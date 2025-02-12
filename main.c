@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/12 18:08:45 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/12 22:11:26 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,26 @@ void	clear()
 	rl_clear_history();
 }
 
-void	add_to_stack(t_stack **a, int value)
+int	ft_strlstcmp(char *str, char **list, int size)
 {
-	t_stack	*buffer;
-	t_stack	*last;
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		if (ft_strcmp(str, list[i]) == 0)
+			return (i);
+	}
+	return (-1);
+}
+void	add_command(t_command **a, char **args)
+{
+	t_command	*buffer;
+	t_command	*last;
 
 	buffer = malloc(sizeof(t_stack));
-	buffer->stack = value;
+	buffer->size = ;
+	buffer->command = 
 	buffer->next = NULL;
 	if (!*a)
 		*a = buffer;
@@ -88,13 +101,13 @@ int	parse_command_line(char *str)
 {
 	int	i;
 	char	**args;
-	
+	t_command	*command;
 	args = ft_split(str, " ");
 	i = 0;
 	while (args[i] != NULL)
 	{
-		if (is_command(args[i])
-			get_args(&args[i]);
+		if (ft_strlstcmp(args[i], commands)
+			command = add_command(&args[i]);
 	}
 	
 }

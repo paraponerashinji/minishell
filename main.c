@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/13 17:34:48 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/13 17:49:37 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	ft_strlstcmp(char *str, char **list, int size)
 	{
 		if (ft_strcmp(str, list[i]) == 0)
 			return (i);
+		i++;
 	}
 	return (-1);
 }
@@ -82,12 +83,13 @@ void	add_command(t_command **a, char **args)
 {
 	t_command	*buffer;
 	t_command	*last;
+	char	*ends[] = {";", "|", "&&", "||"};
 	int	i;
 
 	buffer = malloc(sizeof(t_command));
 	buffer->command = args[0];
 	i = 1;
-	while (ft_strlstcmp(args[i], ends, size) != -1)
+	while (ft_strlstcmp(args[i], ends, 4) != -1)
 	{
 		buffer->command = ft_strjoin(buffer->command, " ");
 		buffer->command = ft_strjoin(buffer->command, args[i]);
@@ -106,20 +108,34 @@ void	add_command(t_command **a, char **args)
 	}
 }
 
+void	print_commands(t_command *commands)
+{
+	t_command	*temp;
+
+	temp = commands;
+	while (temp != NULL)
+	{
+		ft_printf("Command: %s\n", temp->command);
+		temp = temp->next;
+	}
+}
+
 int	parse_command_line(char *str)
 {
 	int	i;
 	char	**args;
 	t_command	*command;
+	char	*commands[] = {"cd", "echo", "exit", "clear"};
 	args = ft_split(str, ' ');
 	i = 0;
 	while (args[i] != NULL)
 	{
-		if (ft_strlstcmp(args[i], commands, size))
+		if (ft_strlstcmp(args[i], commands, 4))
 			add_command(&command, &args[i]);
+		i++;
 	}
+	print_commands(command);
 	return (0);
-	
 }
 int	main()
 {
@@ -133,8 +149,7 @@ int	main()
 		prompt = get_prompt();
 		minishell = readline(prompt);
 		free(prompt);
-		if (ft_strcmp(minishell, "clear") == 0)
-			clear();
+		parse_command_line(minishell);
 		if (ft_strcmp(minishell, "exit") == 0)
 		{
 			free(minishell);

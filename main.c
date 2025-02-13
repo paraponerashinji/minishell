@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/13 18:15:38 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/13 18:21:36 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	add_command(t_command **a, char **args)
 {
 	t_command	*buffer;
 	t_command	*last;
-	char	*ends[] = {";", "|", "&&", "||"};
+	char	*ends[] = {"|", "&&", "||"};
 	int	i;
 
 	buffer = malloc(sizeof(t_command));
@@ -138,7 +138,7 @@ int	parse_command_line(char *str)
 	while (args[i] != NULL)
 	{
 		if (ft_strlstcmp(args[i], commands, 4) != -1)
-			i = add_command(&command, &args[i]);
+			i += add_command(&command, &args[i]);
 		else
 			i++;
 	}

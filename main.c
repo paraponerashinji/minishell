@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/13 18:03:15 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/13 18:15:38 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,15 @@ int	add_command(t_command **a, char **args)
 	buffer = malloc(sizeof(t_command));
 	buffer->command = args[0];
 	i = 1;
-	while (args[i] != NULL && ft_strlstcmp(args[i], ends, 4) != -1)
-	{
-		buffer->command = ft_strjoin(buffer->command, " ");
-		buffer->command = ft_strjoin(buffer->command, args[i]);
+	while (args[i] != NULL)
+	{	
+		if (ft_strlstcmp(args[i], ends, 4) == -1)
+		{
+			buffer->command = ft_strjoin(buffer->command, " ");
+			buffer->command = ft_strjoin(buffer->command, args[i]);
+		}
+		else
+			break;
 		i++;
 	}
 	buffer->size = i;

@@ -90,8 +90,8 @@ int	add_command(t_command **a, char **args)
 	buffer->command = args[0];
 	i = 1;
 	while (args[i] != NULL)
-	{	
-		if (ft_strlstcmp(args[i], ends, 4) == -1)
+	{
+		if (ft_strlstcmp(args[i], ends, 3) == -1)
 		{
 			buffer->command = ft_strjoin(buffer->command, " ");
 			buffer->command = ft_strjoin(buffer->command, args[i]);
@@ -131,7 +131,9 @@ int	parse_command_line(char *str)
 	int	i;
 	char	**args;
 	t_command	*command;
-	char	*commands[] = {"cd", "echo", "exit", "clear"};
+	char	*commands[];
+
+	commands = {"cd", "echo", "exit", "clear"};
 	args = ft_split(str, ' ');
 	i = 0;
 	command = NULL;

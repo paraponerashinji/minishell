@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/13 17:49:37 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/13 17:54:59 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ typedef struct	s_command
 	struct s_command	*next;
 }	t_command;
 
-void	add_command(t_command **a, char **args)
+int	add_command(t_command **a, char **args)
 {
 	t_command	*buffer;
 	t_command	*last;
@@ -89,7 +89,7 @@ void	add_command(t_command **a, char **args)
 	buffer = malloc(sizeof(t_command));
 	buffer->command = args[0];
 	i = 1;
-	while (ft_strlstcmp(args[i], ends, 4) != -1)
+	while (args[i] != NULL && ft_strlstcmp(args[i], ends, 4) == -1)
 	{
 		buffer->command = ft_strjoin(buffer->command, " ");
 		buffer->command = ft_strjoin(buffer->command, args[i]);
@@ -106,6 +106,7 @@ void	add_command(t_command **a, char **args)
 			last = last->next;
 		last->next = buffer;
 	}
+	return (i);
 }
 
 void	print_commands(t_command *commands)
@@ -128,10 +129,11 @@ int	parse_command_line(char *str)
 	char	*commands[] = {"cd", "echo", "exit", "clear"};
 	args = ft_split(str, ' ');
 	i = 0;
+	command = NULL;
 	while (args[i] != NULL)
 	{
 		if (ft_strlstcmp(args[i], commands, 4))
-			add_command(&command, &args[i]);
+			i = add_command(&command, &args[i]);
 		i++;
 	}
 	print_commands(command);

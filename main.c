@@ -131,9 +131,7 @@ int	parse_command_line(char *str)
 	int	i;
 	char	**args;
 	t_command	*command;
-	char	*commands[];
-
-	commands = {"cd", "echo", "exit", "clear"};
+	char	*commands[] = {"cd", "echo", "exit", "clear"};
 	args = ft_split(str, ' ');
 	i = 0;
 	command = NULL;

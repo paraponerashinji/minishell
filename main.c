@@ -6,17 +6,10 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/13 18:21:36 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/15 14:13:25 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
 #include "minishell.h"
 
 void	handle_signal(int sig)
@@ -72,13 +65,6 @@ int	ft_strlstcmp(char *str, char **list, int size)
 	return (-1);
 }
 
-typedef struct	s_command
-{
-	int	size;
-	char	*command;
-	struct s_command	*next;
-}	t_command;
-
 int	add_command(t_command **a, char **args)
 {
 	t_command	*buffer;
@@ -126,7 +112,7 @@ void	print_commands(t_command *commands)
 	}
 }
 
-int	parse_command_line(char *str)
+int	parse_command_line(char *str, char **envp)
 {
 	int	i;
 	char	**args;
@@ -142,14 +128,17 @@ int	parse_command_line(char *str)
 		else
 			i++;
 	}
+	createpipes(command, envp);
 	print_commands(command);
 	return (0);
 }
-int	main()
+int	main(int argc, char **argv, char **envp)
 {
 	char	*minishell;
 	char	*prompt;
 
+	(void)argc;
+	(void)argv;
 	signal(SIGINT, handle_signal);
 	ft_printf("\e[H\e[J");
 	while (1)
@@ -157,7 +146,13 @@ int	main()
 		prompt = get_prompt();
 		minishell = readline(prompt);
 		free(prompt);
-		parse_command_line(minishell);
+		if (minishell == NULL)
+		{
+			free(minishell);
+			break;
+		}
+		add_history(minishell);
+		parse_command_line(minishell, envp);
 		if (ft_strcmp(minishell, "exit") == 0)
 		{
 			free(minishell);

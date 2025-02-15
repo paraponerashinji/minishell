@@ -6,9 +6,11 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 16:08:47 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/15 14:05:59 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/15 14:16:08 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minishell.h"
 
 void	free_split(char **split)
 {
@@ -109,6 +111,7 @@ int	createpipes(t_command *commands, char **envp)
 	t_command	*temp;
 
 	buffer = STDIN_FILENO;
+	temp = commands;
 	while (temp != NULL)
 	{
 		args = ft_split(temp->command, ' ');
@@ -123,7 +126,7 @@ int	createpipes(t_command *commands, char **envp)
 		if (buffer != 0)
 			close(buffer);
 		buffer = p_fd[0];
-		i++;
+		temp = temp->next;
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/15 14:13:25 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/15 22:16:43 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,37 @@ void	handle_signal(int sig)
     }
 }
 
+char	*crop_path(char **path)
+{
+	int	i;
+	char	*buffer;
+	char	*buffer2;
+
+	i = 0;
+	while (path[i] != NULL)
+		i++;
+	buffer = ft_strjoin(path[i-2], "/");
+	buffer2 = ft_strjoin(buffer, path[i-1]);
+	free(buffer);
+	return (buffer2);
+}
+
 char	*get_prompt()
 {
 	char	path[1024];
 	char	*buffer;
+	char	**buffer2;
 	char	*prompt;
-	char	*prefix = "\e[1;32mminishell\e[0m: \e[1;34m";
-	char	*suffix = ">\e[0m ";
+	char	*prefix = "\e[1;32mminishell\e[0m:\e[1;34m~/";
+	char	*suffix = ">\e[0m";
 
 	if (getcwd(path, sizeof(path)) != NULL)
 	{
-		buffer = ft_strjoin(prefix, path);
+		buffer2 = ft_split(path, '/');
+		prompt = crop_path(buffer2);
+		free_split(buffer2);
+		buffer = ft_strjoin(prefix, prompt);
+		free(prompt);
 		prompt = ft_strjoin(buffer, suffix);
 		free(buffer);
 	}
@@ -117,13 +137,13 @@ int	parse_command_line(char *str, char **envp)
 	int	i;
 	char	**args;
 	t_command	*command;
-	char	*commands[] = {"cd", "echo", "exit", "clear"};
+	char	*commands[] = {"cd", "echo", "exit", "pwd", "export", "unset", "env"};
 	args = ft_split(str, ' ');
 	i = 0;
 	command = NULL;
 	while (args[i] != NULL)
 	{
-		if (ft_strlstcmp(args[i], commands, 4) != -1)
+		if (ft_strlstcmp(args[i], commands, 7) != -1)
 			i += add_command(&command, &args[i]);
 		else
 			i++;

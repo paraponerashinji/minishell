@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/16 14:23:58 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/17 12:46:14 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*get_prompt()
 	char	path[1024];
 	char	*buffer;
 	char	**buffer2;
-	char	*prompt;
+	char	*prompt = NULL;
 	char	*prefix = "\e[1;32mminishell\e[0m:\e[1;34m~/";
 	char	*suffix = "\e[0m ";
 
@@ -184,6 +184,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
 	ft_printf("\e[H\e[J");
 	while (1)
 	{
@@ -201,6 +202,7 @@ int	main(int argc, char **argv, char **envp)
 		//parse_command_line(minishell, envp);
 		if (ft_strcmp(minishell, "exit") == 0)
 		{
+			rl_clear_history();
 			free(minishell);
 			break;
 		}

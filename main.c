@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/17 12:46:14 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/17 17:00:08 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,9 +197,9 @@ int	main(int argc, char **argv, char **envp)
 			break;
 		}
 		add_history(minishell);
-		if (ft_strcmp(minishell, "pwd") ==  0)
+		/*if (ft_strcmp(minishell, "pwd") ==  0)
 			execute("pwd", envp);
-		//parse_command_line(minishell, envp);
+		*/parse_command_line(minishell, envp);
 		if (ft_strcmp(minishell, "exit") == 0)
 		{
 			rl_clear_history();

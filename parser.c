@@ -6,67 +6,36 @@
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 12:23:35 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/17 16:49:24 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/18 13:18:08 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 
-void	*ft_memcpy(void *dest, const void *source, int size)
+void	free_split(char **split)
 {
-	unsigned char	*dest2;
-	unsigned char	*source2;
-	int				i;
+	int	i;
 
 	i = 0;
-	dest2 = (unsigned char *) dest;
-	source2 = (unsigned char *) source;
-	while (i < size)
-	{
-		dest2[i] = source2[i];
-		i++;
-	}
-	return (dest);
+	while (split[i])
+		free(split[i++]);
+	free(split);
 }
 
-void	*ft_realloc(void *ptr, int old_size, int new_size)
+typedef enum
 {
-	void	*new_ptr;
+	PIPE,
+	I_RED,
+	O_RED,
+	AND_PIPE,
+	OR_PIPE
+}	command_type;
 
-	if (new_size == 0)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	if (ptr == NULL)
-		return (malloc(new_size));
-	new_ptr = malloc(new_size);
-	if (new_ptr)
-	{
-		ft_memcpy(new_ptr, ptr, old_size);
-		free(ptr);
-	}
-	return (new_ptr);
-}
-
-typedef struct s_node
+typedef struct	s_commands
 {
-	char	*cmd;
-	struct s_node	*left;
-	struct s_node	*right;
-}	t_node;
-
-typedef struct s_token
-{
-	int	type;
-	char	*value;
-}	t_token;
-
-typedef struct s_commands
-{
+	command_type	type;
 	char	*command;
-	struct s_command	*next;
 }	t_commands;
 
 int	cmp(char c)
@@ -105,24 +74,35 @@ int	splitlen(const char *s)
 
 char	**multi_split(char *s)
 {
-	int	i[4];
+	int	i[5];
 	int	buffer;
 	char	**output;
 
 	i[0] = 0;
 	i[2] = 0;
+	i[4] = 0;
 	output = malloc((splitlen(s) + 1) * sizeof(char *));
 	if (!output)
 		return NULL;
 	while (s[i[0]] != '\0')
 	{
-		while (cmp(s[i[0]]) == 1 && s[i[0]] != '\0')
+		if (cmp(s[i[0]]) == 1 && s[i[0]] != '\0')
+		{
+			if (s[i[0]] == '"')
+				i[4] = !i[4];
 			i[0]++;
+		}
+		if (cmp(s[i[0]]) == 1 && s[i[0]] != '\0')
+			return NULL;
 		if (s[i[0]] == '\0')
 			break;
 		i[1] = i[0];
-		while (cmp(s[i[1]]) == 0 && s[i[1]] != '\0')
+		while ((cmp(s[i[1]]) == 0 || i[4]) && s[i[1]] != '\0')
+		{
+			if (s[i[1]] == '"')
+				i[4] = !i[4];
 			i[1]++;
+		}
 		output[i[2]] = malloc((i[1] - i[0] + 1) * sizeof(char));
 		if (!output[i[2]])
 			return NULL;
@@ -132,21 +112,63 @@ char	**multi_split(char *s)
 		output[i[2]][i[3]] = '\0';
 		i[2]++;
 	}
+	if (i[4])
+	{
+		printf("Error: bracket\n");
+		return NULL;
+	}
 	output[i[2]] = NULL;
+	return (output);
+}
+
+char	*get_operators(char *s)
+{
+	int	i[2];
+	int	quotes;
+	char	*output;
+
+	i[0] = 0;
+	i[1] = 0;
+	quotes = 0;
+	output = malloc((splitlen(s) * 2 + 2) * sizeof(char));
+	output[i[1]++] = '|';
+	if (!output)
+		return NULL;
+	while (s[i[0]] != '\0')
+	{
+		if (cmp(s[i[0]]) == 1)
+		{
+			if (!quotes)
+				output[i[1]++] = s[i[0]];
+		}
+		else if (s[i[0]] == '"')
+		{
+			quotes = !quotes;
+		}
+		i[0]++;
+	}
+	output[i[1]] = '\0';
 	return (output);
 }
 int	main(int argc, char *argv[])
 {
 	int	i;
 	char	**splitted;
+	char	*operator;
 	t_commands	commands;
 	if (argc < 2)
 		return (printf("Erreur: input\n"));
 	i = 0;
 	splitted = multi_split(argv[1]);
+	operator = get_operators(argv[1]);
+	if (splitted == NULL)
+		return (0);
 	while (splitted[i] != NULL)
 	{
 		printf("%s\n", splitted[i]);
 		i++;
 	}
+	printf("%s\n", operator);
+	free_split(splitted);
+	free(operator);
 }

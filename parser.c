@@ -6,7 +6,7 @@
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 12:23:35 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/19 14:39:05 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/19 14:59:44 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,7 +284,7 @@ char	*first_word(char *str)
 	k = 0;
 	while (str[i] != ' ' && str[i] != '\0')
 	{
-		output[k++] = str[i];
+		output[k++] = str[i++];
 	}
 	output[k] = '\0';
 	return (output);
@@ -318,7 +318,7 @@ void	add_command(t_commands **a, char *splitted, pipetype type)
 	buffer->pipe_type = type;
 	buffer->command = another_custom_split(splitted, ' ');
 	buffer->next = NULL;
-	if (*a)
+	if (!*a)
 		*a = buffer;
 	else
 	{
@@ -352,7 +352,7 @@ void	add_buff_to_last(t_commands **a, char *str)
 	buffer_split = another_custom_split(str, ' ');
 	add_size = array_size(buffer_split);
 	i = 0;
-	if(!a)
+	if(!*a)
 	{
 		buffer = malloc(sizeof(t_commands));
 		buffer->pipe_type = PIPE;
@@ -390,7 +390,7 @@ char	*add_io(t_io_red **a, char *splitted, iotype type)
 	buffer->file = first_word(splitted);
 	buffer->next = NULL;
 	output = rm_first_word(splitted);
-	if (*a)
+	if (!*a)
 		*a = buffer;
 	else
 	{
@@ -425,19 +425,46 @@ void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, cha
 		i++;
 	} 
 }
+
+void print_commands(t_commands *commands)
+{
+	t_commands *current = commands;
+	while (current != NULL)
+	{
+		printf("Pipe Type: %d\n", current->pipe_type);
+		for (int i = 0; current->command[i] != NULL; i++)
+		{
+			printf("Command[%d]: %s\n", i, current->command[i]);
+		}
+		current = current->next;
+	}
+}
+
+void print_redirection(t_io_red *redirection)
+{
+	t_io_red *current = redirection;
+	while (current != NULL)
+	{
+		printf("IO Type: %d\n", current->in_or_out);
+		printf("File: %s\n", current->file);
+		current = current->next;
+	}
+}
 int	main(int argc, char *argv[])
 {
 	int	i;
 	char	**splitted;
 	char	*operator;
-	t_commands	*commands;
-	t_io_red	*redirection;
+	t_commands	*commands = NULL;
+	t_io_red	*redirection = NULL;
 	if (argc < 2)
 		return (printf("Erreur: input\n"));
 	i = 0;
 	splitted = multi_split(argv[1]);
 	operator = get_operators(argv[1]);
 	putlist(&commands, &redirection, splitted, operator);
+	print_commands(commands);
+	print_redirection(redirection);
 	free_split(splitted);
 	free(operator);
 }

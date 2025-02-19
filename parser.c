@@ -6,13 +6,41 @@
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 12:23:35 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/19 13:53:00 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/19 14:39:05 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+int	ft_strlen(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
+
+char	*ft_strdup(char *src)
+{
+	char	*dest;
+	int		sizestr;
+	int		i;
+
+	sizestr = ft_strlen(src);
+	dest = malloc((sizestr + 1) * sizeof(*dest));
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
 
 void	free_split(char **split)
 {
@@ -23,14 +51,14 @@ void	free_split(char **split)
 		free(split[i++]);
 	free(split);
 }
-
+/*
 typedef struct	s_commands
 {
 	char	*type;
 	int	i;
 	char	*command;
 }	t_commands;
-
+*/
 int	cmp(char c)
 {
 	int	i;
@@ -176,7 +204,7 @@ typedef enum {
 
 typedef struct  s_commands
 {
-	pipetype    *pipe_type;
+	pipetype    pipe_type;
 	char    **command;
 	struct s_commands	*next;
 }       t_commands;
@@ -262,7 +290,7 @@ char	*first_word(char *str)
 	return (output);
 }
 
-char	rm_first_word(char *str)
+char	*rm_first_word(char *str)
 {
 	int	i;
 	int	k;
@@ -272,7 +300,7 @@ char	rm_first_word(char *str)
 	k = 0;
 	while (str[i] == ' ')
 		i++;
-	while (str != ' ' && str[i] != '\0')
+	while (str[i] != ' ' && str[i] != '\0')
 		i++;
 	output = malloc((ft_strlen(str) - i + 1) * sizeof(char));
 	while (str[i] != '\0')
@@ -288,10 +316,10 @@ void	add_command(t_commands **a, char *splitted, pipetype type)
 
 	buffer = malloc(sizeof(t_commands));
 	buffer->pipe_type = type;
-	buffer->command = another_custom_split(splitted, " ");
+	buffer->command = another_custom_split(splitted, ' ');
 	buffer->next = NULL;
 	if (*a)
-		a = buffer;
+		*a = buffer;
 	else
 	{
 		last = *a;
@@ -301,27 +329,54 @@ void	add_command(t_commands **a, char *splitted, pipetype type)
 	}
 }
 
+int	array_size(char	**arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i] != NULL)
+		i++;
+	return (i);
+}
 void	add_buff_to_last(t_commands **a, char *str)
 {
 	t_commands	*buffer;
 	t_commands	*last;
 	int	i;
+	int	old_size;
+	int	add_size;
+	int	new_size;
+	char	**buffer_array;
+	char	**buffer_split;
 
+	buffer_split = another_custom_split(str, ' ');
+	add_size = array_size(buffer_split);
 	i = 0;
 	if(!a)
 	{
 		buffer = malloc(sizeof(t_commands));
 		buffer->pipe_type = PIPE;
-		buffer->command = another_custom_split(str, " ");
+		buffer->command = buffer_split;
 		buffer->next = NULL;
-		a = buffer; 
+		*a = buffer; 
 	}
 	else
 	{
 		last = *a;
 		while (last->next)
 			last = last->next;
-		
+		old_size = array_size(last->command);
+		new_size = old_size + add_size;
+		buffer_array = malloc((new_size + 1) * sizeof(char*));
+		while (last->command[i] != NULL)
+		{
+			buffer_array[i] = ft_strdup(last->command[i]);
+			i++;
+		}
+		old_size = 0;
+		while (buffer_split[old_size] != NULL)
+			buffer_array[i++] = ft_strdup(buffer_split[old_size++]);
+		last->command = buffer_array;
 	}
 }
 
@@ -336,7 +391,7 @@ char	*add_io(t_io_red **a, char *splitted, iotype type)
 	buffer->next = NULL;
 	output = rm_first_word(splitted);
 	if (*a)
-		a = buffer;
+		*a = buffer;
 	else
 	{
 		last = *a;
@@ -347,10 +402,8 @@ char	*add_io(t_io_red **a, char *splitted, iotype type)
 	return (output);
 }
 
-t_commands	putlist(char **splitted, char *op<F12erator, int size)
+void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, char *operator)
 {
-	t_commands	*commands;
-	t_io_red	*redirection;
 	char	*buffer;
 	int	i;
 
@@ -358,17 +411,18 @@ t_commands	putlist(char **splitted, char *op<F12erator, int size)
 	while (splitted[i] != NULL)
 	{
 		if (operator[i] == '|')
-			add_command(&commands, splitted[i], PIPE);
+			add_command(commands, splitted[i], PIPE);
 		if (operator[i] == '<')
 		{
-			buffer = add_io(&redirection, splitted[i], INPUT);
-			add_buff_to_last(&commands, buffer);
+			buffer = add_io(redirection, splitted[i], INPUT);
+			add_buff_to_last(commands, buffer);
 		}
 		if (operator[i] == '>')
 		{
-			buffer = add_io(&redirection, splitted[i], OUTPUT);
-			add_buff_to_last(&commands, buffer);
+			buffer = add_io(redirection, splitted[i], OUTPUT);
+			add_buff_to_last(commands, buffer);
 		}
+		i++;
 	} 
 }
 int	main(int argc, char *argv[])
@@ -377,37 +431,13 @@ int	main(int argc, char *argv[])
 	char	**splitted;
 	char	*operator;
 	t_commands	*commands;
+	t_io_red	*redirection;
 	if (argc < 2)
 		return (printf("Erreur: input\n"));
 	i = 0;
 	splitted = multi_split(argv[1]);
 	operator = get_operators(argv[1]);
-	commands = malloc(splitlen((argv[1]) + 2) * sizeof(t_commands));
-	if (splitted == NULL)
-		return (0);
-	while (splitted[i] != NULL)
-	{
-		commands[i].type = malloc(6 * sizeof(char));
-		commands[i].command = malloc(strlen(splitted[i]) + 1);
-		commands[i].i = 1;
-		strcpy(commands[i].command, splitted[i]);
-		if (operator[i] == '|')
-			strcpy(commands[i].type, "PIPE");
-		else if (operator[i] == '<')
-			strcpy(commands[i].type, "I_RED");
-		else if (operator[i] == '>')
-			strcpy(commands[i].type, "O_RED");
-		i++;
-	}
-	commands[i].commands = NULL;
-	commands[i].type = NULL;
-	commands[i].i = -1;
-	i = 0;
-	while (commands[i].i != -1)
-	{
-		printf("Operator:\n%s\nCommand:\n%s\n", commands[i].type, commands[i].command);
-		i++;
-	}
+	putlist(&commands, &redirection, splitted, operator);
 	free_split(splitted);
 	free(operator);
 }

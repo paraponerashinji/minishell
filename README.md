@@ -2,14 +2,13 @@
 
 DID LIST:
 
-Parsing is almost working, i need to put operator and command in the same struct\
+Parsing almost done, i need to add single quote integration\
 TODO LIST:\
 
-Redo the makefile so it compile all the cmds\
-finish parsing\
+Parsing : integration of single quote, double characters specifiers, and cleaning\
+Connect the output of parsing to pipes integrate special pipes, clean the pipes code\
+Redo the Makefile so it compile the cmd separetely\
 Implement Echo, cd, export, unset, end\
-Clean pipes\
-Implement redirection\
 Implement env variables\
 
 Bonus:\

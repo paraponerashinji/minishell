@@ -6,12 +6,13 @@
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 12:23:35 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/19 11:19:24 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/19 11:40:59 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 void	free_split(char **split)
 {
@@ -26,6 +27,7 @@ void	free_split(char **split)
 typedef struct	s_commands
 {
 	char	*type;
+	int	i;
 	char	*command;
 }	t_commands;
 
@@ -152,23 +154,28 @@ int	main(int argc, char *argv[])
 	i = 0;
 	splitted = multi_split(argv[1]);
 	operator = get_operators(argv[1]);
-	commands = malloc(splitlen((argv[1]) + 1) * sizeof(commands));
+	commands = malloc(splitlen((argv[1]) + 2) * sizeof(t_commands));
 	if (splitted == NULL)
 		return (0);
 	while (splitted[i] != NULL)
 	{
-		commands[i].command = splitted[i];
+		commands[i].type = malloc(6 * sizeof(char));
+		commands[i].command = malloc(strlen(splitted[i]) + 1);
+		commands[i].i = 1;
+		strcpy(commands[i].command, splitted[i]);
 		if (operator[i] == '|')
-			commands[i].type = "PIPE";
+			strcpy(commands[i].type, "PIPE");
 		else if (operator[i] == '<')
-			commands[i].type = "I_RED";
+			strcpy(commands[i].type, "I_RED");
 		else if (operator[i] == '>')
-			commands[i].type = "O_RED";
+			strcpy(commands[i].type, "O_RED");
 		i++;
 	}
-	commands[i].command = NULL;
+	commands[i].commands = NULL;
+	commands[i].type = NULL;
+	commands[i].i = -1;
 	i = 0;
-	while (commands[i].command != NULL)
+	while (commands[i].i != -1)
 	{
 		printf("Operator:\n%s\nCommand:\n%s\n", commands[i].type, commands[i].command);
 		i++;

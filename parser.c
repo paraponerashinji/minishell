@@ -6,7 +6,7 @@
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 12:23:35 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/18 13:18:08 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/19 11:19:24 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,9 @@ void	free_split(char **split)
 	free(split);
 }
 
-typedef enum
-{
-	PIPE,
-	I_RED,
-	O_RED,
-	AND_PIPE,
-	OR_PIPE
-}	command_type;
-
 typedef struct	s_commands
 {
-	command_type	type;
+	char	*type;
 	char	*command;
 }	t_commands;
 
@@ -155,20 +146,33 @@ int	main(int argc, char *argv[])
 	int	i;
 	char	**splitted;
 	char	*operator;
-	t_commands	commands;
+	t_commands	*commands;
 	if (argc < 2)
 		return (printf("Erreur: input\n"));
 	i = 0;
 	splitted = multi_split(argv[1]);
 	operator = get_operators(argv[1]);
+	commands = malloc(splitlen((argv[1]) + 1) * sizeof(commands));
 	if (splitted == NULL)
 		return (0);
 	while (splitted[i] != NULL)
 	{
-		printf("%s\n", splitted[i]);
+		commands[i].command = splitted[i];
+		if (operator[i] == '|')
+			commands[i].type = "PIPE";
+		else if (operator[i] == '<')
+			commands[i].type = "I_RED";
+		else if (operator[i] == '>')
+			commands[i].type = "O_RED";
 		i++;
 	}
-	printf("%s\n", operator);
+	commands[i].command = NULL;
+	i = 0;
+	while (commands[i].command != NULL)
+	{
+		printf("Operator:\n%s\nCommand:\n%s\n", commands[i].type, commands[i].command);
+		i++;
+	}
 	free_split(splitted);
 	free(operator);
 }

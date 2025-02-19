@@ -61,8 +61,6 @@ char *get_prompt();
 void cd_command(char *input);
 void clear();
 int ft_strlstcmp(char *str, char **list, int size);
-int add_command(t_command **a, char **args);
-void print_commands(t_command *commands);
 int parse_command_line(char *str, char **envp);
 void free_split(char **split);
 int checkargs(int argc);
@@ -86,5 +84,6 @@ char *add_io(t_io_red **a, char *splitted, iotype type);
 void putlist(t_commands **commands, t_io_red **redirection, char **splitted, char *operator);
 void print_commands(t_commands *commands);
 void print_redirection(t_io_red *redirection);
+void	parser(char *str);
 
 #endif // MINISHELL_H

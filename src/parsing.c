@@ -12,29 +12,9 @@
 
 #include "../minishell.h"
 
-int	splitlen(const char *s)
-{
-	int	i;
-	int	split;
-
-	i = 0;
-	split = 0;
-	while (s[i] != '\0')
-	{
-		while (cmp(s[i]) && s[i] != '\0')
-			i++;
-		if (s[i] != '\0')
-			split++;
-		while (!cmp(s[i]) && s[i] != '\0')
-			i++;
-	}
-	return (split);
-}
-
 char	**multi_split(char *s)
 {
 	int	i[5];
-	int	buffer;
 	char	**output;
 
 	i[0] = 0;
@@ -136,7 +116,7 @@ void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, cha
 
 void	parser(char *str)
 {
-	char	*splitted;
+	char	**splitted;
 	char	*operator;
 	t_commands	*commands = NULL;
 	t_io_red	*redirection = NULL;

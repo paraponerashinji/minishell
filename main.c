@@ -84,7 +84,7 @@ int	ft_strlstcmp(char *str, char **list, int size)
 	}
 	return (-1);
 }
-
+/*
 int	add_command(t_command **a, char **args)
 {
 	t_command	*buffer;
@@ -151,7 +151,7 @@ int	parse_command_line(char *str, char **envp)
 	createpipes(command, envp);
 	print_commands(command);
 	return (0);
-}
+}*/
 
 void	execute(char *cmd, char **envp)
 {
@@ -183,6 +183,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	(void)envp;
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
 	ft_printf("\e[H\e[J");
@@ -199,7 +200,8 @@ int	main(int argc, char **argv, char **envp)
 		add_history(minishell);
 		/*if (ft_strcmp(minishell, "pwd") ==  0)
 			execute("pwd", envp);
-		*/parse_command_line(minishell, envp);
+		parse_command_line(minishell, envp);*/
+		parser(minishell);
 		if (ft_strcmp(minishell, "exit") == 0)
 		{
 			rl_clear_history();

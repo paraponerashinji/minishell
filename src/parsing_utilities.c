@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../minishell.h"
+
 char	**another_custom_split(char *s, char c)
 {
 	int	i[5];
-	int	buffer;
 	char	**output;
 
 	i[0] = 0;

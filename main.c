@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/17 17:00:08 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/20 18:54:19 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ int	parse_command_line(char *str, char **envp)
 	print_commands(command);
 	return (0);
 }*/
-
+/*
 void	execute(char *cmd, char **envp)
 {
 	pid_t	p;
@@ -166,7 +166,7 @@ void	execute(char *cmd, char **envp)
 	if (p == 0)
 	{
 		getcwd(path, sizeof(path));
-		full_cmd = ft_strjoin(path, "/src/cmds/pwd");
+		full_cmd = ft_strjoin(path, "minishell");
 		execve(full_cmd, args, envp);
 		free(full_cmd);
 		exit(1);
@@ -175,7 +175,7 @@ void	execute(char *cmd, char **envp)
 		printf("fork error");
 	else
 		waitpid(p, NULL, 0);
-}
+}*/
 int	main(int argc, char **argv, char **envp)
 {
 	char	*minishell;
@@ -198,10 +198,8 @@ int	main(int argc, char **argv, char **envp)
 			break;
 		}
 		add_history(minishell);
-		/*if (ft_strcmp(minishell, "pwd") ==  0)
-			execute("pwd", envp);
-		parse_command_line(minishell, envp);*/
-		parser(minishell);
+		//parse_command_line(minishell, envp);
+		parser(minishell, envp);
 		if (ft_strcmp(minishell, "exit") == 0)
 		{
 			rl_clear_history();

@@ -6,7 +6,7 @@
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 15:15:12 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/19 15:21:02 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/20 12:14:20 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, cha
 	} 
 }
 
-void	parser(char *str)
+void	parser(char *str, char **envp)
 {
 	char	**splitted;
 	char	*operator;
@@ -124,8 +124,9 @@ void	parser(char *str)
 	splitted = multi_split(str);
 	operator = get_operators(str);
 	putlist(&commands, &redirection, splitted, operator);
-	print_commands(commands);
-	print_redirection(redirection);
+	//print_commands(commands);
+	//print_redirection(redirection);
+	createpipes(commands, redirection, envp);
 	free_split(splitted);
 	free(operator);
 }

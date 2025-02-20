@@ -67,7 +67,7 @@ int checkargs(int argc);
 char *ft_getenv(char *name, char **env);
 char *get_path(char *cmd, char **env);
 void executecommand(char *cmd, char **args, int i_fd, int o_fd, char **envp);
-int createpipes(t_command *commands, char **envp);
+int createpipes(t_commands *commands, t_io_red *redirection, char **envp);
 
 int cmp(char c);
 int splitlen2(const char *s, char c);
@@ -84,6 +84,6 @@ char *add_io(t_io_red **a, char *splitted, iotype type);
 void putlist(t_commands **commands, t_io_red **redirection, char **splitted, char *operator);
 void print_commands(t_commands *commands);
 void print_redirection(t_io_red *redirection);
-void	parser(char *str);
+void	parser(char *str, char **envp);
 
 #endif // MINISHELL_H

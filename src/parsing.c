@@ -6,7 +6,7 @@
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 15:15:12 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/20 12:14:20 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/21 13:16:52 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,8 @@ void	parser(char *str, char **envp)
 	splitted = multi_split(str);
 	operator = get_operators(str);
 	putlist(&commands, &redirection, splitted, operator);
-	//print_commands(commands);
-	//print_redirection(redirection);
+	print_commands(commands);
+	print_redirection(redirection);
 	createpipes(commands, redirection, envp);
 	free_split(splitted);
 	free(operator);

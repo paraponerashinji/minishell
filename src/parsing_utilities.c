@@ -26,18 +26,27 @@ char	**another_custom_split(char *s, char c)
 	while (s[i[0]] != '\0')
 	{
 		while (s[i[0]] == c)
-		{
-			if (s[i[0]] == '"')
-				i[4] = !i[4];
 			i[0]++;
-		}
 		if (s[i[0]] == '\0')
 			break;
 		i[1] = i[0];
-		while ((s[i[1]] != c || i[4]) && s[i[1]] != '\0')
+		if (s[i[1]] == '"' || s[i[1]] == '\'')
 		{
-			if (s[i[1]] == '"')
-				i[4] = !i[4];
+			i[4] = s[i[1]];
+			i[1]++;
+			while (s[i[1]] != i[4] && s[i[1]] != '\0')
+				i[1]++;
+			if (s[i[1]] != i[4])
+			{
+			printf("Error: bracket\n");
+			return NULL;
+			}
+			else
+				i[1]++;
+		}
+		else
+		{
+			while (s[i[1]] != c && s[i[1]] != '\'' && s[i[1]] != '"' && s[i[1]] != '\0')
 			i[1]++;
 		}
 		output[i[2]] = malloc((i[1] - i[0] + 1) * sizeof(char));
@@ -48,11 +57,6 @@ char	**another_custom_split(char *s, char c)
 			output[i[2]][i[3]++] = s[i[0]++];
 		output[i[2]][i[3]] = '\0';
 		i[2]++;
-	}
-	if (i[4])
-	{
-		printf("Error: bracket\n");
-		return NULL;
 	}
 	output[i[2]] = NULL;
 	return (output);

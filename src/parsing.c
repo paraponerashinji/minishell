@@ -6,7 +6,7 @@
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 15:15:12 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/21 13:16:52 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/21 17:24:04 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 char	**multi_split(char *s)
 {
-	int	i[5];
+	int	i[6];
 	char	**output;
 
 	i[0] = 0;
 	i[2] = 0;
 	i[4] = 0;
+	i[5] = 0;
 	output = malloc((splitlen(s) + 1) * sizeof(char *));
 	if (!output)
 		return NULL;
@@ -29,6 +30,8 @@ char	**multi_split(char *s)
 		{
 			if (s[i[0]] == '"')
 				i[4] = !i[4];
+			else if (s[i[0]] == '\'')
+				i[5] = !i[5];
 			i[0]++;
 		}
 		if (cmp(s[i[0]]) == 1 && s[i[0]] != '\0')
@@ -36,10 +39,12 @@ char	**multi_split(char *s)
 		if (s[i[0]] == '\0')
 			break;
 		i[1] = i[0];
-		while ((cmp(s[i[1]]) == 0 || i[4]) && s[i[1]] != '\0')
+		while ((cmp(s[i[1]]) == 0 || i[4] || i[5]) && s[i[1]] != '\0')
 		{
-			if (s[i[1]] == '"')
+			if (!i[5] && s[i[1]] == '"')
 				i[4] = !i[4];
+			else if (!i[4] && s[i[1]] == '\'')
+				i[5] = !i[5];
 			i[1]++;
 		}
 		output[i[2]] = malloc((i[1] - i[0] + 1) * sizeof(char));

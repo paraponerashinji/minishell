@@ -3,12 +3,13 @@
 DID LIST:
 
 I connected the parsing with the pipes, you can now exec files\
-I integrated single quote args\
+Env var are now implemented
 TODO LIST:
 
 Valgrind correction:\
 memleak in the parsing, valgrind error when execve (??)\
-Parsing : integrate env var in the single quote args, double characters specifiers, and cleaning\
+Parsing : double characters specifiers, and cleaning\
+I enventually will have to rewrite all the parsing because its too ugly\
 Integrate redirection\
 Integrate special pipes, clean the pipes code\
 Implement Echo, cd, export, unset, end\

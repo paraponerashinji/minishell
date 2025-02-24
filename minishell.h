@@ -80,6 +80,7 @@ char *rm_first_word(char *str);
 void add_command(t_commands **a, char *splitted, pipetype type);
 int array_size(char **arr);
 void add_buff_to_last(t_commands **a, char *str);
+char    *ft_replacesubstr(char  *str, char *to_replace, char *replacement);
 char *add_io(t_io_red **a, char *splitted, iotype type);
 void putlist(t_commands **commands, t_io_red **redirection, char **splitted, char *operator);
 void print_commands(t_commands *commands);

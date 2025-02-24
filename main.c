@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/20 18:54:19 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/24 11:20:46 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 
 void	handle_signal(int sig)
 {
-    if (sig == SIGINT)
-    {
-        ft_printf("\n");
-        rl_on_new_line();
-        rl_replace_line("", 0);
-        rl_redisplay();
-    }
+	(void)sig;
 }
 
 char	*crop_path(char **path)
@@ -198,6 +192,7 @@ int	main(int argc, char **argv, char **envp)
 			break;
 		}
 		add_history(minishell);
+		//printf("%s\n", ft_replacesubstr("tet $arg test blabla $arg2", "$arg", "HEY"));
 		//parse_command_line(minishell, envp);
 		parser(minishell, envp);
 		if (ft_strcmp(minishell, "exit") == 0)
@@ -206,5 +201,6 @@ int	main(int argc, char **argv, char **envp)
 			free(minishell);
 			break;
 		}
+		free(minishell);
 	}
 }

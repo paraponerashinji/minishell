@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/21 15:37:44 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/24 17:11:24 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,58 @@ int	is_command(char	*str)
 	}
 	return (-1);
 }
+
+int	ft_strchrpos(char *str, int searchedChar)
+{
+	int	i;
+
+	i = 0;
+	while (*str)
+	{
+		if (*str == (char)searchedChar)
+			return (i);
+		str++;
+		i++;
+	}
+	if (searchedChar == '\0')
+		return (0);
+	return (0);
+}
+void	check_env(t_commands *temp)
+{
+	int	i[5];
+	char	*str;
+	char	*buffer;
+
+	i[0] = 0;
+	while (temp->command[i[0]] != NULL)
+	{
+		i[1] = ft_strlen(temp->command[i[0]]);
+		i[2] = ft_strchrpos(temp->command[i[0]], '$');
+		if (temp->command[i[0]][0] == '"' && temp->command[i[0]][i[1] - 1] == '"' && i[2])
+		{
+			i[3] = i[2];
+			while (temp->command[i[0]][i[3]] != ' ' && temp->command[i[0]][i[3]] != '"')
+				i[3]++;
+			i[3] = i[3] - i[2];
+			buffer = ft_substr(temp->command[i[0]], i[2], i[3]);
+			str = getenv(&buffer[1]);
+			temp->command[i[0]] = ft_replacesubstr(temp->command[i[0]], buffer, str);
+		}
+		else if (temp->command[i[0]][0] == '$')
+		{
+			i[3] = i[2];
+			while (temp->command[i[0]][i[3]] != ' ' && temp->command[i[0]][i[3]] != '\0')
+				i[3]++;
+			i[3] = i[3] - i[2];
+			buffer = ft_substr(temp->command[i[0]], i[2], i[3]);
+			str = getenv(&buffer[1]);
+			temp->command[i[0]] = ft_replacesubstr(temp->command[i[0]], buffer, str);
+		}
+		i[0]++;
+	}
+}
+
 int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 {
 	int	p_fd[2];
@@ -145,6 +197,7 @@ int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 	temp = commands;
 	while (temp != NULL)
 	{
+		check_env(temp);
 		if (temp->next != NULL)
 			pipe(p_fd);
 		else

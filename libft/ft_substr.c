@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-unsigned int	customstrlen(const char *str)
+unsigned int	customstrlen3(const char *str)
 {
 	unsigned int	i;
 
@@ -32,7 +32,7 @@ char	*ft_substr(const char *str, unsigned int start, size_t length)
 	char			*dest;
 
 	y = 0;
-	strlength = customstrlen(str);
+	strlength = customstrlen3(str);
 	if (!str || start >= strlength)
 	{
 		dest = malloc(1 * sizeof(char));

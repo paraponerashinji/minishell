@@ -6,7 +6,7 @@
 #    By: rchallie <rchallie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 11:05:52 by rchallie          #+#    #+#              #
-#    Updated: 2025/02/11 16:31:15 by aharder          ###   ########.fr        #
+#    Updated: 2020/08/13 22:17:48 by rchallie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,13 +23,16 @@ SRCS = ft_memset.c		\
 		ft_isalnum.c		\
 		ft_isascii.c		\
 		ft_isprint.c		\
+		ft_strcmp.c		\
 		ft_toupper.c		\
 		ft_tolower.c		\
 		ft_strchr.c		\
 		ft_strrchr.c		\
 		ft_strncmp.c		\
-		ft_strcmp.c		\
 		ft_strlcpy.c		\
+		ft_strcpy.c		\
+		ft_strncpy.c		\
+		ft_replacesubstr.c	\
 		ft_strlcat.c		\
 		ft_strnstr.c		\
 		ft_atoi.c		\

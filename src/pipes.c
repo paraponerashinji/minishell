@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/24 17:11:24 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/24 17:40:33 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 
 int	is_command(char	*str)
 {
-	char    *commands[] = {"cd", "echo", "exit", "pwd", "export", "unset", "env"};
+	char    *commands[] = {"cd", "echo", "exit", "pwd", "wc", "unset", "env"};
 	int	i;
 
 	i = 0;
@@ -156,6 +156,7 @@ void	check_env(t_commands *temp)
 	int	i[5];
 	char	*str;
 	char	*buffer;
+	char	*buff2;
 
 	i[0] = 0;
 	while (temp->command[i[0]] != NULL)
@@ -170,7 +171,10 @@ void	check_env(t_commands *temp)
 			i[3] = i[3] - i[2];
 			buffer = ft_substr(temp->command[i[0]], i[2], i[3]);
 			str = getenv(&buffer[1]);
+			buff2 = temp->command[i[0]];
 			temp->command[i[0]] = ft_replacesubstr(temp->command[i[0]], buffer, str);
+			free(buff2);
+			free(buffer);
 		}
 		else if (temp->command[i[0]][0] == '$')
 		{
@@ -180,10 +184,34 @@ void	check_env(t_commands *temp)
 			i[3] = i[3] - i[2];
 			buffer = ft_substr(temp->command[i[0]], i[2], i[3]);
 			str = getenv(&buffer[1]);
+			buff2 = temp->command[i[0]];
 			temp->command[i[0]] = ft_replacesubstr(temp->command[i[0]], buffer, str);
+			free(buff2);
+			free(buffer);
 		}
 		i[0]++;
 	}
+}
+
+int	find_i_red(t_io_red *redirection)
+{
+	t_io_red	*temp;
+	int	input_fd;
+
+	temp = redirection;
+	if (temp == NULL)
+		return (STDIN_FILENO);
+	while (temp != NULL)
+	{
+		if (temp->in_or_out == INPUT)
+		{
+			if (input_fd)
+				close(input_fd);
+			input_fd = open(temp->file, O_RDONLY);
+		}
+		temp = temp->next;
+	}
+	return (input_fd);
 }
 
 int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
@@ -192,8 +220,7 @@ int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 	int	buffer;
 	t_commands	*temp;
 
-	(void)redirection;
-	buffer = STDIN_FILENO;
+	buffer = find_i_red(redirection);
 	temp = commands;
 	while (temp != NULL)
 	{

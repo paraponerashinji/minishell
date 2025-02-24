@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/24 17:40:33 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/24 21:10:50 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,9 @@ void	executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 	pid_t	p;
 	char	*full_cmd;
 	char	current_path[1024];
+	int	i;
 
+	i = 0;
 	p = fork();
 	if (p == 0)
 	{
@@ -214,25 +216,52 @@ int	find_i_red(t_io_red *redirection)
 	return (input_fd);
 }
 
+void	duplicate(int fd, t_io_red *redirection)
+{
+	t_io_red	*temp;
+	int	output_fd;
+
+	temp = redirection;
+	if (temp == NULL)
+	{
+		dup2(fd, STDOUT_FILENO);
+		return ;
+	}
+	while (temp != NULL)
+	{
+		if (temp->in_or_out == OUTPUT)
+		{
+			output_fd = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			dup2(output_fd, fd);
+			close(output_fd);
+		}
+		temp = temp->next;
+	}
+}
+
 int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 {
 	int	p_fd[2];
 	int	buffer;
+	int	buff_out;
 	t_commands	*temp;
 
 	buffer = find_i_red(redirection);
 	temp = commands;
+	buff_out = dup(STDOUT_FILENO);
 	while (temp != NULL)
 	{
 		check_env(temp);
 		if (temp->next != NULL)
+		{
 			pipe(p_fd);
+		}
 		else
-			p_fd[1] = STDOUT_FILENO;
+			duplicate(buff_out, redirection);
 		if (ft_strncmp(temp->command[0], "./", 2) == 0)
-			executefile(&temp->command[0][1], temp->command, buffer, p_fd[1], envp);
+			executefile(&temp->command[0][1], temp->command, buffer, buff_out, envp);
 		else if (is_command(temp->command[0]) != -1)
-			executecommand(temp->command[0], temp->command, buffer, p_fd[1], envp);
+			executecommand(temp->command[0], temp->command, buffer, buff_out, envp);
 		else
 			printf("%s: command not found\n", temp->command[0]);
 		if (temp->next != NULL)

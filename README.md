@@ -13,7 +13,5 @@ Parsing : double characters specifiers, and cleaning\
 I enventually will have to rewrite all the parsing because its too ugly\
 Integrate special pipes, clean the pipes code\
 Implement Echo, cd, export, unset, end\
-Implement env variables\
-
 Bonus:\
 Implement &&, || and *

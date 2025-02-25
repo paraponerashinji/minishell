@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/25 14:39:41 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/25 16:00:08 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,11 +264,6 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	{
 		if (temp->in_or_out == OUTPUT)
 		{
-			/*output_fd = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			buffer_buff_fd = dup(buff_fd);
-			copy(buffer_buff_fd, output_fd);
-			close(buffer_buff_fd);
-			close(output_fd);*/
 			i++;
 		}
 		temp = temp->next;
@@ -291,7 +286,6 @@ void	write_output(int buff_fd, t_io_red *redirection)
 		temp = temp->next;
 	}
 	copy(buff_fd, output_fd, i);
-	//close_all(output_fd);
 	close(buff_fd);
 }
 
@@ -299,14 +293,12 @@ int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 {
 	int	p_fd[2];
 	int	b_fd[2];
-	//int	buff_fd;
 	int	buffer;
 	t_commands	*temp;
 
 	buffer = find_i_red(redirection);
 	temp = commands;
 	pipe(b_fd);
-	//buff_fd = open("buffer/buffer.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	while (temp != NULL)
 	{
 		check_env(temp);

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/24 21:10:50 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/25 14:39:41 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,39 +216,97 @@ int	find_i_red(t_io_red *redirection)
 	return (input_fd);
 }
 
-void	duplicate(int fd, t_io_red *redirection)
+void	copy(int buff_fd, int *o_fd, int size)
+{
+	char	*line;
+	int	i;
+
+	line = get_next_line(buff_fd);
+	if (line == NULL)
+		printf("erreur gnl");
+	while (line != NULL)
+	{
+		i = 0;
+		printf("%d", o_fd[i]);
+		while (size > i)
+		{
+			write(o_fd[i++], line, ft_strlen(line));
+		}
+		free(line);
+		line = get_next_line(buff_fd);
+	}
+}
+
+void	copy_single(int buff_fd, int o_fd)
+{
+	char	*line;
+
+	line = get_next_line(buff_fd);
+	if (line == NULL)
+		printf("erreur gnl");
+	while (line != NULL)
+	{
+		write(o_fd, line, ft_strlen(line));
+		free(line);
+		line = get_next_line(buff_fd);
+	}
+}
+
+void	write_output(int buff_fd, t_io_red *redirection)
 {
 	t_io_red	*temp;
-	int	output_fd;
+	int	*output_fd;
+	int	i;
 
+	i = 0;
 	temp = redirection;
-	if (temp == NULL)
-	{
-		dup2(fd, STDOUT_FILENO);
-		return ;
-	}
 	while (temp != NULL)
 	{
 		if (temp->in_or_out == OUTPUT)
 		{
-			output_fd = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			dup2(output_fd, fd);
-			close(output_fd);
+			/*output_fd = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			buffer_buff_fd = dup(buff_fd);
+			copy(buffer_buff_fd, output_fd);
+			close(buffer_buff_fd);
+			close(output_fd);*/
+			i++;
 		}
 		temp = temp->next;
 	}
+	temp = redirection;
+	if (i == 0)
+	{
+		copy_single(buff_fd, 1);
+		return;
+	}
+	output_fd = malloc((i + 1) * sizeof(int));
+	i = 0;
+	while (temp != NULL)
+	{
+		if (temp->in_or_out == OUTPUT)
+		{
+			output_fd[i] = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			i++;
+		}
+		temp = temp->next;
+	}
+	copy(buff_fd, output_fd, i);
+	//close_all(output_fd);
+	close(buff_fd);
 }
 
 int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 {
 	int	p_fd[2];
+	int	b_fd[2];
+	//int	buff_fd;
 	int	buffer;
-	int	buff_out;
 	t_commands	*temp;
 
 	buffer = find_i_red(redirection);
 	temp = commands;
-	buff_out = dup(STDOUT_FILENO);
+	pipe(b_fd);
+	//buff_fd = open("buffer/buffer.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	while (temp != NULL)
 	{
 		check_env(temp);
@@ -257,11 +315,11 @@ int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 			pipe(p_fd);
 		}
 		else
-			duplicate(buff_out, redirection);
+			p_fd[1] = b_fd[1];
 		if (ft_strncmp(temp->command[0], "./", 2) == 0)
-			executefile(&temp->command[0][1], temp->command, buffer, buff_out, envp);
+			executefile(&temp->command[0][1], temp->command, buffer, p_fd[1], envp);
 		else if (is_command(temp->command[0]) != -1)
-			executecommand(temp->command[0], temp->command, buffer, buff_out, envp);
+			executecommand(temp->command[0], temp->command, buffer, p_fd[1], envp);
 		else
 			printf("%s: command not found\n", temp->command[0]);
 		if (temp->next != NULL)
@@ -271,5 +329,7 @@ int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 		buffer = p_fd[0];
 		temp = temp->next;
 	}
+	close(b_fd[1]);
+	write_output(b_fd[0], redirection);
 	return (1);
 }

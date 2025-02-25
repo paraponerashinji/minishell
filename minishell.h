@@ -22,6 +22,7 @@
 #include <readline/history.h>
 #include <signal.h>
 #include "libft/libft.h" // Inclusion de la libft
+#include "get_next_line.h"
 #include <sys/wait.h>
 
 typedef struct s_command

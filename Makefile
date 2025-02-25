@@ -1,7 +1,7 @@
 NAME= minishell
 CC= cc
 CFLAGS = -Wall -Wextra -Werror -I$(LIBFTDIR)
-SRCS= main.c src/pipes.c src/parsing.c src/more_parsing.c src/parsing_utilities.c
+SRCS= main.c src/pipes.c src/parsing.c src/more_parsing.c src/parsing_utilities.c gnl/get_next_line.c gnl/get_next_line_utils.c
 OBJS= $(SRCS:.c=.o)
 LIBFTDIR = libft
 LIBFT = $(LIBFTDIR)/libft.a

@@ -126,7 +126,7 @@ void	parser(char *str, char **envp)
 	t_commands	*commands = NULL;
 	t_io_red	*redirection = NULL;
 
-	splitted = multi_split(str);
+	splitted = first_split(str);
 	operator = get_operators(str);
 	putlist(&commands, &redirection, splitted, operator);
 	print_commands(commands);

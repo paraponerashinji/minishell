@@ -101,9 +101,7 @@ void	executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 	pid_t	p;
 	char	*full_cmd;
 	char	current_path[1024];
-	int	i;
 
-	i = 0;
 	p = fork();
 	if (p == 0)
 	{

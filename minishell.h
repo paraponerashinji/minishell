@@ -88,5 +88,7 @@ void putlist(t_commands **commands, t_io_red **redirection, char **splitted, cha
 void print_commands(t_commands *commands);
 void print_redirection(t_io_red *redirection);
 void	parser(char *str, char **envp);
+char    **first_split(char *s);
+char    **second_split(char *s, char c);
 
 #endif // MINISHELL_H

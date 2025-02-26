@@ -19,7 +19,7 @@ void	add_command(t_commands **a, char *splitted, pipetype type)
 
 	buffer = malloc(sizeof(t_commands));
 	buffer->pipe_type = type;
-	buffer->command = another_custom_split(splitted, ' ');
+	buffer->command = second_split(splitted, ' ');
 	buffer->next = NULL;
 	if (!*a)
 		*a = buffer;
@@ -43,7 +43,7 @@ void	add_buff_to_last(t_commands **a, char *str)
 	char	**buffer_array;
 	char	**buffer_split;
 
-	buffer_split = another_custom_split(str, ' ');
+	buffer_split = second_split(str, ' ');
 	add_size = array_size(buffer_split);
 	i = 0;
 	if(!*a)

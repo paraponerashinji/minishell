@@ -5,6 +5,7 @@ DID LIST:
 I connected the parsing with the pipes, you can now exec files\
 Env var are now implemented\
 implemented input and output redirection\
+Cleaned first split and semi implemented double characters specifiers\
 TODO LIST:
 
 Valgrind correction:\

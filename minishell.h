@@ -73,7 +73,7 @@ int createpipes(t_commands *commands, t_io_red *redirection, char **envp);
 
 int cmp(char c);
 int splitlen2(const char *s, char c);
-int splitlen(const char *s);
+int splitlen(char *s, char c);
 char **multi_split(char *s);
 char *get_operators(char *s);
 char **another_custom_split(char *s, char c);

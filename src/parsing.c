@@ -6,12 +6,12 @@
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 15:15:12 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/21 17:24:04 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/27 01:39:47 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
+/*
 char	**multi_split(char *s)
 {
 	int	i[6];
@@ -64,7 +64,7 @@ char	**multi_split(char *s)
 	output[i[2]] = NULL;
 	return (output);
 }
-
+*/
 char	*get_operators(char *s)
 {
 	int	i[2];
@@ -74,7 +74,7 @@ char	*get_operators(char *s)
 	i[0] = 0;
 	i[1] = 0;
 	quotes = 0;
-	output = malloc((splitlen(s) * 2 + 2) * sizeof(char));
+	output = malloc((splitlen(s, ' ') * 2 + 2) * sizeof(char));
 	output[i[1]++] = '|';
 	if (!output)
 		return NULL;

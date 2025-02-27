@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
+/*
 char	**another_custom_split(char *s, char c)
 {
 	int	i[5];
@@ -60,7 +60,7 @@ char	**another_custom_split(char *s, char c)
 	}
 	output[i[2]] = NULL;
 	return (output);
-}
+}*/
 
 int	array_size(char	**arr)
 {
@@ -97,23 +97,39 @@ void print_redirection(t_io_red *redirection)
 	}
 }
 
-int	splitlen(const char *s)
+int splitlen(char *s, char c)
 {
-	int	i;
-	int	split;
+    int i;
+    int count;
+    int in_segment;
+    char quote;
 
-	i = 0;
-	split = 0;
-	while (s[i] != '\0')
-	{
-		while (cmp(s[i]) && s[i] != '\0')
-			i++;
-		if (s[i] != '\0')
-			split++;
-		while (!cmp(s[i]) && s[i] != '\0')
-			i++;
-	}
-	return (split);
+    i = 0;
+    count = 0;
+    in_segment = 0;
+    while (s[i] != '\0')
+    {
+        if ((s[i] == '"' || s[i] == '\'') && !in_segment)
+        {
+            quote = s[i];
+            i++;
+            while (s[i] != quote && s[i] != '\0')
+                i++;
+            if (s[i] == quote)
+                i++;
+            in_segment = 1;
+            count++;
+        }
+        else if (s[i] != c && !in_segment)
+        {
+            in_segment = 1;
+            count++;
+        }
+        else if (s[i] == c)
+            in_segment = 0;
+        i++;
+    }
+    return count;
 }
 
 int	cmp(char c)

@@ -240,8 +240,6 @@ void	copy_single(int buff_fd, int o_fd)
 	char	*line;
 
 	line = get_next_line(buff_fd);
-	if (line == NULL)
-		printf("erreur gnl");
 	while (line != NULL)
 	{
 		write(o_fd, line, ft_strlen(line));

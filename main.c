@@ -14,7 +14,13 @@
 
 void	handle_signal(int sig)
 {
-	(void)sig;
+	if (sig == SIGINT)
+	{
+		ft_printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 char	*crop_path(char **path)
@@ -54,11 +60,6 @@ char	*get_prompt()
 	return (prompt);
 }
 
-void	cd_command(char *input)
-{
-	ft_printf("TODO : %s\n", input);
-}
-
 void	clear()
 {
 	ft_printf("\e[H\e[J");
@@ -78,98 +79,7 @@ int	ft_strlstcmp(char *str, char **list, int size)
 	}
 	return (-1);
 }
-/*
-int	add_command(t_command **a, char **args)
-{
-	t_command	*buffer;
-	t_command	*last;
-	char	*ends[] = {"|", "&&", "||"};
-	int	i;
 
-	buffer = malloc(sizeof(t_command));
-	buffer->command = args[0];
-	i = 1;
-	while (args[i] != NULL)
-	{
-		if (ft_strlstcmp(args[i], ends, 3) == -1)
-		{
-			buffer->command = ft_strjoin(buffer->command, " ");
-			buffer->command = ft_strjoin(buffer->command, args[i]);
-		}
-		else
-			break;
-		i++;
-	}
-	buffer->size = i;
-	buffer->next = NULL;
-	if (!*a)
-		*a = buffer;
-	else
-	{
-		last = *a;
-		while (last->next)
-			last = last->next;
-		last->next = buffer;
-	}
-	return (i);
-}
-
-void	print_commands(t_command *commands)
-{
-	t_command	*temp;
-
-	temp = commands;
-	while (temp != NULL)
-	{
-		ft_printf("Command: %s\n", temp->command);
-		temp = temp->next;
-	}
-}
-
-int	parse_command_line(char *str, char **envp)
-{
-	int	i;
-	char	**args;
-	t_command	*command;
-	char	*commands[] = {"cd", "echo", "exit", "pwd", "export", "unset", "env"};
-	args = ft_split(str, ' ');
-	i = 0;
-	command = NULL;
-	while (args[i] != NULL)
-	{
-		if (ft_strlstcmp(args[i], commands, 7) != -1)
-			i += add_command(&command, &args[i]);
-		else
-			i++;
-	}
-	createpipes(command, envp);
-	print_commands(command);
-	return (0);
-}*/
-/*
-void	execute(char *cmd, char **envp)
-{
-	pid_t	p;
-	char	path[1024];
-	char	*full_cmd;
-	char	**args;
-
-	args = NULL;
-	(void)cmd;
-	p = fork();
-	if (p == 0)
-	{
-		getcwd(path, sizeof(path));
-		full_cmd = ft_strjoin(path, "minishell");
-		execve(full_cmd, args, envp);
-		free(full_cmd);
-		exit(1);
-	}
-	else if (p == -1)
-		printf("fork error");
-	else
-		waitpid(p, NULL, 0);
-}*/
 int	main(int argc, char **argv, char **envp)
 {
 	char	*minishell;
@@ -192,8 +102,6 @@ int	main(int argc, char **argv, char **envp)
 			break;
 		}
 		add_history(minishell);
-		//printf("%s\n", ft_replacesubstr("tet $arg test blabla $arg2", "$arg", "HEY"));
-		//parse_command_line(minishell, envp);
 		parser(minishell, envp);
 		if (ft_strcmp(minishell, "exit") == 0)
 		{

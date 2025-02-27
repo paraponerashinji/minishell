@@ -119,6 +119,36 @@ void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, cha
 	} 
 }
 
+void	free_cmd(t_commands **a)
+{
+	t_commands	*tmp;
+	int	i;
+
+	i = 0;
+	while (*a)
+	{
+		tmp = *a;
+		*a = (*a)->next;
+		while (tmp->command[i] != NULL)
+			free(tmp->command[i++]);
+		free(tmp->command);
+		free(tmp);
+	}
+}
+
+void	free_red(t_io_red **a)
+{
+	t_io_red	*tmp;
+
+	while (*a)
+	{
+		tmp = *a;
+		*a = (*a)->next;
+		free(tmp->file);
+		free(tmp);
+	}
+}
+
 void	parser(char *str, char **envp)
 {
 	char	**splitted;
@@ -132,6 +162,8 @@ void	parser(char *str, char **envp)
 	print_commands(commands);
 	print_redirection(redirection);
 	createpipes(commands, redirection, envp);
+	free_cmd(&commands);
+	free_red(&redirection);
 	free_split(splitted);
 	free(operator);
 }

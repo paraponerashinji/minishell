@@ -32,46 +32,68 @@ void	add_command(t_commands **a, char *splitted, pipetype type)
 	}
 }
 
+t_commands	*init_command_node(char **command)
+{
+	t_commands	*node;
+
+	node = malloc(sizeof(t_commands));
+	node->pipe_type = PIPE;
+	node->command = command;
+	node->next = NULL;
+	return (node);
+}
+
+t_commands	*get_last_command(t_commands *a)
+{
+	while (a->next != NULL)
+		a = a->next;
+	return (a);
+}
+
+char	**merge_command(char **old, char **to_add)
+{
+	int		i;
+	int		j;
+	int		old_size;
+	char	**output;
+
+	old_size = array_size(old);
+	output = malloc((old_size + array_size(to_add) + 1) * sizeof(char *));
+	i = 0;
+	while (old[i] != NULL)
+	{
+		output[i] = ft_strdup(old[i]);
+		i++;
+	}
+	j = 0;
+	while (to_add[j] != NULL)
+		output[i++] = ft_strdup(to_add[j++]);
+	output[i] = NULL;
+	return (output);
+}
+
 void	add_buff_to_last(t_commands **a, char *str)
 {
-	t_commands	*buffer;
 	t_commands	*last;
 	int	i;
-	int	old_size;
-	int	add_size;
-	int	new_size;
-	char	**buffer_array;
-	char	**buffer_split;
+	char		**buffer_split;
+	char		**new_command;
 
-	buffer_split = second_split(str, ' ');
-	add_size = array_size(buffer_split);
 	i = 0;
-	if(!*a)
-	{
-		buffer = malloc(sizeof(t_commands));
-		buffer->pipe_type = PIPE;
-		buffer->command = buffer_split;
-		buffer->next = NULL;
-		*a = buffer; 
-	}
+	buffer_split = second_split(str, ' ');
+	free(str);
+	if (!*a)
+		*a = init_command_node(buffer_split);
 	else
 	{
-		last = *a;
-		while (last->next)
-			last = last->next;
-		old_size = array_size(last->command);
-		new_size = old_size + add_size;
-		buffer_array = malloc((new_size + 1) * sizeof(char*));
+		last = get_last_command(*a);
+		new_command = merge_command(last->command, buffer_split);
 		while (last->command[i] != NULL)
-		{
-			buffer_array[i] = ft_strdup(last->command[i]);
-			i++;
-		}
-		old_size = 0;
-		while (buffer_split[old_size] != NULL)
-			buffer_array[i++] = ft_strdup(buffer_split[old_size++]);
-		last->command = buffer_array;
+			free(last->command[i++]);
+		free(last->command);
+		last->command = new_command;
 	}
+	free(buffer_split);
 }
 
 char	*add_io(t_io_red **a, char *splitted, iotype type)

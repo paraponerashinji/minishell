@@ -172,7 +172,7 @@ void	check_env(t_commands *temp)
 			buffer = ft_substr(temp->command[i[0]], i[2], i[3]);
 			str = getenv(&buffer[1]);
 			buff2 = temp->command[i[0]];
-			temp->command[i[0]] = ft_replacesubstr(temp->command[i[0]], buffer, str);
+			temp->command[i[0]] = ft_replacesubstr(buff2, buffer, str);
 			free(buff2);
 			free(buffer);
 		}
@@ -185,7 +185,7 @@ void	check_env(t_commands *temp)
 			buffer = ft_substr(temp->command[i[0]], i[2], i[3]);
 			str = getenv(&buffer[1]);
 			buff2 = temp->command[i[0]];
-			temp->command[i[0]] = ft_replacesubstr(temp->command[i[0]], buffer, str);
+			temp->command[i[0]] = ft_replacesubstr(buff2, buffer, str);
 			free(buff2);
 			free(buffer);
 		}
@@ -199,8 +199,9 @@ int	find_i_red(t_io_red *redirection)
 	int	input_fd;
 
 	temp = redirection;
+	input_fd = 0;
 	if (temp == NULL)
-		return (STDIN_FILENO);
+		return (0);
 	while (temp != NULL)
 	{
 		if (temp->in_or_out == INPUT)
@@ -225,7 +226,6 @@ void	copy(int buff_fd, int *o_fd, int size)
 	while (line != NULL)
 	{
 		i = 0;
-		printf("%d", o_fd[i]);
 		while (size > i)
 		{
 			write(o_fd[i++], line, ft_strlen(line));
@@ -250,6 +250,15 @@ void	copy_single(int buff_fd, int o_fd)
 	}
 }
 
+void	free_and_close(int *fd, int size)
+{
+	int	i;
+	
+	i = 0;
+	while (size > i)
+		close(fd[i++]);
+	free(fd);
+}
 void	write_output(int buff_fd, t_io_red *redirection)
 {
 	t_io_red	*temp;
@@ -284,6 +293,7 @@ void	write_output(int buff_fd, t_io_red *redirection)
 		temp = temp->next;
 	}
 	copy(buff_fd, output_fd, i);
+	free_and_close(output_fd, i);
 	close(buff_fd);
 }
 
@@ -314,8 +324,6 @@ int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 			printf("%s: command not found\n", temp->command[0]);
 		if (temp->next != NULL)
 			close(p_fd[1]);
-		if (buffer != 0)
-			close(buffer);
 		buffer = p_fd[0];
 		temp = temp->next;
 	}

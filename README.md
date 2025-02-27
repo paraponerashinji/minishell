@@ -13,6 +13,7 @@ Rewriting a clean V2
 
 TODO LIST:
 
+SEGFAULT when bad env variable\
 Valgrind correction:\
 Parsing : double characters specifiers, and cleaning\
 I enventually will have to rewrite all the parsing because its too ugly\

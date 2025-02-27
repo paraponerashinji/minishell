@@ -135,7 +135,7 @@ int splitlen(char *s, char c)
 int	cmp(char c)
 {
 	int	i;
-	char	list[] = { '|', '<', '>', '\0' };
+	char	list[] = { '|', '<', '>', '&', '\0'};
 
 	i = 0;
 	while (list[i])

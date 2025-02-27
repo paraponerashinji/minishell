@@ -35,8 +35,13 @@ typedef struct s_command
 typedef enum {
     PIPE,
     OR_PIPE,
-    IF_PIPE
-} pipetype;
+    IF_PIPE,
+    INPUT_DEL,
+    SIMPLE_INPUT,
+    OUTPUT_APP,
+    SIMPLE_OUTPUT,
+    ERROR
+}	type;
 
 typedef enum {
     INPUT,
@@ -45,14 +50,14 @@ typedef enum {
 
 typedef struct s_commands
 {
-    pipetype pipe_type;
+    int pipe_type;
     char **command;
     struct s_commands *next;
 } t_commands;
 
 typedef struct s_io_red
 {
-    iotype in_or_out;
+    int in_or_out;
     char *file;
     struct s_io_red *next;	
 } t_io_red;
@@ -75,16 +80,16 @@ int cmp(char c);
 int splitlen2(const char *s, char c);
 int splitlen(char *s, char c);
 char **multi_split(char *s);
-char *get_operators(char *s);
+int *get_operators(char *s);
 char **another_custom_split(char *s, char c);
 char *first_word(char *str);
 char *rm_first_word(char *str);
-void add_command(t_commands **a, char *splitted, pipetype type);
+void add_command(t_commands **a, char *splitted, int op);
 int array_size(char **arr);
 void add_buff_to_last(t_commands **a, char *str);
 char    *ft_replacesubstr(char  *str, char *to_replace, char *replacement);
-char *add_io(t_io_red **a, char *splitted, iotype type);
-void putlist(t_commands **commands, t_io_red **redirection, char **splitted, char *operator);
+char *add_io(t_io_red **a, char *splitted, int type);
+void putlist(t_commands **commands, t_io_red **redirection, char **splitted, int *operator);
 void print_commands(t_commands *commands);
 void print_redirection(t_io_red *redirection);
 void	parser(char *str, char **envp);

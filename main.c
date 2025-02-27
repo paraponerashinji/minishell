@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:57:54 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/24 11:20:46 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/27 17:39:22 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,14 @@ int	ft_strlstcmp(char *str, char **list, int size)
 	return (-1);
 }
 
+void	print_mini()
+{
+	printf(" __  __ ___ _   _ ___ ____  _   _ _____ _     _     \n");
+	printf("|  \\/  |_ _| \\ | |_ _/ ___|| | | | ____| |   | |    \n");
+	printf("| |\\/| || ||  \\| || |\\___ \\| |_| |  _| | |   | |    \n");
+	printf("| |  | || || |\\  || | ___) |  _  | |___| |___| |___ \n");
+	printf("|_|  |_|___|_| \\_|___|____/|_| |_|_____|_____|_____|\n\n");
+}
 int	main(int argc, char **argv, char **envp)
 {
 	char	*minishell;
@@ -90,7 +98,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)envp;
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
-	ft_printf("\e[H\e[J");
+	printf("\e[H\e[J");
+	print_mini();
 	while (1)
 	{
 		prompt = get_prompt();

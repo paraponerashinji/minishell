@@ -11,91 +11,57 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-/*
-char	**multi_split(char *s)
-{
-	int	i[6];
-	char	**output;
 
-	i[0] = 0;
-	i[2] = 0;
-	i[4] = 0;
-	i[5] = 0;
-	output = malloc((splitlen(s) + 1) * sizeof(char *));
-	if (!output)
-		return NULL;
-	while (s[i[0]] != '\0')
-	{
-		if (cmp(s[i[0]]) == 1 && s[i[0]] != '\0')
-		{
-			if (s[i[0]] == '"')
-				i[4] = !i[4];
-			else if (s[i[0]] == '\'')
-				i[5] = !i[5];
-			i[0]++;
-		}
-		if (cmp(s[i[0]]) == 1 && s[i[0]] != '\0')
-			return NULL;
-		if (s[i[0]] == '\0')
-			break;
-		i[1] = i[0];
-		while ((cmp(s[i[1]]) == 0 || i[4] || i[5]) && s[i[1]] != '\0')
-		{
-			if (!i[5] && s[i[1]] == '"')
-				i[4] = !i[4];
-			else if (!i[4] && s[i[1]] == '\'')
-				i[5] = !i[5];
-			i[1]++;
-		}
-		output[i[2]] = malloc((i[1] - i[0] + 1) * sizeof(char));
-		if (!output[i[2]])
-			return NULL;
-		i[3] = 0;
-		while (i[0] < i[1])
-			output[i[2]][i[3]++] = s[i[0]++];
-		output[i[2]][i[3]] = '\0';
-		i[2]++;
-	}
-	if (i[4])
-	{
-		printf("Error: bracket\n");
-		return NULL;
-	}
-	output[i[2]] = NULL;
-	return (output);
+int	find_op(char *s)
+{
+	if (s[0] == '|' &&  s[1] == '|')
+		return (1);
+	else if (s[0] == '|')
+		return (2);
+	else if (s[0] == '&' && s[1] == '&')
+		return (3);
+	else if (s[0] == '<' && s[1] == '<')
+		return (4);
+	else if (s[0] == '<')
+		return (5);
+	else if (s[0] == '>' && s[1] == '>')
+		return (6);
+	else if (s[0] == '>')
+		return (7);
+	else
+		return (0);
 }
-*/
-char	*get_operators(char *s)
+
+int	*get_operators(char *s)
 {
 	int	i[2];
 	int	quotes;
-	char	*output;
+	int	*output;
 
 	i[0] = 0;
 	i[1] = 0;
 	quotes = 0;
-	output = malloc((splitlen(s, ' ') * 2 + 2) * sizeof(char));
-	output[i[1]++] = '|';
+	output = malloc((splitlen(s, ' ') * 2 + 2) * sizeof(int));
 	if (!output)
 		return NULL;
+	output[i[1]++] = 2;
 	while (s[i[0]] != '\0')
 	{
-		if (cmp(s[i[0]]) == 1)
+		if ((cmp(s[i[0]]) == 1) && !quotes)
 		{
-			if (!quotes)
-				output[i[1]++] = s[i[0]];
+			output[i[1]++] = find_op(&s[i[0]++]);
+			if (output[i[1]] == 1 || output[i[1]] == 3 || output[i[1]] == 4 || output[i[1]] == 6)
+				i[0]++;
 		}
 		else if (s[i[0]] == '"')
-		{
 			quotes = !quotes;
-		}
 		i[0]++;
 	}
 	output[i[1]] = '\0';
 	return (output);
 }
 
-void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, char *operator)
+void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, int *operator)
 {
 	char	*buffer;
 	int	i;
@@ -103,18 +69,22 @@ void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, cha
 	i = 0;
 	while (splitted[i] != NULL)
 	{
-		if (operator[i] == '|')
-			add_command(commands, splitted[i], PIPE);
-		if (operator[i] == '<')
+		if (operator[i] == 2)
+			add_command(commands, splitted[i], 2);
+		else if (operator[i] == 1)
+			add_command(commands, splitted[i], 1);
+		else if (operator[i] == 3)
 		{
-			buffer = add_io(redirection, splitted[i], INPUT);
+			printf("hey");
+			add_command(commands, splitted[i], 3);
+		}
+		else if (operator[i] != 0)
+		{
+			buffer = add_io(redirection, splitted[i], operator[i]);
 			add_buff_to_last(commands, buffer);
 		}
-		if (operator[i] == '>')
-		{
-			buffer = add_io(redirection, splitted[i], OUTPUT);
-			add_buff_to_last(commands, buffer);
-		}
+		else
+			printf("ERREUR OPERATEUR");
 		i++;
 	} 
 }
@@ -152,7 +122,7 @@ void	free_red(t_io_red **a)
 void	parser(char *str, char **envp)
 {
 	char	**splitted;
-	char	*operator;
+	int	*operator;
 	t_commands	*commands = NULL;
 	t_io_red	*redirection = NULL;
 

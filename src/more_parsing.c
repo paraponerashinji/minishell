@@ -12,13 +12,13 @@
 
 #include "../minishell.h"
 
-void	add_command(t_commands **a, char *splitted, pipetype type)
+void	add_command(t_commands **a, char *splitted, int op)
 {
 	t_commands	*buffer;
 	t_commands	*last;
 
 	buffer = malloc(sizeof(t_commands));
-	buffer->pipe_type = type;
+	buffer->pipe_type = op;
 	buffer->command = second_split(splitted, ' ');
 	buffer->next = NULL;
 	if (!*a)
@@ -96,13 +96,13 @@ void	add_buff_to_last(t_commands **a, char *str)
 	free(buffer_split);
 }
 
-char	*add_io(t_io_red **a, char *splitted, iotype type)
+char	*add_io(t_io_red **a, char *splitted, int op)
 {
 	t_io_red	*buffer;
 	t_io_red	*last;
 	char		*output;
 	buffer = malloc(sizeof(t_io_red));
-	buffer->in_or_out = type;
+	buffer->in_or_out = op;
 	buffer->file = first_word(splitted);
 	buffer->next = NULL;
 	output = rm_first_word(splitted);

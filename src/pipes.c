@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/25 16:00:08 by aharder          ###   ########.fr       */
+/*   Updated: 2025/02/28 18:56:25 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,9 @@ char	*get_path(char *cmd, char **env)
 	return (cmd);
 }
 
-void	executecommand(char *cmd, char **args, int i_fd, int o_fd, char **envp)
+int	executecommand(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 {
+	int	exit_status;
 	pid_t	p;
 	char	*full_cmd;
 
@@ -93,11 +94,13 @@ void	executecommand(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 	else if (p == -1)
 		ft_printf("fork error");
 	else
-		waitpid(p, NULL, 0);
+		waitpid(p, &exit_status, 0);
+	return (exit_status);
 }
 
-void	executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp)
+int	executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 {
+	int	exit_status;
 	pid_t	p;
 	char	*full_cmd;
 	char	current_path[1024];
@@ -117,7 +120,8 @@ void	executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 	else if (p == -1)
 		ft_printf("fork error");
 	else
-		waitpid(p, NULL, 0);
+		waitpid(p, &exit_status, 0);
+	return (exit_status);
 }
 
 int	is_command(char	*str)
@@ -294,9 +298,30 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	free_and_close(output_fd, i);
 	close(buff_fd);
 }
+/*
+int	manage_pipe(t_commands *commands, t_io_red *redirection, char **envp)
+{
+	int	status;
+	int
+	t_commands	temp;
 
+	temp = commands;
+	status = 0;
+	while (temp != NULL)
+	{
+		if (temp->pipe_type = 1 && status != 0)
+			status = createpipes(temp, redirection, envp);
+		if (temp->pipe_type = 2)
+			status = createpipes(temp, redirection, envp);
+		if (temp->pipe_type = 3 && status == 0)
+			status = createpipes(temp, redirection, envp);
+		temp = temp->next;
+	}
+}
+*/
 int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 {
+	int	status;
 	int	p_fd[2];
 	int	b_fd[2];
 	int	buffer;
@@ -314,12 +339,18 @@ int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 		}
 		else
 			p_fd[1] = b_fd[1];
-		if (ft_strncmp(temp->command[0], "./", 2) == 0)
-			executefile(&temp->command[0][1], temp->command, buffer, p_fd[1], envp);
-		else if (is_command(temp->command[0]) != -1)
-			executecommand(temp->command[0], temp->command, buffer, p_fd[1], envp);
-		else
-			printf("%s: command not found\n", temp->command[0]);
+		if ((temp->pipe_type == 3 && status == 0) || (temp->pipe_type == 2) || (temp->pipe_type == 1 && status != 0))
+		{
+			if (ft_strncmp(temp->command[0], "./", 2) == 0)
+				status = executefile(&temp->command[0][1], temp->command, buffer, p_fd[1], envp);
+			else if (is_command(temp->command[0]) != -1)
+				status = executecommand(temp->command[0], temp->command, buffer, p_fd[1], envp);
+			else
+			{
+				printf("%s: command not found\n", temp->command[0]);
+				status = 127;
+			}
+		}
 		if (temp->next != NULL)
 			close(p_fd[1]);
 		buffer = p_fd[0];

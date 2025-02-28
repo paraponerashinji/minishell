@@ -60,10 +60,22 @@ char	*get_prompt()
 	return (prompt);
 }
 
+void	print_mini()
+{
+	printf("___  ________ _   _ _____ _____ _   _  _____ _      _     \n");
+	printf("|  \\/  |_   _| \\ | |_   _/  ___| | | ||  ___| |    | |    \n");
+	printf("| .  . | | | |  \\| | | | \\ `--.| |_| || |__ | |    | |    \n");
+	printf("| |\\/| | | | | . ` | | |  `--. \\  _  ||  __|| |    | |    \n");
+	printf("| |  | |_| |_| |\\  |_| |_/\\__/ / | | || |___| |____| |____\n");
+	printf("\\_|  |_/\\___/\\_| \\_/\\___/\\____/\\_| |_/\\____/\\_____/\\_____/\n");
+	//printf("░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓████████▓▒░▒▓████████▓▒░ \n\n");
+}
+
 void	clear()
 {
 	ft_printf("\e[H\e[J");
 	rl_clear_history();
+	print_mini();
 }
 
 int	ft_strlstcmp(char *str, char **list, int size)
@@ -80,14 +92,6 @@ int	ft_strlstcmp(char *str, char **list, int size)
 	return (-1);
 }
 
-void	print_mini()
-{
-	printf(" __  __ ___ _   _ ___ ____  _   _ _____ _     _     \n");
-	printf("|  \\/  |_ _| \\ | |_ _/ ___|| | | | ____| |   | |    \n");
-	printf("| |\\/| || ||  \\| || |\\___ \\| |_| |  _| | |   | |    \n");
-	printf("| |  | || || |\\  || | ___) |  _  | |___| |___| |___ \n");
-	printf("|_|  |_|___|_| \\_|___|____/|_| |_|_____|_____|_____|\n\n");
-}
 int	main(int argc, char **argv, char **envp)
 {
 	char	*minishell;
@@ -111,13 +115,15 @@ int	main(int argc, char **argv, char **envp)
 			break;
 		}
 		add_history(minishell);
-		parser(minishell, envp);
 		if (ft_strcmp(minishell, "exit") == 0)
 		{
 			rl_clear_history();
 			free(minishell);
 			break;
 		}
+		if (ft_strcmp(minishell, "clear") == 0)
+			clear();
+		parser(minishell, envp);
 		free(minishell);
 	}
 }

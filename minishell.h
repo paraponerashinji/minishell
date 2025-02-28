@@ -73,7 +73,7 @@ void free_split(char **split);
 int checkargs(int argc);
 char *ft_getenv(char *name, char **env);
 char *get_path(char *cmd, char **env);
-void executecommand(char *cmd, char **args, int i_fd, int o_fd, char **envp);
+int executecommand(char *cmd, char **args, int i_fd, int o_fd, char **envp);
 int createpipes(t_commands *commands, t_io_red *redirection, char **envp);
 
 int cmp(char c);

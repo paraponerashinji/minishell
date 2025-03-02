@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/28 18:56:25 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/02 01:48:29 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,7 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	temp = redirection;
 	while (temp != NULL)
 	{
-		if (temp->in_or_out == OUTPUT)
+		if (temp->in_or_out == 7)
 		{
 			i++;
 		}
@@ -299,26 +299,89 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	close(buff_fd);
 }
 /*
-int	manage_pipe(t_commands *commands, t_io_red *redirection, char **envp)
+void	manage_pipe(t_commands *commands, t_io_red *redirection, char **envp)
 {
 	int	status;
-	int
-	t_commands	temp;
+	int	p_fd[2];
+	int	buffer;
+	t_commands	*temp;
 
 	temp = commands;
 	status = 0;
 	while (temp != NULL)
 	{
-		if (temp->pipe_type = 1 && status != 0)
-			status = createpipes(temp, redirection, envp);
-		if (temp->pipe_type = 2)
-			status = createpipes(temp, redirection, envp);
-		if (temp->pipe_type = 3 && status == 0)
-			status = createpipes(temp, redirection, envp);
+		pipe(p_fd);
+		if (temp->pipe_type == 1 && status != 0)
+			status = createpipes(temp, redirection, p_fd, envp);
+		else if (temp->pipe_type == 2)
+			status = createpipes(temp, redirection, p_fd, envp);
+		else if (temp->pipe_type == 3 && status == 0)
+			status = createpipes(temp, redirection, p_fd, envp);
+		if ((temp->pipe_type == 3 && status == 0) || (temp->pipe_type == 2) || (temp->pipe_type == 1 && status != 0))
+		{
+			close(buffer);
+			buffer = p_fd[0];
+		}
 		temp = temp->next;
 	}
+	write_output(buffer, redirection);
 }
 */
+int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
+{
+	int	status;
+	int	p_fd[2];
+	int	b_fd[2];
+	int	buffer;
+	t_commands	*temp;
+
+	buffer = find_i_red(redirection); // Find input redirection
+	temp = commands;
+	pipe(b_fd); // Create buffer pipe
+	while (temp != NULL)
+	{
+		check_env(temp); // Check and replace environment variables
+		if (temp->next != NULL)
+		{
+			pipe(p_fd); // Create pipe for next command
+		}
+		else
+			p_fd[1] = b_fd[1]; // Use buffer pipe for the last command
+		if (temp->pipe_type == 3 || temp->pipe_type == 2 || temp->pipe_type == 1)
+		{
+			// Execute command based on its type
+			if (ft_strncmp(temp->command[0], "./", 2) == 0)
+				status = executefile(&temp->command[0][1], temp->command, buffer, p_fd[1], envp);
+			else if (is_command(temp->command[0]) != -1)
+				status = executecommand(temp->command[0], temp->command, buffer, p_fd[1], envp);
+			else
+			{
+				printf("%s: command not found\n", temp->command[0]);
+				status = 127;
+			}
+			if (temp->next != NULL)
+			{
+				if ((temp->next->pipe_type == 3 && status != 0) || (temp->next->pipe_type == 1 && status == 0))
+				{
+					dup2(p_fd[0], b_fd[0]);
+					close(p_fd[0]); // Close the read end of the pipe
+					close(p_fd[1]);
+					break;
+				}
+			}
+			close(buffer);
+			buffer = p_fd[0];
+		}
+		if (temp->next != NULL)
+			close(p_fd[1]); // Close write end of the pipe
+		temp = temp->next;
+	}
+	close(p_fd[1]);
+	close(b_fd[1]); // Close write end of the buffer pipe
+	write_output(b_fd[0], redirection); // Write output to the appropriate file descriptors
+	return (1);
+}
+/*
 int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 {
 	int	status;
@@ -350,13 +413,14 @@ int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 				printf("%s: command not found\n", temp->command[0]);
 				status = 127;
 			}
+			buffer = p_fd[0];
 		}
+			buffer = buffer;
 		if (temp->next != NULL)
 			close(p_fd[1]);
-		buffer = p_fd[0];
 		temp = temp->next;
 	}
 	close(b_fd[1]);
 	write_output(b_fd[0], redirection);
 	return (1);
-}
+}*/

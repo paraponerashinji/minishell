@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/02 02:46:15 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/02 02:52:55 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,8 +330,8 @@ void	manage_pipe(t_commands *commands, t_io_red *redirection, char **envp)
 int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 {
 	int	status;
-	int	p_fd[2] = {-1, -1};
-	int	b_fd[2] = {-1, -1};
+	int	p_fd[2];
+	int	b_fd[2];
 	int	buffer;
 	t_commands	*temp;
 
@@ -360,6 +360,7 @@ int	createpipes(t_commands *commands, t_io_red *redirection, char **envp)
 				printf("%s: command not found\n", temp->command[0]);
 				status = 127;
 			}
+			close(p_fd[1]);
 			if (temp->next != NULL)
 			{
 				if ((temp->next->pipe_type == 3 && status != 0) || (temp->next->pipe_type == 1 && status == 0))

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/02 02:52:55 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/02 12:51:52 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,7 @@ void	free_and_close(int *fd, int size)
 		close(fd[i++]);
 	free(fd);
 }
+
 void	write_output(int buff_fd, t_io_red *redirection)
 {
 	t_io_red	*temp;
@@ -271,10 +272,8 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	temp = redirection;
 	while (temp != NULL)
 	{
-		if (temp->in_or_out == 7)
-		{
+		if (temp->in_or_out == 7 || temp->in_or_out == 6)
 			i++;
-		}
 		temp = temp->next;
 	}
 	temp = redirection;
@@ -287,17 +286,17 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	i = 0;
 	while (temp != NULL)
 	{
-		if (temp->in_or_out == OUTPUT)
-		{
-			output_fd[i] = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			i++;
-		}
+		if (temp->in_or_out == 7)
+			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if (temp->in_or_out == 6)
+			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		temp = temp->next;
 	}
 	copy(buff_fd, output_fd, i);
 	free_and_close(output_fd, i);
 	close(buff_fd);
 }
+
 /*
 void	manage_pipe(t_commands *commands, t_io_red *redirection, char **envp)
 {

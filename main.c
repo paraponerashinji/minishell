@@ -111,6 +111,7 @@ int	main(int argc, char **argv, char **envp)
 		free(prompt);
 		if (minishell == NULL)
 		{
+			printf("Readline returned NULL\n");
 			free(minishell);
 			break;
 		}

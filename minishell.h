@@ -24,6 +24,9 @@
 #include "libft/libft.h" // Inclusion de la libft
 #include "get_next_line.h"
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <libgen.h>
 
 typedef struct s_command
 {

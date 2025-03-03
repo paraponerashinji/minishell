@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:02 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/02 13:26:34 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/03 02:32:32 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,13 +155,86 @@ int	ft_strchrpos(char *str, int searchedChar)
 		return (0);
 	return (0);
 }
-void	check_env(t_commands *temp)
+
+char	**get_filenames(void)
+{
+    struct dirent *entry;
+    DIR *dp = opendir(".");
+    char **filenames = NULL;
+    int count = 0;
+
+    if (dp == NULL)
+    {
+        perror("opendir");
+        return NULL;
+    }
+
+    while ((entry = readdir(dp)))
+    {
+        if (entry->d_name[0] != '.')
+        {
+            filenames = realloc(filenames, sizeof(char *) * (count + 2));
+            filenames[count] = ft_strdup(entry->d_name);
+            count++;
+        }
+    }
+    filenames[count] = NULL; // Null-terminate the array
+    closedir(dp);
+    return filenames;
+}
+
+void free_2d_array(char **array)
+{
+    int i = 0;
+    while (array[i])
+    {
+        free(array[i]);
+        i++;
+    }
+    free(array);
+}
+
+char	**insert_files(char **command, int index)
+{
+	char	**filenames;
+	char	**output;
+	int	i;
+	int	j;
+	int	k;
+
+	k = 0;
+	i = 0;
+	j = 0;
+	filenames = get_filenames();
+	output = malloc((array_size(filenames) + array_size(command) + 1) * sizeof(char *));
+	while (i < index)
+	{
+		output[i] = command[i];
+		i++;
+	}
+	while (filenames[j] != NULL)
+	{
+		output[index + j] = filenames[j];
+		j++;
+	}
+	k = index + 1;
+	while (command[k] != NULL)
+	{
+		output[j + k - index - 1] = command[k];
+		k++;
+	}
+	output[j + k - index - 1] = NULL;
+	free(filenames);
+	return (output);
+}
+
+char	**check_env(t_commands *temp)
 {
 	int	i[5];
 	char	*str;
 	char	*buffer;
 	char	*buff2;
-
+	
 	i[0] = 0;
 	while (temp->command[i[0]] != NULL)
 	{
@@ -192,6 +265,10 @@ void	check_env(t_commands *temp)
 			temp->command[i[0]] = ft_replacesubstr(buff2, buffer, str);
 			free(buff2);
 			free(buffer);
+		}
+		else if (temp->command[i[0]][0] == '*' && temp->command[i[0]][1] == '\0')
+		{
+			temp->command = insert_files(temp->command, i[0]);
 		}
 		i[0]++;
 	}

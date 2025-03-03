@@ -8,6 +8,7 @@ SRCS=		main.c\
 		src/Parsing/listing.c\
 		src/Parsing/listing_utilities.c\
 		src/Parsing/second_split.c\
+		
 OBJS= $(SRCS:.c=.o)
 LIBFTDIR = libft
 LIBFT = $(LIBFTDIR)/libft.a

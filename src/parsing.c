@@ -75,7 +75,6 @@ void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, int
 			add_command(commands, splitted[i], 1);
 		else if (operator[i] == 3)
 		{
-			printf("hey");
 			add_command(commands, splitted[i], 3);
 		}
 		else if (operator[i] != 0)

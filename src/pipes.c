@@ -81,6 +81,7 @@ int	executecommand(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 	char	*full_cmd;
 
 	p = fork();
+	exit_status = 1;
 	if (p == 0)
 	{
 		dup2(i_fd, STDIN_FILENO);
@@ -106,6 +107,7 @@ int	executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 	char	current_path[1024];
 
 	p = fork();
+	exit_status = 1;
 	if (p == 0)
 	{
 		dup2(i_fd, STDIN_FILENO);
@@ -158,40 +160,41 @@ int	ft_strchrpos(char *str, int searchedChar)
 
 char	**get_filenames(void)
 {
-    struct dirent *entry;
-    DIR *dp = opendir(".");
-    char **filenames = NULL;
-    int count = 0;
+	struct dirent	*entry;
+	DIR	*dp;
+	char	**filenames;
+	int count;
+	int	i;
+	
+	i = 0;
+	count = 0;
+	dp = opendir(".");
+	if (dp == NULL)
+	{
+		perror("opendir");
+		return NULL;
+	}
 
-    if (dp == NULL)
-    {
-        perror("opendir");
-        return NULL;
-    }
-
-    while ((entry = readdir(dp)))
-    {
-        if (entry->d_name[0] != '.')
-        {
-            filenames = realloc(filenames, sizeof(char *) * (count + 2));
-            filenames[count] = ft_strdup(entry->d_name);
-            count++;
+	entry = readdir(dp);
+	while (entry != NULL)
+	{
+		if (entry->d_name[0] != '.')
+			count++;
+		entry = readdir(dp);
         }
-    }
-    filenames[count] = NULL; // Null-terminate the array
-    closedir(dp);
-    return filenames;
-}
-
-void free_2d_array(char **array)
-{
-    int i = 0;
-    while (array[i])
-    {
-        free(array[i]);
-        i++;
-    }
-    free(array);
+        closedir(dp);
+        filenames = malloc((count + 1) * sizeof(char *));
+        dp = opendir(".");
+       	entry = readdir(dp);
+	while (entry != NULL)
+	{
+		if (entry->d_name[0] != '.')
+			filenames[i++] = ft_strdup(entry->d_name);
+		entry = readdir(dp);
+        }
+        filenames[i] = NULL;
+        closedir(dp);
+        return (filenames);
 }
 
 char	**insert_files(char **command, int index)
@@ -209,26 +212,24 @@ char	**insert_files(char **command, int index)
 	output = malloc((array_size(filenames) + array_size(command) + 1) * sizeof(char *));
 	while (i < index)
 	{
-		output[i] = command[i];
+		output[i] = ft_strdup(command[i]);
 		i++;
 	}
 	while (filenames[j] != NULL)
 	{
-		output[index + j] = filenames[j];
+		output[index + j] = ft_strdup(filenames[j]);
 		j++;
 	}
 	k = index + 1;
 	while (command[k] != NULL)
-	{
-		output[j + k - index - 1] = command[k];
-		k++;
-	}
-	output[j + k - index - 1] = NULL;
-	free(filenames);
+		output[index + j++] = ft_strdup(command[k++]);
+	output[index + j] = NULL;
+	free_split(filenames);
+	free_split(command);
 	return (output);
 }
 
-char	**check_env(t_commands *temp)
+void	check_env(t_commands *temp)
 {
 	int	i[5];
 	char	*str;

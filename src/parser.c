@@ -41,7 +41,7 @@ char	**perror_and_free(char **output)
 		i++;
 	}
 	free(output);
-	return NULL;
+	return (NULL);
 }
 
 void	handle_quotes(t_var_bundle *var, char c)

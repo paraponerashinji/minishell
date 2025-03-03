@@ -21,7 +21,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
-#include "libft/libft.h" // Inclusion de la libft
+#include "libft/libft.h"
 #include "get_next_line.h"
 #include <sys/wait.h>
 #include <sys/types.h>

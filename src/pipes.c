@@ -128,7 +128,7 @@ int	executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp)
 
 int	is_command(char	*str)
 {
-	char    *commands[] = {"cd", "echo", "exit", "pwd", "wc", "unset", "env"};
+	char    *commands[] = {"cd", "echo", "exit", "export", "wc", "unset", "env"};
 	int	i;
 
 	i = 0;
@@ -169,12 +169,6 @@ char	**get_filenames(void)
 	i = 0;
 	count = 0;
 	dp = opendir(".");
-	if (dp == NULL)
-	{
-		perror("opendir");
-		return NULL;
-	}
-
 	entry = readdir(dp);
 	while (entry != NULL)
 	{
@@ -203,27 +197,23 @@ char	**insert_files(char **command, int index)
 	char	**output;
 	int	i;
 	int	j;
-	int	k;
 
-	k = 0;
 	i = 0;
 	j = 0;
 	filenames = get_filenames();
 	output = malloc((array_size(filenames) + array_size(command) + 1) * sizeof(char *));
-	while (i < index)
-	{
-		output[i] = ft_strdup(command[i]);
-		i++;
-	}
+	while (i++ < index)
+		output[i - 1] = ft_strdup(command[i - 1]);
 	while (filenames[j] != NULL)
 	{
 		output[index + j] = ft_strdup(filenames[j]);
 		j++;
 	}
-	k = index + 1;
-	while (command[k] != NULL)
-		output[index + j++] = ft_strdup(command[k++]);
-	output[index + j] = NULL;
+	j = j + index;
+	index++;
+	while (command[index] != NULL)
+		output[j++] = ft_strdup(command[index++]);
+	output[j] = NULL;
 	free_split(filenames);
 	free_split(command);
 	return (output);

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../include/minishell.h"
+
 void	check_env(t_commands *temp)
 {
 	int	i;
@@ -97,4 +99,37 @@ char	**insert_files(char **command, int index)
 	free_split(filenames);
 	free_split(command);
 	return (output);
+}
+
+char	**get_filenames(void)
+{
+	struct dirent	*entry;
+	DIR	*dp;
+	char	**filenames;
+	int count;
+	int	i;
+	
+	i = 0;
+	count = 0;
+	dp = opendir(".");
+	entry = readdir(dp);
+	while (entry != NULL)
+	{
+		if (entry->d_name[0] != '.')
+			count++;
+		entry = readdir(dp);
+	}
+		closedir(dp);
+       	filenames = malloc((count + 1) * sizeof(char *));
+        dp = opendir(".");
+       	entry = readdir(dp);
+	while (entry != NULL)
+	{
+		if (entry->d_name[0] != '.')
+			filenames[i++] = ft_strdup(entry->d_name);
+		entry = readdir(dp);
+    }
+    filenames[i] = NULL;
+    closedir(dp);
+    return (filenames);
 }

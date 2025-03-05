@@ -97,7 +97,7 @@ int	main()
 			free(minishell);
 			break;
 		}
-		parser(minishell, envp);
+		parser(minishell);
 		free(minishell);
 	}
 }

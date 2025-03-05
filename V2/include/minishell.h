@@ -35,12 +35,21 @@ typedef struct s_commands
 	struct s_commands	*next;
 }	t_commands;
 
-typedef struct s_commands
+typedef struct s_io_red
 {
 	int				in_or_out;
-	char			**command;
+	char			*file;
 	struct s_io_red	*next;
 }	t_io_red;
+
+typedef struct s_var_bundle
+{
+	int	i;
+	int	j;
+	int	y;
+	int	s_quotes;
+	int	d_quotes;
+}	t_var_bundle;
 
 // MAIN
 char		*get_prompt(void);
@@ -48,10 +57,13 @@ char		*crop_path(char **path);
 void		handle_signal(int sig);
 void		handle_signal(int sig);
 // PARSING
-void		parser(char *str, char **envp);
+void		parser(char *str);
 int			splitlen(char *s, char c);
 int			*get_operators(char *s);
 int			find_op(char *s);
+int splitlen(char *s, char c);
+int	cmp(char c);
+// LISTING
 void		putlist(t_commands **cmds, t_io_red **red, char **split, int *op);
 void		add_command(t_commands **a, char *splitted, int op);
 t_commands	*init_command_node(char **command);
@@ -77,7 +89,7 @@ char		**second_split(char *s, char c);
 char		*write_segment(char *s, int start, int end);
 int			find_segment_end(char *s, char c, int start);
 // PIPES
-int			createpipes(t_commands *commands, t_io_red *redirection, char **envp);
+int			createpipes(t_commands *commands, t_io_red *redirection);
 int			is_command(char	*str);
 int			executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp);
 int			executecommand(char *cmd, char **args, int i_fd, int o_fd, char **envp);
@@ -96,4 +108,7 @@ void		free_and_close(int *fd, int size);
 
 // UTILITIES
 void		free_split(char **split);
+int array_size(char **arr);
+void print_commands(t_commands *commands);
+void print_redirection(t_io_red *redirection);
 #endif

@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../include/minishell.h"
 int	createpipes(t_commands *commands, t_io_red *redirection)
 {
 	int	p_fd[2];
@@ -54,6 +55,8 @@ int	execute(t_commands *temp, int buffer, int p_fd[2])
 {
 	int	status;
 
+	if (access(temp->command[0], F_OK | X_OK) == 0)
+		status = executecommand(temp->command[0], temp->command, buffer, p_fd[1], envp);
 	if (ft_strncmp(temp->command[0], "./", 2) == 0)
 		status = executefile(&temp->command[0][1], temp->command, buffer, p_fd[1], envp);
 	else if (is_command(temp->command[0]) != -1)

@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "..../include/minishell.h"
+#include "../include/minishell.h"
 
-void	add_command(t_commands **a, char *splitted, pipetype type)
+void	add_command(t_commands **a, char *splitted, int type)
 {
 	t_commands	*buffer;
 	t_commands	*last;
@@ -32,7 +32,7 @@ void	add_command(t_commands **a, char *splitted, pipetype type)
 	}
 }
 
-char	*add_io(t_io_red **a, char *splitted, iotype type)
+char	*add_io(t_io_red **a, char *splitted, int type)
 {
 	t_io_red	*buffer;
 	t_io_red	*last;
@@ -57,7 +57,6 @@ char	*add_io(t_io_red **a, char *splitted, iotype type)
 
 void	add_buff_to_last(t_commands **a, char *str)
 {
-	t_commands	*buffer;
 	t_commands	*last;
 	char		**buffer_split;
 	char		**new_command;
@@ -67,7 +66,7 @@ void	add_buff_to_last(t_commands **a, char *str)
 		*a = init_command_node(buffer_split);
 	else
 	{
-		get_last_command(*a);
+		last = get_last_command(*a);
 		new_command = merge_command(last->command, buffer_split);
 		free(last->command);
 		last->command = new_command;

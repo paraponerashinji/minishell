@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "..../include/minishell.h"
+#include "../include/minishell.h"
 
 char	**first_split(char *s)
 {

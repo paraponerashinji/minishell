@@ -10,12 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../include/minishell.h"
+
 t_commands	*init_command_node(char **command)
 {
 	t_commands	*node;
 
 	node = malloc(sizeof(t_commands));
-	node->pipe_type = PIPE;
+	node->pipe_type = 2;
 	node->command = command;
 	node->next = NULL;
 	return (node);
@@ -45,7 +47,7 @@ char	**merge_command(char **old, char **to_add)
 	}
 	j = 0;
 	while (to_add[j] != NULL)
-		output[i++] = ft_strdupt(to_add[j++]);
+		output[i++] = ft_strdup(to_add[j++]);
 	output[i] = NULL;
 	return (output);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "..../include/minishell.h"
+#include "../include/minishell.h"
 
 void	assign_start_value(t_var_bundle *var)
 {

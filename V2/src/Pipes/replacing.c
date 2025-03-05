@@ -36,7 +36,6 @@ void	check_env(t_commands *temp)
 char	*quote_replace(char *str, int i)
 {
 	char	*buffer;
-	char	*value;
 	char	*buff2;
 	int		j;
 
@@ -56,7 +55,6 @@ char	*quote_replace(char *str, int i)
 char	*replace(char *str, int i)
 {
 	char	*buffer;
-	char	*value;
 	char	*buff2;
 	int		j;
 
@@ -99,6 +97,23 @@ char	**insert_files(char **command, int index)
 	free_split(filenames);
 	free_split(command);
 	return (output);
+}
+
+int	ft_strchrpos(char *str, int searchedChar)
+{
+	int	i;
+
+	i = 0;
+	while (*str)
+	{
+		if (*str == (char)searchedChar)
+			return (i);
+		str++;
+		i++;
+	}
+	if (searchedChar == '\0')
+		return (0);
+	return (0);
 }
 
 char	**get_filenames(void)

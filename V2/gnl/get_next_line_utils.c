@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../get_next_line.h"
+#include "../include/get_next_line.h"
 
 char	*ft_strchr2(char *str, int searchedChar)
 {

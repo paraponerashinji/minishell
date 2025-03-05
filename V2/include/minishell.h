@@ -27,6 +27,7 @@
 # include <sys/types.h>
 # include <dirent.h>
 # include <libgen.h>
+# include "get_next_line.h"
 
 typedef struct s_commands
 {
@@ -91,8 +92,13 @@ int			find_segment_end(char *s, char c, int start);
 // PIPES
 int			createpipes(t_commands *commands, t_io_red *redirection);
 int			is_command(char	*str);
-int			executefile(char *cmd, char **args, int i_fd, int o_fd, char **envp);
-int			executecommand(char *cmd, char **args, int i_fd, int o_fd, char **envp);
+int	execute(t_commands *temp, int buffer, int p_fd[2]);
+int			executefile(char *cmd, char **args, int i_fd, int o_fd);
+char	*get_path(char *cmd);
+int			executecommand(char *cmd, char **args, int i_fd, int o_fd);
+// REPLACING
+char	*replace(char *str, int i);
+char	*quote_replace(char *str, int i);
 // INPUT REDIRECTION, ENV VAR AND *
 int			find_i_red(t_io_red *redirection);
 void		get_heredoc(int *p_fd, char *end);
@@ -111,4 +117,5 @@ void		free_split(char **split);
 int array_size(char **arr);
 void print_commands(t_commands *commands);
 void print_redirection(t_io_red *redirection);
+void	init_pipes(int p_fd[2], int b_fd[2]);
 #endif

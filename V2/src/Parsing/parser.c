@@ -15,7 +15,7 @@
 void	parser(char *str)
 {
 	char		**splitted;
-	int		*operator;
+	int			*operator;
 	t_commands	*commands = NULL;
 	t_io_red	*redirection = NULL;
 
@@ -24,7 +24,9 @@ void	parser(char *str)
 	putlist(&commands, &redirection, splitted, operator);
 	print_commands(commands);
 	print_redirection(redirection);
-	//createpipes(commands, redirection);
+	createpipes(commands, redirection);
+	free_red(&redirection);
+	free_cmd(&commands);
 	free_split(splitted);
 	free(operator);
 }
@@ -32,7 +34,7 @@ void	parser(char *str)
 void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, int *operator)
 {
 	char	*buffer;
-	int	i;
+	int		i;
 
 	i = 0;
 	while (splitted[i] != NULL)
@@ -53,7 +55,7 @@ void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, int
 		else
 			printf("ERREUR OPERATEUR");
 		i++;
-	} 
+	}
 }
 
 int	*get_operators(char *s)
@@ -67,7 +69,7 @@ int	*get_operators(char *s)
 	quotes = 0;
 	output = malloc((splitlen(s, ' ') * 2 + 2) * sizeof(int));
 	if (!output)
-		return NULL;
+		return (NULL);
 	output[i[1]++] = 2;
 	while (s[i[0]] != '\0')
 	{
@@ -101,45 +103,45 @@ int	cmp(char c)
 	return (0);
 }
 
-int splitlen(char *s, char c)
+int	splitlen(char *s, char c)
 {
-    int i;
-    int count;
-    int in_segment;
-    char quote;
+	int		i;
+	int		count;
+	int		in_segment;
+	char	quote;
 
-    i = 0;
-    count = 0;
-    in_segment = 0;
-    while (s[i] != '\0')
-    {
-        if ((s[i] == '"' || s[i] == '\'') && !in_segment)
-        {
-            quote = s[i];
-            i++;
-            while (s[i] != quote && s[i] != '\0')
-                i++;
-            if (s[i] == quote)
-                i++;
-            in_segment = 1;
-            count++;
-        }
-        else if (s[i] != c && !in_segment)
-        {
-            in_segment = 1;
-            count++;
-        }
-        else if (s[i] == c)
-            in_segment = 0;
-        if (s[i] != '\0')
-        	i++;
-    }
-    return count;
+	i = 0;
+	count = 0;
+	in_segment = 0;
+	while (s[i] != '\0')
+	{
+		if ((s[i] == '"' || s[i] == '\'') && !in_segment)
+		{
+			quote = s[i];
+			i++;
+			while (s[i] != quote && s[i] != '\0')
+				i++;
+			if (s[i] == quote)
+				i++;
+			in_segment = 1;
+			count++;
+		}
+		else if (s[i] != c && !in_segment)
+		{
+			in_segment = 1;
+			count++;
+		}
+		else if (s[i] == c)
+			in_segment = 0;
+		if (s[i] != '\0')
+			i++;
+	}
+	return (count);
 }
 
 int	find_op(char *s)
 {
-	if (s[0] == '|' &&  s[1] == '|')
+	if (s[0] == '|' && s[1] == '|')
 		return (1);
 	else if (s[0] == '|')
 		return (2);
@@ -177,21 +179,26 @@ void	free_split(char **split)
 	free(split);
 }
 
-void print_commands(t_commands *commands)
+void	print_commands(t_commands *commands)
 {
-	t_commands *current = commands;
+	t_commands	*current;
+	int			i;
+
+	i = 0;
+	current = commands;
 	while (current != NULL)
 	{
 		printf("Pipe Type: %d\n", current->pipe_type);
-		for (int i = 0; current->command[i] != NULL; i++)
+		while (current->command[i] != NULL)
 		{
 			printf("Command[%d]: %s\n", i, current->command[i]);
+			i++;
 		}
 		current = current->next;
 	}
 }
 
-void print_redirection(t_io_red *redirection)
+void	print_redirection(t_io_red *redirection)
 {
 	t_io_red *current = redirection;
 	while (current != NULL)

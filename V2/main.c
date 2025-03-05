@@ -25,20 +25,20 @@ void	handle_signal(int sig)
 
 char	*crop_path(char **path)
 {
-	int	i;
+	int		i;
 	char	*buffer;
 	char	*buffer2;
 
 	i = 0;
 	while (path[i] != NULL)
 		i++;
-	buffer = ft_strjoin(path[i-2], "/");
-	buffer2 = ft_strjoin(buffer, path[i-1]);
+	buffer = ft_strjoin(path[i - 2], "/");
+	buffer2 = ft_strjoin(buffer, path[i - 1]);
 	free(buffer);
 	return (buffer2);
 }
 
-char	*get_prompt()
+char	*get_prompt(void)
 {
 	char	path[1024];
 	char	*buffer;
@@ -60,7 +60,7 @@ char	*get_prompt()
 	return (prompt);
 }
 
-void	print_mini()
+void	print_mini(void)
 {
 	printf("___  ________ _   _ _____ _____ _   _  _____ _      _     \n");
 	printf("|  \\/  |_   _| \\ | |_   _/  ___| | | ||  ___| |    | |    \n");
@@ -70,7 +70,7 @@ void	print_mini()
 	printf("\\_|  |_/\\___/\\_| \\_/\\___/\\____/\\_| |_/\\____/\\_____/\\_____/\n");
 }
 
-int	main()
+int	main(void)
 {
 	char	*minishell;
 	char	*prompt;
@@ -88,15 +88,9 @@ int	main()
 		{
 			printf("Readline returned NULL\n");
 			free(minishell);
-			break;
+			break ;
 		}
 		add_history(minishell);
-		if (ft_strcmp(minishell, "exit") == 0)
-		{
-			rl_clear_history();
-			free(minishell);
-			break;
-		}
 		parser(minishell);
 		free(minishell);
 	}

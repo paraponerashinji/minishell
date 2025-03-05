@@ -8,7 +8,10 @@ SRCS=		main.c\
 		src/Parsing/listing.c\
 		src/Parsing/listing_utilities.c\
 		src/Parsing/second_split.c\
-		
+		src/Pipes/pipes.c\
+		src/Pipes/replacing.c\
+		gnl/get_next_line.c\
+		gnl/get_next_line_utils.c
 OBJS= $(SRCS:.c=.o)
 LIBFTDIR = libft
 LIBFT = $(LIBFTDIR)/libft.a

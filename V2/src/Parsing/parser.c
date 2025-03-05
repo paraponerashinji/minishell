@@ -131,7 +131,8 @@ int splitlen(char *s, char c)
         }
         else if (s[i] == c)
             in_segment = 0;
-        i++;
+        if (s[i] != '\0')
+        	i++;
     }
     return count;
 }

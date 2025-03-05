@@ -48,6 +48,8 @@ void	process_string(char *s, t_var_bundle *var, char **output)
 		output[var->y] = crop_str(s, var->i, var->j);
 		var->y++;
 		var->i = var->j + i;
+		if (var->i > ft_strlen(s))
+			break;
 	}
 }
 

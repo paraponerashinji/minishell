@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replacing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/03 16:17:46 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:51:39 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,11 @@
 void	check_env(t_commands *temp)
 {
 	int	i;
-	int	j;
 	int	k;
 
 	i = 0;
 	while (temp->command[i] != NULL)
 	{
-		j = ft_strlen(temp->command[i]);
 		k = ft_strchrpos(temp->command[i], '$');
 		if (temp->command[i][0] == '"' && k)
 			temp->command[i] = quote_replace(temp->command[i], k);
@@ -114,37 +112,4 @@ int	ft_strchrpos(char *str, int searchedChar)
 	if (searchedChar == '\0')
 		return (0);
 	return (0);
-}
-
-char	**get_filenames(void)
-{
-	struct dirent	*entry;
-	DIR	*dp;
-	char	**filenames;
-	int count;
-	int	i;
-	
-	i = 0;
-	count = 0;
-	dp = opendir(".");
-	entry = readdir(dp);
-	while (entry != NULL)
-	{
-		if (entry->d_name[0] != '.')
-			count++;
-		entry = readdir(dp);
-	}
-		closedir(dp);
-       	filenames = malloc((count + 1) * sizeof(char *));
-        dp = opendir(".");
-       	entry = readdir(dp);
-	while (entry != NULL)
-	{
-		if (entry->d_name[0] != '.')
-			filenames[i++] = ft_strdup(entry->d_name);
-		entry = readdir(dp);
-    }
-    filenames[i] = NULL;
-    closedir(dp);
-    return (filenames);
 }

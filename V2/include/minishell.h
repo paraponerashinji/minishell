@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/03 14:34:49 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/06 23:06:22 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void		parser(char *str);
 int			splitlen(char *s, char c);
 int			*get_operators(char *s);
 int			find_op(char *s);
-int splitlen(char *s, char c);
-int	cmp(char c);
+int			splitlen(char *s, char c);
+int			cmp(char c);
 // LISTING
 void		putlist(t_commands **cmds, t_io_red **red, char **split, int *op);
 void		add_command(t_commands **a, char *splitted, int op);
@@ -89,28 +89,40 @@ char		**perror_and_free(char **output);
 char		**second_split(char *s, char c);
 char		*write_segment(char *s, int start, int end);
 int			find_segment_end(char *s, char c, int start);
+// VALID LINES
+int valid_line(t_commands *cmd, t_io_red *red);
+int print_pipe_error();
 // PIPES
 int			createpipes(t_commands *commands, t_io_red *redirection);
+void		process_commands(t_commands *commands, int p_fd[2], int b_fd[2], int buffer);
+void		init_pipes(int p_fd[2], int b_fd[2]);
+void		close_pipes(int fd);
 int			is_command(char	*str);
-int	execute(t_commands *temp, int buffer, int p_fd[2]);
-int			executefile(char *cmd, char **args, int i_fd, int o_fd);
-char	*get_path(char *cmd);
-int			executecommand(char *cmd, char **args, int i_fd, int o_fd);
 // REPLACING
-char	*replace(char *str, int i);
-char	*quote_replace(char *str, int i);
-// INPUT REDIRECTION, ENV VAR AND *
+void		check_env(t_commands *temp);
+char		*replace(char *str, int i);
+char		*quote_replace(char *str, int i);
+char		**insert_files(char **command, int index);
+int			ft_strchrpos(char *str, int searchedChar);
+// INPUT REDIRECTION
 int			find_i_red(t_io_red *redirection);
 void		get_heredoc(int *p_fd, char *end);
-void		check_env(t_commands *temp);
-char		**insert_files(char **command, int index);
-char		**get_filenames(void);
-int			ft_strchrpos(char *str, int searchedChar);
 // OUTPUT REDIRECTION
 void		write_output(int buff_fd, t_io_red *redirection);
 void		copy(int buff_fd, int *o_fd, int size);
 void		copy_single(int buff_fd, int o_fd);
+// EXECUTION
+int			execute(t_commands *temp, int buffer, int p_fd[2]);
+int			executefile(char *cmd, char **args, int i_fd, int o_fd);
+int			executefullfile(char *cmd, char **args, int i_fd, int o_fd);
+int			executecommand(char *cmd, char **args, int i_fd, int o_fd);
+char		*get_path(char *cmd);
+// PIPES/EXEC UTILS
 void		free_and_close(int *fd, int size);
+void		free_cmd(t_commands **a);
+void		free_red(t_io_red **a);
+char		**get_filenames(void);
+
 
 // UTILITIES
 void		free_split(char **split);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   listing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
+/*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:27:22 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/26 18:49:43 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/07 02:41:20 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ void	add_buff_to_last(t_commands **a, char *str)
 	{
 		last = get_last_command(*a);
 		new_command = merge_command(last->command, buffer_split);
-		free(last->command);
+		free_split(last->command);
+		free_split(buffer_split);
+		free(str);
 		last->command = new_command;
 	}
 }

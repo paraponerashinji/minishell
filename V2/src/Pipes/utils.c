@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:47:27 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/06 22:55:27 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/07 02:21:47 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	free_cmd(t_commands **a)
 	{
 		tmp = *a;
 		*a = (*a)->next;
-        i = 0;
+		i = 0;
 		while (tmp->command[i] != NULL)
 			free(tmp->command[i++]);
 		free(tmp->command);
@@ -55,14 +55,37 @@ void	free_red(t_io_red **a)
 char	**get_filenames(void)
 {
 	struct dirent	*entry;
-	DIR	*dp;
-	char	**filenames;
-	int count;
-	int	i;
-	
+	DIR				*dp;
+	char			**filenames;
+	int				count;
+	int				i;
+
 	i = 0;
+	count = count_files();
+	filenames = malloc((count + 1) * sizeof(char *));
+	dp = opendir(".");
+	entry = readdir(dp);
+	while (entry != NULL)
+	{
+		if (entry->d_name[0] != '.')
+			filenames[i++] = ft_strdup(entry->d_name);
+		entry = readdir(dp);
+	}
+	filenames[i] = NULL;
+	closedir(dp);
+	return (filenames);
+}
+
+int	count_files(void)
+{
+	struct dirent	*entry;
+	DIR				*dp;
+	int				count;
+
 	count = 0;
 	dp = opendir(".");
+	if (dp == NULL)
+		return (0);
 	entry = readdir(dp);
 	while (entry != NULL)
 	{
@@ -70,17 +93,6 @@ char	**get_filenames(void)
 			count++;
 		entry = readdir(dp);
 	}
-		closedir(dp);
-       	filenames = malloc((count + 1) * sizeof(char *));
-        dp = opendir(".");
-       	entry = readdir(dp);
-	while (entry != NULL)
-	{
-		if (entry->d_name[0] != '.')
-			filenames[i++] = ft_strdup(entry->d_name);
-		entry = readdir(dp);
-    }
-    filenames[i] = NULL;
-    closedir(dp);
-    return (filenames);
+	closedir(dp);
+	return (count);
 }

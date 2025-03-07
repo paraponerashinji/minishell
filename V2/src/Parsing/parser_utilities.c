@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 23:09:42 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/06 23:12:16 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/07 00:06:19 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 int	cmp(char c)
 {
-	int	i;
-	char	list[] = { '|', '<', '>', '&', '\0'};
+	int		i;
+	char	list[5];
 
+	init_list(list);
 	i = 0;
 	while (list[i])
 	{
@@ -29,38 +30,31 @@ int	cmp(char c)
 
 int	splitlen(char *s, char c)
 {
-	int		i;
-	int		count;
+	int		i[2];
 	int		in_segment;
-	char	quote;
 
-	i = 0;
-	count = 0;
+	i[0] = 0;
+	i[1] = 0;
 	in_segment = 0;
-	while (s[i] != '\0')
+	while (s[i[0]] != '\0')
 	{
-		if ((s[i] == '"' || s[i] == '\'') && !in_segment)
+		if ((s[i[0]] == '"' || s[i[0]] == '\'') && !in_segment)
 		{
-			quote = s[i];
-			i++;
-			while (s[i] != quote && s[i] != '\0')
-				i++;
-			if (s[i] == quote)
-				i++;
+			i[0] = handle_quotes_bis(s, i[0]);
 			in_segment = 1;
-			count++;
+			i[1]++;
 		}
-		else if (s[i] != c && !in_segment)
+		else if (s[i[0]] != c && !in_segment)
 		{
 			in_segment = 1;
-			count++;
+			i[1]++;
 		}
-		else if (s[i] == c)
+		else if (s[i[0]] == c)
 			in_segment = 0;
-		if (s[i] != '\0')
-			i++;
+		if (s[i[0]] != '\0')
+			i[0]++;
 	}
-	return (count);
+	return (i[1]);
 }
 
 int	find_op(char *s)

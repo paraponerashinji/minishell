@@ -6,32 +6,34 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/06 17:48:40 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/07 02:14:08 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	process_commands(t_commands *commands, int p_fd[2], int b_fd[2], int buffer)
+void	process_commands(t_commands *commands, int p_fd[2], int b_fd[2], int b)
 {
-	t_commands	*temp;
-	int			status;
+	t_commands	*t;
+	int			s;
 
-	temp = commands;
+	t = commands;
 	init_pipes(p_fd, b_fd);
-	while (temp != NULL)
+	while (t != NULL)
 	{
-		check_env(temp);
+		check_env(t);
 		pipe(p_fd);
-		status = execute(temp, buffer, p_fd);
-		if (temp->next != NULL)
+		s = execute(t, b, p_fd);
+		if (t->next != NULL)
 		{
-			if ((temp->next->pipe_type == 3 && status != 0) || (temp->next->pipe_type == 1 && status == 0))
+			if (t->next->pipe_type == 3 && s != 0)
+				break ;
+			if (t->next->pipe_type == 1 && s == 0)
 				break ;
 			close(p_fd[1]);
 		}
-		buffer = p_fd[0];
-		temp = temp->next;
+		b = p_fd[0];
+		t = t->next;
 	}
 	dup2(p_fd[0], b_fd[0]);
 	close(p_fd[0]);

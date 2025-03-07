@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_split.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
+/*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:10:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/26 18:15:00 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/06 23:46:52 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	process_string(char *s, t_var_bundle *var, char **output)
 		var->y++;
 		var->i = var->j + i;
 		if (var->i > ft_strlen(s))
-			break;
+			break ;
 	}
 }
 

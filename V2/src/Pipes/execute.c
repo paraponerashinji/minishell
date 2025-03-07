@@ -6,22 +6,22 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/06 17:57:45 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/07 02:09:20 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	execute(t_commands *temp, int buffer, int p_fd[2])
+int	execute(t_commands *temp, int b, int p_fd[2])
 {
 	int	status;
 
 	if (access(temp->command[0], F_OK | X_OK) == 0)
-		status = executefullfile(temp->command[0], temp->command, buffer, p_fd[1]);
+		status = executefullfile(temp->command[0], temp->command, b, p_fd[1]);
 	if (ft_strncmp(temp->command[0], "./", 2) == 0)
-		status = executefile(&temp->command[0][1], temp->command, buffer, p_fd[1]);
+		status = executefile(&temp->command[0][1], temp->command, b, p_fd[1]);
 	else if (is_command(temp->command[0]) != -1)
-		status = executecommand(temp->command[0], temp->command, buffer, p_fd[1]);
+		status = executecommand(temp->command[0], temp->command, b, p_fd[1]);
 	else
 	{
 		printf("%s: command not found\n", temp->command[0]);

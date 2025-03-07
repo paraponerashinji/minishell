@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/06 17:51:39 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/07 02:37:13 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,31 +69,31 @@ char	*replace(char *str, int i)
 	return (str);
 }
 
-char	**insert_files(char **command, int index)
+char	**insert_files(char **cmd, int index)
 {
-	char	**filenames;
+	char	**fn;
 	char	**output;
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	filenames = get_filenames();
-	output = malloc((array_size(filenames) + array_size(command) + 1) * sizeof(char *));
+	fn = get_filenames();
+	output = malloc((array_size(fn) + array_size(cmd) + 1) * sizeof(char *));
 	while (i++ < index)
-		output[i - 1] = ft_strdup(command[i - 1]);
-	while (filenames[j] != NULL)
+		output[i - 1] = ft_strdup(cmd[i - 1]);
+	while (fn[j] != NULL)
 	{
-		output[index + j] = ft_strdup(filenames[j]);
+		output[index + j] = ft_strdup(fn[j]);
 		j++;
 	}
 	j = j + index;
 	index++;
-	while (command[index] != NULL)
-		output[j++] = ft_strdup(command[index++]);
+	while (cmd[index] != NULL)
+		output[j++] = ft_strdup(cmd[index++]);
 	output[j] = NULL;
-	free_split(filenames);
-	free_split(command);
+	free_split(fn);
+	free_split(cmd);
 	return (output);
 }
 

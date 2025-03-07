@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/06 23:12:19 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/07 00:11:16 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@ void	parser(char *str)
 {
 	char		**splitted;
 	int			*operator;
-	t_commands	*commands = NULL;
-	t_io_red	*redirection = NULL;
+	t_commands	*commands;
+	t_io_red	*redirection;
 
+	commands = NULL;
+	redirection = NULL;
 	splitted = first_split(str);
 	operator = get_operators(str);
 	putlist(&commands, &redirection, splitted, operator);
@@ -32,26 +34,26 @@ void	parser(char *str)
 	free(operator);
 }
 
-void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, int *operator)
+void	putlist(t_commands **cmds, t_io_red **red, char **split, int *op)
 {
 	char	*buffer;
 	int		i;
 
 	i = 0;
-	while (splitted[i] != NULL)
+	while (split[i] != NULL)
 	{
-		if (operator[i] == 2)
-			add_command(commands, splitted[i], 2);
-		else if (operator[i] == 1)
-			add_command(commands, splitted[i], 1);
-		else if (operator[i] == 3)
+		if (op[i] == 2)
+			add_command(cmds, split[i], 2);
+		else if (op[i] == 1)
+			add_command(cmds, split[i], 1);
+		else if (op[i] == 3)
 		{
-			add_command(commands, splitted[i], 3);
+			add_command(cmds, split[i], 3);
 		}
-		else if (operator[i] != 0)
+		else if (op[i] != 0)
 		{
-			buffer = add_io(redirection, splitted[i], operator[i]);
-			add_buff_to_last(commands, buffer);
+			buffer = add_io(red, split[i], op[i]);
+			add_buff_to_last(cmds, buffer);
 		}
 		else
 			printf("ERREUR OPERATEUR");
@@ -61,29 +63,26 @@ void	putlist(t_commands **commands, t_io_red **redirection, char **splitted, int
 
 int	*get_operators(char *s)
 {
-	int	i[2];
-	int	quotes;
+	int	i[4];
 	int	*output;
 
 	i[0] = 0;
-	i[1] = 0;
-	quotes = 0;
-	output = malloc((splitlen(s, ' ') * 2 + 2) * sizeof(int));
+	i[1] = 1;
+	i[2] = 0;
+	i[3] = splitlen(s, ' ');
+	output = malloc((splitlen(s, ' ') + 1) * sizeof(int));
 	if (!output)
 		return (NULL);
-	output[i[1]++] = 2;
+	output[0] = 2;
 	while (s[i[0]] != '\0')
 	{
-		if ((cmp(s[i[0]]) == 1) && !quotes)
-		{
-			output[i[1]] = find_op(&s[i[0]++]);
-			if (output[i[1]] == 1 || output[i[1]] == 3 || output[i[1]] == 4 || output[i[1]] == 6)
-				i[0]++;
-			i[1]++;
-		}
+		if ((cmp(s[i[0]]) == 1) && !i[2])
+			handle_operator(s, &i[0], &i[1], output);
 		else if (s[i[0]] == '"')
-			quotes = !quotes;
+			i[2] = !i[2];
 		i[0]++;
+		if (i[1] > i[3])
+			return (output);
 	}
 	output[i[1]] = '\0';
 	return (output);
@@ -110,7 +109,9 @@ void	print_commands(t_commands *commands)
 
 void	print_redirection(t_io_red *redirection)
 {
-	t_io_red *current = redirection;
+	t_io_red	*current;
+
+	current = redirection;
 	while (current != NULL)
 	{
 		printf("IO Type: %d\n", current->in_or_out);

@@ -10,6 +10,7 @@ SRCS=		main.c\
 		src/Parsing/listing_utilities.c\
 		src/Parsing/second_split.c\
 		src/Parsing/valid_line.c\
+		src/Parsing/utilities_bordel.c\
 		src/Pipes/pipes.c\
 		src/Pipes/replacing.c\
 		src/Pipes/execute.c\

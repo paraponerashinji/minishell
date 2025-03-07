@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/06 23:06:22 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/07 02:33:52 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ int			*get_operators(char *s);
 int			find_op(char *s);
 int			splitlen(char *s, char c);
 int			cmp(char c);
+int			handle_quotes_bis(char *s, int i);
+int handle_operator(char *s, int *i, int *j, int *output);
+void init_list(char *list);
 // LISTING
 void		putlist(t_commands **cmds, t_io_red **red, char **split, int *op);
 void		add_command(t_commands **a, char *splitted, int op);
@@ -111,6 +114,7 @@ void		get_heredoc(int *p_fd, char *end);
 void		write_output(int buff_fd, t_io_red *redirection);
 void		copy(int buff_fd, int *o_fd, int size);
 void		copy_single(int buff_fd, int o_fd);
+int count_output_redirections(t_io_red *redirection);
 // EXECUTION
 int			execute(t_commands *temp, int buffer, int p_fd[2]);
 int			executefile(char *cmd, char **args, int i_fd, int o_fd);
@@ -122,7 +126,7 @@ void		free_and_close(int *fd, int size);
 void		free_cmd(t_commands **a);
 void		free_red(t_io_red **a);
 char		**get_filenames(void);
-
+int	count_files(void);
 
 // UTILITIES
 void		free_split(char **split);

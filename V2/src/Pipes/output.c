@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 16:06:06 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/06 17:46:37 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/07 02:35:32 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,8 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	int			*output_fd;
 	int			i;
 
-	i = 0;
+	i = count_output_redirections(redirection);
 	temp = redirection;
-	while (temp != NULL)
-	{
-		if (temp->in_or_out == 7 || temp->in_or_out == 6)
-			i++;
-		temp = temp->next;
-	}
 	temp = redirection;
 	if (i == 0)
 	{
@@ -37,9 +31,9 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	while (temp != NULL)
 	{
 		if (temp->in_or_out == 7)
-			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC);
 		else if (temp->in_or_out == 6)
-			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_APPEND);
 		temp = temp->next;
 	}
 	copy(buff_fd, output_fd, i);
@@ -78,4 +72,18 @@ void	copy_single(int buff_fd, int o_fd)
 		free(line);
 		line = get_next_line(buff_fd);
 	}
+}
+
+int	count_output_redirections(t_io_red *redirection)
+{
+	int	count;
+
+	count = 0;
+	while (redirection != NULL)
+	{
+		if (redirection->in_or_out == 7 || redirection->in_or_out == 6)
+			count++;
+		redirection = redirection->next;
+	}
+	return (count);
 }

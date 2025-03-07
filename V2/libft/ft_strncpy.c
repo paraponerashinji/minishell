@@ -26,4 +26,3 @@ void	ft_strncpy(char *dest, const char *src, int size)
 		i++;
 	}
 }
-

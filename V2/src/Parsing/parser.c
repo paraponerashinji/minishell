@@ -12,43 +12,48 @@
 
 #include "../include/minishell.h"
 
-void	parser(char *str)
+void	parser(char *str, char **envp)
 {
 	char		**splitted;
 	int			*operator;
-	t_commands	*commands;
-	t_io_red	*redirection;
+	t_mini		mini;
 
-	commands = NULL;
-	redirection = NULL;
+	mini.commands = NULL;
+	mini.redirection = NULL;
+	mini.env = init_env(envp);
 	splitted = first_split(str);
 	operator = get_operators(str);
-	putlist(&commands, &redirection, splitted, operator);
-	print_commands(commands);
-	print_redirection(redirection);
-	if (valid_line(commands, redirection) == 0)
-		createpipes(commands, redirection);
-	free_red(&redirection);
-	free_cmd(&commands);
+	putlist(&mini, splitted, operator, envp);
+	print_commands(mini.commands);
+	print_redirection(mini.redirection);
+	if (valid_line(mini.commands, mini.redirection) == 0)
+		createpipes(mini.commands, mini.redirection, mini.env);
+	free_red(&mini.redirection);
+	free_cmd(&mini.commands);
 	free_split(splitted);
 	free(operator);
 }
 
-void	putlist(t_commands **cmds, t_io_red **red, char **split, int *op)
+void	putlist(t_mini	*mini, char **split, int *op, char **envp)
 {
 	char	*buffer;
+	t_commands	**cmds;
+	t_io_red	**red;
 	int		i;
 
+	cmds = &mini->commands;
+	red = &mini->redirection;
 	i = 0;
+	//add_first_command(cmds, split[0], envp);
 	while (split[i] != NULL)
 	{
 		if (op[i] == 2)
-			add_command(cmds, split[i], 2);
+			add_command(cmds, split[i], 2, envp);
 		else if (op[i] == 1)
-			add_command(cmds, split[i], 1);
+			add_command(cmds, split[i], 1, envp);
 		else if (op[i] == 3)
 		{
-			add_command(cmds, split[i], 3);
+			add_command(cmds, split[i], 3, envp);
 		}
 		else if (op[i] != 0)
 		{
@@ -69,8 +74,8 @@ int	*get_operators(char *s)
 	i[0] = 0;
 	i[1] = 1;
 	i[2] = 0;
-	i[3] = splitlen(s, ' ');
-	output = malloc((splitlen(s, ' ') + 1) * sizeof(int));
+	i[3] = first_split_size(s);
+	output = malloc((i[3] + 1) * sizeof(int));
 	if (!output)
 		return (NULL);
 	output[0] = 2;
@@ -81,7 +86,7 @@ int	*get_operators(char *s)
 		else if (s[i[0]] == '"')
 			i[2] = !i[2];
 		i[0]++;
-		if (i[1] > i[3])
+		if (i[1] >= i[3])
 			return (output);
 	}
 	output[i[1]] = '\0';

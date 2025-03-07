@@ -67,14 +67,17 @@ void	print_mini(void)
 	printf("| .  . | | | |  \\| | | | \\ `--.| |_| || |__ | |    | |    \n");
 	printf("| |\\/| | | | | . ` | | |  `--. \\  _  ||  __|| |    | |    \n");
 	printf("| |  | |_| |_| |\\  |_| |_/\\__/ / | | || |___| |____| |____\n");
-	printf("\\_|  |_/\\___/\\_| \\_/\\___/\\____/\\_| |_/\\____/\\_____/\\_____/\n");
+	printf("\\_|  |_/\\___/\\_| \\_/\\___/");
+	printf("\\____/\\_| |_/\\____/\\_____/\\_____/\n");
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*minishell;
 	char	*prompt;
 
+	(void)argc;
+	(void)argv;
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
 	printf("\e[H\e[J");
@@ -91,7 +94,7 @@ int	main(void)
 			break ;
 		}
 		add_history(minishell);
-		parser(minishell);
+		parser(minishell, envp);
 		free(minishell);
 	}
 }

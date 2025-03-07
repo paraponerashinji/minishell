@@ -4,6 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -I$(LIBFTDIR) -ggdb
 SRCS=		main.c\
 		src/Parsing/parser.c\
 		src/Parsing/parser_utilities.c\
+		src/Parsing/env.c\
 		src/Parsing/first_split.c\
 		src/Parsing/first_split_utilities.c\
 		src/Parsing/listing.c\
@@ -13,6 +14,7 @@ SRCS=		main.c\
 		src/Parsing/utilities_bordel.c\
 		src/Pipes/pipes.c\
 		src/Pipes/replacing.c\
+		src/Pipes/replacing_utils.c\
 		src/Pipes/execute.c\
 		src/Pipes/input.c\
 		src/Pipes/output.c\

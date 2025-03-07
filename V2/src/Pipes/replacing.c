@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-void	check_env(t_commands *temp)
+void	check_env(t_commands *temp, t_env *env)
 {
 	int		i;
 	int		k;
@@ -23,9 +23,9 @@ void	check_env(t_commands *temp)
 	{
 		k = ft_strchrpos(temp->command[i], '$');
 		if (temp->command[i][0] == '"' && k)
-			temp->command[i] = quote_replace(temp->command[i], k);
+			temp->command[i] = quote_replace(temp->command[i], k, env);
 		else if (temp->command[i][0] == '$')
-			temp->command[i] = replace(temp->command[i], k);
+			temp->command[i] = replace(temp->command[i], k, env);
 		else if (temp->command[i][0] == '*' && temp->command[i][1] == '\0')
 			temp->command = insert_files(temp->command, i);
 		if (temp->command[i][0] == '"' || temp->command[i][0] == '\'')
@@ -41,7 +41,7 @@ void	check_env(t_commands *temp)
 	}
 }
 
-char	*quote_replace(char *str, int i)
+char	*quote_replace(char *str, int i, t_env *env)
 {
 	char	*buffer;
 	char	*buff2;
@@ -53,7 +53,7 @@ char	*quote_replace(char *str, int i)
 		j++;
 	j = j - i;
 	buffer = ft_substr(str, i, j);
-	buff3 = getenv(&buffer[1]);
+	buff3 = ft_getenv(env, &buffer[1]);
 	if (!buff3)
 	{
 		buff2 = str;
@@ -69,7 +69,7 @@ char	*quote_replace(char *str, int i)
 	return (str);
 }
 
-char	*replace(char *str, int i)
+char	*replace(char *str, int i, t_env *env)
 {
 	char	*buffer;
 	char	*buff2;
@@ -81,7 +81,7 @@ char	*replace(char *str, int i)
 	j = j - i;
 	buffer = ft_substr(str, i, j);
 	buff2 = str;
-	str = getenv(&buffer[1]);
+	str = ft_getenv(env, &buffer[1]);
 	if (!str)
 	{
 		free(buffer);

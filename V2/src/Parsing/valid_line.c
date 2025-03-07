@@ -26,6 +26,7 @@ int	valid_line(t_commands *cmd, t_io_red *red)
 	buff = cmd;
 	while (buff != NULL)
 	{
+		//(void)buff->env;
 		if (buff->command[0] == NULL)
 			return (print_pipe_error());
 		if (buff->command[0][0] == '\0')

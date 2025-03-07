@@ -12,25 +12,33 @@
 
 #include "../include/minishell.h"
 
-int	execute(t_commands *temp, int b, int p_fd[2])
+int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 {
 	int	status;
 
-	if (access(temp->command[0], F_OK | X_OK) == 0)
-		status = executefullfile(temp->command[0], temp->command, b, p_fd[1]);
-	if (ft_strncmp(temp->command[0], "./", 2) == 0)
-		status = executefile(&temp->command[0][1], temp->command, b, p_fd[1]);
-	else if (is_command(temp->command[0]) != -1)
-		status = executecommand(temp->command[0], temp->command, b, p_fd[1]);
+	if (t->command[0][0] == '/' && access(t->command[0], F_OK | X_OK) == 0)
+		status = executefullfile(t->command[0], t->command, b, p_fd[1]);
+	else if (ft_strncmp(t->command[0], "./", 2) == 0)
+	{
+		if (!access(&t->command[0][2], F_OK | X_OK))
+			status = executefile(t->command, b, p_fd[1], env);
+		else
+		{
+			printf("%s: file not found\n", t->command[0]);
+			status = 127;
+		}
+	}
+	else if (is_command(t->command[0]) != -1)
+		status = executecommand(t->command[0], t->command, b, p_fd[1]);
 	else
 	{
-		printf("%s: command not found\n", temp->command[0]);
+		printf("%s: command not found\n", t->command[0]); // TODO replace this part with normal execution
 		status = 127;
 	}
 	return (status);
 }
 
-int	executefile(char *cmd, char **args, int i_fd, int o_fd)
+int	executefile(char **args, int i_fd, int o_fd, t_env *env)
 {
 	int			exit_status;
 	pid_t		p;
@@ -38,6 +46,7 @@ int	executefile(char *cmd, char **args, int i_fd, int o_fd)
 	char		*full_cmd;
 	char		current_path[1024];
 
+	(void)env;
 	p = fork();
 	exit_status = 1;
 	if (p == 0)
@@ -45,8 +54,8 @@ int	executefile(char *cmd, char **args, int i_fd, int o_fd)
 		dup2(i_fd, STDIN_FILENO);
 		dup2(o_fd, STDOUT_FILENO);
 		getcwd(current_path, sizeof(current_path));
-		full_cmd = ft_strjoin(current_path, cmd);
-		execve(full_cmd, args, environ);
+		full_cmd = ft_strjoin(current_path, &args[0][1]);
+		execve(&args[0][1], args, environ);
 		perror("fail file");
 		free(full_cmd);
 		exit(1);

@@ -58,6 +58,8 @@ char	**second_split(char *s, char c)
 
 	i[0] = 0;
 	i[1] = 0;
+	if (!s)
+		return (NULL);
 	output = malloc((splitlen(s, ' ') + 1) * sizeof(char *));
 	if (!output)
 		return (NULL);

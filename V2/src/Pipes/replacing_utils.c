@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncpy.c                                       :+:      :+:    :+:   */
+/*   replacing_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 15:07:53 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/24 15:45:53 by aharder          ###   ########.fr       */
+/*   Created: 2025/03/07 15:59:16 by aharder           #+#    #+#             */
+/*   Updated: 2025/03/07 16:17:05 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	ft_strncpy(char *dest, const char *src, int size)
-{
-	int	i;
+#include "../include/minishell.h"
 
-	i = 0;
-	while (src[i] != '\0' && i < size)
+char	*ft_getenv(t_env *env, char *name)
+{
+	t_env	*temp;
+
+	temp = env;
+	while (temp != NULL)
 	{
-		dest[i] = src[i];
-		i++;
+		if (strcmp(env->value, name) == 0)
+			return (env->result);
+		temp = temp->next;
 	}
-	while (i < size)
-	{
-		dest[i] = '\0';
-		i++;
-	}
+	return (NULL);
 }

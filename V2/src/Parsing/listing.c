@@ -12,14 +12,16 @@
 
 #include "../include/minishell.h"
 
-void	add_command(t_commands **a, char *splitted, int type)
+void	add_command(t_commands **a, char *splitted, int type, char **envp)
 {
 	t_commands	*buffer;
 	t_commands	*last;
 
+	(void)envp;
 	buffer = malloc(sizeof(t_commands));
 	buffer->pipe_type = type;
 	buffer->command = second_split(splitted, ' ');
+	buffer->env = NULL;
 	buffer->next = NULL;
 	if (!*a)
 		*a = buffer;

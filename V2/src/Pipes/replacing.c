@@ -14,8 +14,9 @@
 
 void	check_env(t_commands *temp)
 {
-	int	i;
-	int	k;
+	int		i;
+	int		k;
+	char	*buffer;
 
 	i = 0;
 	while (temp->command[i] != NULL)
@@ -27,6 +28,15 @@ void	check_env(t_commands *temp)
 			temp->command[i] = replace(temp->command[i], k);
 		else if (temp->command[i][0] == '*' && temp->command[i][1] == '\0')
 			temp->command = insert_files(temp->command, i);
+		if (temp->command[i][0] == '"' || temp->command[i][0] == '\'')
+		{
+			buffer = temp->command[i];
+			if (temp->command[i][0] == '"')
+				temp->command[i] = ft_strtrim(buffer, "\"");
+			else if (temp->command[i][0] == '\'')
+				temp->command[i] = ft_strtrim(buffer, "'");
+			free(buffer);
+		}
 		i++;
 	}
 }
@@ -35,6 +45,7 @@ char	*quote_replace(char *str, int i)
 {
 	char	*buffer;
 	char	*buff2;
+	char	*buff3;
 	int		j;
 
 	j = i;
@@ -42,9 +53,17 @@ char	*quote_replace(char *str, int i)
 		j++;
 	j = j - i;
 	buffer = ft_substr(str, i, j);
-	str = getenv(&buffer[1]);
+	buff3 = getenv(&buffer[1]);
+	if (!buff3)
+	{
+		buff2 = str;
+		str = ft_replacesubstr(buff2, buffer, "");
+		free(buffer);
+		free(buff2);
+		return (str);
+	}
 	buff2 = str;
-	str = ft_replacesubstr(buff2, buffer, str);
+	str = ft_replacesubstr(buff2, buffer, buff3);
 	free(buff2);
 	free(buffer);
 	return (str);
@@ -61,8 +80,16 @@ char	*replace(char *str, int i)
 		j++;
 	j = j - i;
 	buffer = ft_substr(str, i, j);
-	str = getenv(&buffer[1]);
 	buff2 = str;
+	str = getenv(&buffer[1]);
+	if (!str)
+	{
+		free(buffer);
+		free(buff2);
+		buffer = malloc(1 * sizeof(char));
+		buffer[0] = '\0';
+		return (buffer);
+	}
 	str = ft_replacesubstr(buff2, buffer, str);
 	free(buff2);
 	free(buffer);

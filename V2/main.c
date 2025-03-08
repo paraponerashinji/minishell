@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
+/*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/03 02:29:14 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:26:44 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,12 @@ int	main(int argc, char **argv, char **envp)
 {
 	char	*minishell;
 	char	*prompt;
-
+	t_mini		mini;
 	(void)argc;
 	(void)argv;
+	mini.commands = NULL;
+	mini.redirection = NULL;
+	mini.env = init_env(envp);
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
 	printf("\e[H\e[J");
@@ -94,7 +97,8 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		}
 		add_history(minishell);
-		parser(minishell, envp);
+		parser(minishell, &mini);
 		free(minishell);
 	}
+	free_env(mini.env);
 }

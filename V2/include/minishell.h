@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 02:33:52 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:30:59 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ typedef struct s_commands
 {
 	int					pipe_type;
 	char				**command;
-	struct s_env		*env;
 	struct s_commands	*next;
 }	t_commands;
 
@@ -73,7 +72,7 @@ char		*crop_path(char **path);
 void		handle_signal(int sig);
 void		handle_signal(int sig);
 // PARSING
-void		parser(char *str, char **envp);
+void		parser(char *str, t_mini *mini);
 int			splitlen(char *s, char c);
 int			*get_operators(char *s);
 int			find_op(char *s);
@@ -86,9 +85,10 @@ void		init_list(char *list);
 void    add_first_command(t_commands **a, char *s, char **envp);
 t_env   *init_env(char **envp);
 void    add_env(t_env   **a, char *value, char *result);
+void	free_env(t_env *env);
 // LISTING
-void		putlist(t_mini *mini, char **split, int *op, char **envp);
-void		add_command(t_commands **a, char *splitted, int op, char **envp);
+void		putlist(t_mini *mini, char **split, int *op);
+void		add_command(t_commands **a, char *splitted, int op);
 t_commands	*init_command_node(char **command);
 t_commands	*get_last_command(t_commands *a);
 char		**merge_command(char **old, char **to_add);
@@ -154,4 +154,5 @@ void		print_commands(t_commands *commands);
 void		print_redirection(t_io_red *redirection);
 void		init_pipes(int p_fd[2], int b_fd[2]);
 char    *ft_getenv(t_env *env, char *name);
+void	print_env(t_env *env);
 #endif

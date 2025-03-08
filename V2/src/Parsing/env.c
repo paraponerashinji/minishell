@@ -3,35 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:22:07 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 15:59:02 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:33:19 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	add_first_command(t_commands **a, char *s, char **envp)
-{
-	t_commands	*buffer;
-	t_commands	*last;
-
-	buffer = malloc(sizeof(t_commands));
-	buffer->pipe_type = 2;
-	buffer->command = second_split(s, ' ');
-	buffer->env = init_env(envp);
-	buffer->next = NULL;
-	if (!*a)
-		*a = buffer;
-	else
-	{
-		last = *a;
-		while (last->next)
-			last = last->next;
-		last->next = buffer;
-	}
-}
 
 t_env	*init_env(char **envp)
 {
@@ -49,7 +28,7 @@ t_env	*init_env(char **envp)
 		while (envp[i][j] != '\0' && envp[i][j] != '=')
 			j++;
 		value = ft_substr(envp[i], 0, j);
-		result = ft_substr(envp[i], j, ft_strlen(envp[i]));
+		result = ft_substr(envp[i], j + 1, ft_strlen(envp[i]));
 		add_env(&env, value, result);
 		i++;
 	}
@@ -73,5 +52,48 @@ void	add_env(t_env	**a, char *value, char *result)
 		while (last->next)
 			last = last->next;
 		last->next = temp;
+	}
+}
+
+void	rm_env(t_env **a, char *value)
+{
+	t_env	*temp;
+	t_env	*last;
+
+	temp = *a;
+	if (strcmp(temp->value, value) == 0)
+	{
+		*a = temp->next;
+		free(temp->value);
+		free(temp->result);
+		free(temp);
+		return ;
+	}
+	while (temp->next != NULL)
+	{
+		if (strcmp(temp->next->value, value) == 0)
+		{
+			last = temp->next;
+			temp->next = temp->next->next;
+			free(last->value);
+			free(last->result);
+			free(last);
+			return ;
+		}
+		temp = temp->next;
+	}
+}
+
+void	free_env(t_env *env)
+{
+	t_env	*temp;
+
+	while (env)
+	{
+		temp = env;
+		env = env->next;
+		free(temp->value);
+		free(temp->result);
+		free(temp);
 	}
 }

@@ -6,35 +6,32 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 00:11:16 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:24:26 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	parser(char *str, char **envp)
+void	parser(char *str, t_mini *mini)
 {
 	char		**splitted;
 	int			*operator;
-	t_mini		mini;
 
-	mini.commands = NULL;
-	mini.redirection = NULL;
-	mini.env = init_env(envp);
 	splitted = first_split(str);
 	operator = get_operators(str);
-	putlist(&mini, splitted, operator, envp);
-	print_commands(mini.commands);
-	print_redirection(mini.redirection);
-	if (valid_line(mini.commands, mini.redirection) == 0)
-		createpipes(mini.commands, mini.redirection, mini.env);
-	free_red(&mini.redirection);
-	free_cmd(&mini.commands);
+	putlist(mini, splitted, operator);
+	print_commands(mini->commands);
+	print_redirection(mini->redirection);
+	//print_env(mini.env);
+	if (valid_line(mini->commands, mini->redirection) == 0)
+		createpipes(mini->commands, mini->redirection, mini->env);
+	free_red(&mini->redirection);
+	free_cmd(&mini->commands);
 	free_split(splitted);
 	free(operator);
 }
 
-void	putlist(t_mini	*mini, char **split, int *op, char **envp)
+void	putlist(t_mini	*mini, char **split, int *op)
 {
 	char	*buffer;
 	t_commands	**cmds;
@@ -48,12 +45,12 @@ void	putlist(t_mini	*mini, char **split, int *op, char **envp)
 	while (split[i] != NULL)
 	{
 		if (op[i] == 2)
-			add_command(cmds, split[i], 2, envp);
+			add_command(cmds, split[i], 2);
 		else if (op[i] == 1)
-			add_command(cmds, split[i], 1, envp);
+			add_command(cmds, split[i], 1);
 		else if (op[i] == 3)
 		{
-			add_command(cmds, split[i], 3, envp);
+			add_command(cmds, split[i], 3);
 		}
 		else if (op[i] != 0)
 		{

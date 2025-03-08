@@ -6,22 +6,20 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:27:22 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 02:41:20 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:12:18 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	add_command(t_commands **a, char *splitted, int type, char **envp)
+void	add_command(t_commands **a, char *splitted, int type)
 {
 	t_commands	*buffer;
 	t_commands	*last;
 
-	(void)envp;
 	buffer = malloc(sizeof(t_commands));
 	buffer->pipe_type = type;
 	buffer->command = second_split(splitted, ' ');
-	buffer->env = NULL;
 	buffer->next = NULL;
 	if (!*a)
 		*a = buffer;

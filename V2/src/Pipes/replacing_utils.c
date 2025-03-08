@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replacing_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharder <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:59:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 16:17:05 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/08 12:33:21 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ char	*ft_getenv(t_env *env, char *name)
 	temp = env;
 	while (temp != NULL)
 	{
-		if (strcmp(env->value, name) == 0)
-			return (env->result);
+		if (strcmp(temp->value, name) == 0)
+			return (temp->result);
 		temp = temp->next;
 	}
 	return (NULL);

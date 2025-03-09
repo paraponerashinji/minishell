@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/08 13:26:44 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 01:13:22 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,10 @@ void	print_mini(void)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*minishell;
-	char	*prompt;
+	char		*minishell;
+	char		*prompt;
 	t_mini		mini;
+
 	(void)argc;
 	(void)argv;
 	mini.commands = NULL;

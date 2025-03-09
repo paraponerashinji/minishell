@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:22:07 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/08 13:33:19 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 01:04:10 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 t_env	*init_env(char **envp)
 {
 	t_env	*env;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*value;
 	char	*result;
 
@@ -32,7 +32,7 @@ t_env	*init_env(char **envp)
 		add_env(&env, value, result);
 		i++;
 	}
-	return (env);	
+	return (env);
 }
 
 void	add_env(t_env	**a, char *value, char *result)

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 23:24:03 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 00:04:48 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 01:10:13 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,10 @@ void	init_list(char *list)
 	list[2] = '>';
 	list[3] = '&';
 	list[4] = '\0';
+}
+
+void	close_pipes(int fd[2])
+{
+	close(fd[0]);
+	close(fd[1]);
 }

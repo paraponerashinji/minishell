@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 02:14:08 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 01:08:02 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ void	process_commands(t_commands *commands, t_env *env, int b_fd[2], int b)
 		t = t->next;
 	}
 	dup2(p_fd[0], b_fd[0]);
-	close(p_fd[0]);
-	close(p_fd[1]);
+	close_pipes(p_fd);
 	close(b_fd[1]);
 }
 
@@ -74,10 +73,4 @@ void	init_pipes(int p_fd[2], int b_fd[2])
 	pipe(b_fd);
 	if (p_fd != NULL)
 		pipe(p_fd);
-}
-
-void	close_pipes(int fd)
-{
-	if (fd != 0)
-		close(fd);
 }

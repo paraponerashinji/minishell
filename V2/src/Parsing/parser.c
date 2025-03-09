@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/08 13:24:26 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 01:09:29 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	parser(char *str, t_mini *mini)
 	putlist(mini, splitted, operator);
 	print_commands(mini->commands);
 	print_redirection(mini->redirection);
-	//print_env(mini.env);
 	if (valid_line(mini->commands, mini->redirection) == 0)
 		createpipes(mini->commands, mini->redirection, mini->env);
 	free_red(&mini->redirection);
@@ -33,15 +32,14 @@ void	parser(char *str, t_mini *mini)
 
 void	putlist(t_mini	*mini, char **split, int *op)
 {
-	char	*buffer;
+	char		*buffer;
 	t_commands	**cmds;
 	t_io_red	**red;
-	int		i;
+	int			i;
 
 	cmds = &mini->commands;
 	red = &mini->redirection;
 	i = 0;
-	//add_first_command(cmds, split[0], envp);
 	while (split[i] != NULL)
 	{
 		if (op[i] == 2)
@@ -49,9 +47,7 @@ void	putlist(t_mini	*mini, char **split, int *op)
 		else if (op[i] == 1)
 			add_command(cmds, split[i], 1);
 		else if (op[i] == 3)
-		{
 			add_command(cmds, split[i], 3);
-		}
 		else if (op[i] != 0)
 		{
 			buffer = add_io(red, split[i], op[i]);

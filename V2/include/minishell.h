@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/08 13:30:59 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 01:12:32 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 
 typedef struct s_env
 {
-	char	*value;
-	char	*result;
+	char			*value;
+	char			*result;
 	struct s_env	*next;
 }	t_env;
 
@@ -52,7 +52,7 @@ typedef struct s_io_red
 
 typedef struct s_mini
 {
-	struct s_io_red 	*redirection;
+	struct s_io_red		*redirection;
 	struct s_env		*env;
 	struct s_commands	*commands;
 }	t_mini;
@@ -82,10 +82,10 @@ int			handle_quotes_bis(char *s, int i);
 int			handle_operator(char *s, int *i, int *j, int *output);
 void		init_list(char *list);
 // ENV
-void    add_first_command(t_commands **a, char *s, char **envp);
-t_env   *init_env(char **envp);
-void    add_env(t_env   **a, char *value, char *result);
-void	free_env(t_env *env);
+void		add_first_command(t_commands **a, char *s, char **envp);
+t_env		*init_env(char **envp);
+void		add_env(t_env **a, char *value, char *result);
+void		free_env(t_env *env);
 // LISTING
 void		putlist(t_mini *mini, char **split, int *op);
 void		add_command(t_commands **a, char *splitted, int op);
@@ -115,11 +115,11 @@ int			find_segment_end(char *s, char c, int start);
 int			valid_line(t_commands *cmd, t_io_red *red);
 int			print_pipe_error(void);
 // PIPES
-int			createpipes(t_commands *commands, t_io_red *redirection, t_env *env);
+int			createpipes(t_commands *cmds, t_io_red *red, t_env *env);
 void		process_commands(t_commands *cmds, t_env *env, int b_fd[2], int b);
 void		init_pipes(int p_fd[2], int b_fd[2]);
-void		close_pipes(int fd);
-int			is_command(char	*str);
+void		close_pipes(int fd[2]);
+int			is_command(char *str);
 // REPLACING
 void		check_env(t_commands *temp, t_env *env);
 char		*replace(char *str, int i, t_env *env);
@@ -153,6 +153,6 @@ int			array_size(char **arr);
 void		print_commands(t_commands *commands);
 void		print_redirection(t_io_red *redirection);
 void		init_pipes(int p_fd[2], int b_fd[2]);
-char    *ft_getenv(t_env *env, char *name);
-void	print_env(t_env *env);
+char		*ft_getenv(t_env *env, char *name);
+void		print_env(t_env *env);
 #endif

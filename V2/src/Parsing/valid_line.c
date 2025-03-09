@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 22:57:27 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 00:13:03 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 01:08:31 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	valid_line(t_commands *cmd, t_io_red *red)
 	buff = cmd;
 	while (buff != NULL)
 	{
-		//(void)buff->env;
 		if (buff->command[0] == NULL)
 			return (print_pipe_error());
 		if (buff->command[0][0] == '\0')

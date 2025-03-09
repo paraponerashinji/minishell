@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/09 01:08:02 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 21:38:00 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,28 @@ int	createpipes(t_commands *commands, t_io_red *redirection, t_env *env)
 	return (1);
 }
 
-int	is_command(char	*str)
+int	is_exec_command(char *str)
 {
-	char	*commands[] = {"cd", "echo", "exit", "export", "wc", "unset", "env"};
+	char	*commands[] = {"echo", "env", "pwd"};
 	int		i;
 
 	i = 0;
-	while (i < 7)
+	while (i < 3)
+	{
+		if (ft_strcmp(str, commands[i]) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+int	is_other_command(char *str)
+{
+	char	*commands[] = {"export", "unset", "cd"};
+	int		i;
+
+	i = 0;
+	while (i < 3)
 	{
 		if (ft_strcmp(str, commands[i]) == 0)
 			return (i);

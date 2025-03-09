@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:47:27 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 02:21:47 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 15:02:41 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,32 @@ int	count_files(void)
 	}
 	closedir(dp);
 	return (count);
+}
+
+char	*get_path(char *cmd)
+{
+	int		i;
+	char	*exec;
+	char	**allpath;
+	char	*path_part;
+	char	**s_cmd;
+
+	i = -1;
+	allpath = ft_split(getenv("PATH"), ':');
+	s_cmd = ft_split(cmd, ' ');
+	while (allpath[++i])
+	{
+		path_part = ft_strjoin(allpath[i], "/");
+		exec = ft_strjoin(path_part, s_cmd[0]);
+		free(path_part);
+		if (access(exec, F_OK | X_OK) == 0)
+		{
+			free_split(s_cmd);
+			return (exec);
+		}
+		free(exec);
+	}
+	free_split(allpath);
+	free_split(s_cmd);
+	return (cmd);
 }

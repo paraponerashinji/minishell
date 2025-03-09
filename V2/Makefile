@@ -16,9 +16,14 @@ SRCS=		main.c\
 		src/Pipes/replacing.c\
 		src/Pipes/replacing_utils.c\
 		src/Pipes/execute.c\
+		src/Pipes/more_execute.c\
 		src/Pipes/input.c\
 		src/Pipes/output.c\
 		src/Pipes/utils.c\
+		src/builtin/cd.c\
+		src/builtin/echo.c\
+		src/builtin/env.c\
+		src/builtin/pwd.c\
 		gnl/get_next_line.c\
 		gnl/get_next_line_utils.c
 OBJS= $(SRCS:.c=.o)

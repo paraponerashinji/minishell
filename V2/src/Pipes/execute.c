@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 02:09:20 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/09 21:39:06 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,12 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 			status = 127;
 		}
 	}
-	else if (is_command(t->command[0]) != -1)
-		status = executecommand(t->command[0], t->command, b, p_fd[1]);
+	else if (is_exec_command(t->command[0]) != -1)
+		status = executebuiltin(t->command, b, p_fd[1], env);
+	else if (is_other_command(t->command[0]) != -1)
+		status = commandbuiltin(t->command, env);
 	else
-	{
-		printf("%s: command not found\n", t->command[0]); // TODO replace this part with normal execution
-		status = 127;
-	}
+		status = executecommand(t->command[0], t->command, b, p_fd[1]);
 	return (status);
 }
 
@@ -56,12 +55,9 @@ int	executefile(char **args, int i_fd, int o_fd, t_env *env)
 		getcwd(current_path, sizeof(current_path));
 		full_cmd = ft_strjoin(current_path, &args[0][1]);
 		execve(&args[0][1], args, environ);
-		perror("fail file");
 		free(full_cmd);
 		exit(1);
 	}
-	else if (p == -1)
-		ft_printf("fork error");
 	else
 		waitpid(p, &exit_status, 0);
 	return (exit_status);
@@ -80,11 +76,8 @@ int	executefullfile(char *cmd, char **args, int i_fd, int o_fd)
 		dup2(i_fd, STDIN_FILENO);
 		dup2(o_fd, STDOUT_FILENO);
 		execve(cmd, args, environ);
-		perror("fail file");
 		exit(1);
 	}
-	else if (p == -1)
-		ft_printf("fork error");
 	else
 		waitpid(p, &exit_status, 0);
 	return (exit_status);
@@ -105,41 +98,33 @@ int	executecommand(char *cmd, char **args, int i_fd, int o_fd)
 		dup2(o_fd, STDOUT_FILENO);
 		full_cmd = get_path(cmd);
 		execve(full_cmd, args, environ);
-		perror("fail command");
 		free(full_cmd);
 		exit(1);
 	}
-	else if (p == -1)
-		ft_printf("fork error");
 	else
 		waitpid(p, &exit_status, 0);
 	return (exit_status);
 }
 
-char	*get_path(char *cmd)
+int	executebuiltin(char **cmd, int i_fd, int o_fd, t_env *envi)
 {
-	int		i;
-	char	*exec;
-	char	**allpath;
-	char	*path_part;
-	char	**s_cmd;
+	int	exit_status;
+	pid_t		p;
 
-	i = -1;
-	allpath = ft_split(getenv("PATH"), ':');
-	s_cmd = ft_split(cmd, ' ');
-	while (allpath[++i])
+	p = fork();
+	if (p == 0)
 	{
-		path_part = ft_strjoin(allpath[i], "/");
-		exec = ft_strjoin(path_part, s_cmd[0]);
-		free(path_part);
-		if (access(exec, F_OK | X_OK) == 0)
-		{
-			free_split(s_cmd);
-			return (exec);
-		}
-		free(exec);
+		dup2(i_fd, STDIN_FILENO);
+		dup2(o_fd, STDOUT_FILENO);
+		if (strncmp(cmd[0], "echo", ft_strlen(cmd[0])) == 0)
+			echo(cmd);
+		else if (strncmp(cmd[0], "env", ft_strlen(cmd[0])) == 0)
+			env(&envi);
+		else if (strncmp(cmd[0], "pwd", ft_strlen(cmd[0])) == 0)
+			pwd();
+		exit(1);
 	}
-	free_split(allpath);
-	free_split(s_cmd);
-	return (cmd);
+	else
+		waitpid(p, &exit_status, 0);
+	return (exit_status);	
 }

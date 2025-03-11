@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/09 21:39:06 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 01:04:29 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 	else if (is_other_command(t->command[0]) != -1)
 		status = commandbuiltin(t->command, env);
 	else
-		status = executecommand(t->command[0], t->command, b, p_fd[1]);
+	{
+		printf("hey : %s\n", t->command[0]);
+		status = executecommand(t->command, b, p_fd[1], env);
+	}
 	return (status);
 }
 
@@ -83,7 +86,7 @@ int	executefullfile(char *cmd, char **args, int i_fd, int o_fd)
 	return (exit_status);
 }
 
-int	executecommand(char *cmd, char **args, int i_fd, int o_fd)
+int	executecommand(char **args, int i_fd, int o_fd, t_env *env)
 {
 	int			exit_status;
 	pid_t		p;
@@ -96,8 +99,9 @@ int	executecommand(char *cmd, char **args, int i_fd, int o_fd)
 	{
 		dup2(i_fd, STDIN_FILENO);
 		dup2(o_fd, STDOUT_FILENO);
-		full_cmd = get_path(cmd);
+		full_cmd = get_path(args[0], env);
 		execve(full_cmd, args, environ);
+		perror("fail command");
 		free(full_cmd);
 		exit(1);
 	}
@@ -108,7 +112,7 @@ int	executecommand(char *cmd, char **args, int i_fd, int o_fd)
 
 int	executebuiltin(char **cmd, int i_fd, int o_fd, t_env *envi)
 {
-	int	exit_status;
+	int			exit_status;
 	pid_t		p;
 
 	p = fork();
@@ -126,5 +130,5 @@ int	executebuiltin(char **cmd, int i_fd, int o_fd, t_env *envi)
 	}
 	else
 		waitpid(p, &exit_status, 0);
-	return (exit_status);	
+	return (0);
 }

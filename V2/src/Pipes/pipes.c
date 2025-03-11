@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/09 21:38:00 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 01:06:58 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	process_commands(t_commands *commands, t_env *env, int b_fd[2], int b)
 		check_env(t, env);
 		pipe(p_fd);
 		s = execute(t, b, p_fd, env);
+		//ft_env_push_back(&env, ft_strjoin("?=", ft_itoa(s)));
 		if (t->next != NULL)
 		{
 			if (t->next->pipe_type == 3 && s != 0)
@@ -55,10 +56,13 @@ int	createpipes(t_commands *commands, t_io_red *redirection, t_env *env)
 
 int	is_exec_command(char *str)
 {
-	char	*commands[] = {"echo", "env", "pwd"};
+	char	*commands[3];
 	int		i;
 
 	i = 0;
+	commands[0] = "echo";
+	commands[1] = "env";
+	commands[2] = "pwd";
 	while (i < 3)
 	{
 		if (ft_strcmp(str, commands[i]) == 0)
@@ -70,10 +74,13 @@ int	is_exec_command(char *str)
 
 int	is_other_command(char *str)
 {
-	char	*commands[] = {"export", "unset", "cd"};
+	char	*commands[3];
 	int		i;
 
 	i = 0;
+	commands[0] = "export";
+	commands[1] = "unset";
+	commands[2] = "cd";
 	while (i < 3)
 	{
 		if (ft_strcmp(str, commands[i]) == 0)

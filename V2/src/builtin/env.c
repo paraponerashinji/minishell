@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 18:25:45 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/09 18:58:37 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 01:18:33 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	env(t_env **env)
 	ptr = *env;
 	while (ptr)
 	{
-		printf("%s=%s\n", ptr->value, ptr->result);
+		//if (strcmp(ptr->value, "?") != 0)
+			printf("%s=%s\n", ptr->value, ptr->result);
 		ptr = ptr->next;
 	}
 	return (0);

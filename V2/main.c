@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/09 01:13:22 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/10 17:50:28 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*get_prompt(void)
 	char	**buffer2;
 	char	*prompt = NULL;
 	char	*prefix = "\e[1;32mminishell\e[0m:\e[1;34m~/";
-	char	*suffix = "\e[0m ";
+	char	*suffix = "\e[0m";
 
 	if (getcwd(path, sizeof(path)) != NULL)
 	{
@@ -89,7 +89,8 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		prompt = get_prompt();
-		minishell = readline(prompt);
+		printf("%s", prompt);
+		minishell = readline(">");
 		free(prompt);
 		if (minishell == NULL)
 		{

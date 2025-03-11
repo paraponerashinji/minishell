@@ -24,6 +24,10 @@ SRCS=		main.c\
 		src/builtin/echo.c\
 		src/builtin/env.c\
 		src/builtin/pwd.c\
+		src/builtin/export.c\
+		src/builtin/export_utils.c\
+		src/builtin/env_utils.c\
+		src/builtin/unset.c\
 		gnl/get_next_line.c\
 		gnl/get_next_line_utils.c
 OBJS= $(SRCS:.c=.o)

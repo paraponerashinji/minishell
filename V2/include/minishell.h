@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/09 21:29:29 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 01:23:11 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,17 +139,16 @@ int			count_output_redirections(t_io_red *redirection);
 int			execute(t_commands *temp, int buffer, int p_fd[2], t_env *env);
 int			executefile(char **args, int i_fd, int o_fd, t_env *env);
 int			executefullfile(char *cmd, char **args, int i_fd, int o_fd);
-int			executecommand(char *cmd, char **args, int i_fd, int o_fd);
-int	executebuiltin(char **cmd, int i_fd, int o_fd, t_env *envi);
-int	commandbuiltin(char **arg, t_env *env);
-char		*get_path(char *cmd);
+int			executecommand(char **args, int i_fd, int o_fd, t_env *env);
+int			executebuiltin(char **cmd, int i_fd, int o_fd, t_env *envi);
+int			commandbuiltin(char **arg, t_env *env);
+char		*get_path(char *cmd, t_env *env);
 // PIPES/EXEC UTILS
 void		free_and_close(int *fd, int size);
 void		free_cmd(t_commands **a);
 void		free_red(t_io_red **a);
 char		**get_filenames(void);
 int			count_files(void);
-
 // UTILITIES
 void		free_split(char **split);
 int			array_size(char **arr);
@@ -158,10 +157,27 @@ void		print_redirection(t_io_red *redirection);
 void		init_pipes(int p_fd[2], int b_fd[2]);
 char		*ft_getenv(t_env *env, char *name);
 void		print_env(t_env *env);
-
 // BUILTIN
-int	pwd(void);
-int	cd(char **args);
-int	echo(char **args);
-int	env(t_env **env);
+int			pwd(void);
+int			cd(char **args);
+int			echo(char **args);
+int			env(t_env **env);
+int			unset(char **args, t_env **env);
+int			export(char **args, t_env **env);
+// BUILTIN UTILITIES
+int			print_export(t_env **env);
+int			ft_size_env(char **env);
+int			ft_list_size(t_env *begin_list);
+void		ft_env_push_back(t_env **begin_list, char *data);
+void		sort_env_alphabetically(char **array);
+void		free_array(char **array, int index);
+char		**copy_environ(t_env **env);
+int			print_export(t_env **env);
+int			index_existing_var(char *arg, t_env **env);
+int			equal_pos(char *str);
+int			update(char *arg, int index, t_env **env);
+t_env		*ft_create_var(char *arg);
+int			add_var(char *arg, t_env **env);
+int			export(char **args, t_env **env);
+void		swap_strings(char **str1, char **str2);
 #endif

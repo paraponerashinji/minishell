@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:10:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/06 23:46:52 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 12:43:32 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,9 @@ void	handle_quotes(t_var_bundle *var, char c)
 
 int	srch_operator(char *s)
 {
-	if (s[0] == '|' || s[0] == '&' || s[0] == '<' || s[0] == '>')
+	if (s[0] == '&' && s[1] == '&')
+		return (2);
+	if (s[0] == '|' || s[0] == '<' || s[0] == '>')
 		return (1 + (s[0] == s[1]));
 	return (0);
 }

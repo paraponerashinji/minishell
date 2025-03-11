@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 01:23:11 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 13:42:38 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,4 +180,6 @@ t_env		*ft_create_var(char *arg);
 int			add_var(char *arg, t_env **env);
 int			export(char **args, t_env **env);
 void		swap_strings(char **str1, char **str2);
+// EXIT STATUS
+void	add_exit_status(int exit_status, t_env **env);
 #endif

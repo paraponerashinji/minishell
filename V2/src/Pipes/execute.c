@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 01:04:29 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 13:22:55 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 		status = executefullfile(t->command[0], t->command, b, p_fd[1]);
 	else if (ft_strncmp(t->command[0], "./", 2) == 0)
 	{
-		if (!access(&t->command[0][2], F_OK | X_OK))
+		if (access(&t->command[0][1], F_OK | X_OK))
 			status = executefile(t->command, b, p_fd[1], env);
 		else
 		{
@@ -34,7 +34,6 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 		status = commandbuiltin(t->command, env);
 	else
 	{
-		printf("hey : %s\n", t->command[0]);
 		status = executecommand(t->command, b, p_fd[1], env);
 	}
 	return (status);
@@ -57,7 +56,7 @@ int	executefile(char **args, int i_fd, int o_fd, t_env *env)
 		dup2(o_fd, STDOUT_FILENO);
 		getcwd(current_path, sizeof(current_path));
 		full_cmd = ft_strjoin(current_path, &args[0][1]);
-		execve(&args[0][1], args, environ);
+		execve(full_cmd, args, environ);
 		free(full_cmd);
 		exit(1);
 	}

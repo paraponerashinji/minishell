@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 00:16:22 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 01:17:03 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 15:01:35 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_env	*ft_create_var(char *arg)
 		new_elem->value = ft_substr(arg, 0, equal_pos(arg));
 		new_elem->result = ft_substr(arg, equal_pos(arg) + 1, ft_strlen(arg)
 				- 1);
+		new_elem->next = NULL;
 	}
 	else
 	{

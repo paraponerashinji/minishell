@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 23:09:42 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 00:06:19 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 14:58:19 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,14 @@ int	splitlen(char *s, char c)
 		if ((s[i[0]] == '"' || s[i[0]] == '\'') && !in_segment)
 		{
 			i[0] = handle_quotes_bis(s, i[0]);
-			in_segment = 1;
 			i[1]++;
 		}
-		else if (s[i[0]] != c && !in_segment)
+		if (s[i[0]] != c && !in_segment)
 		{
 			in_segment = 1;
 			i[1]++;
 		}
-		else if (s[i[0]] == c)
+		if (s[i[0]] == c || s[i[0]] == '"' || s[i[0]] == '\'')
 			in_segment = 0;
 		if (s[i[0]] != '\0')
 			i[0]++;

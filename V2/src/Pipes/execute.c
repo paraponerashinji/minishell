@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 13:22:55 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 15:40:38 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 {
 	int	status;
+
 
 	if (t->command[0][0] == '/' && access(t->command[0], F_OK | X_OK) == 0)
 		status = executefullfile(t->command[0], t->command, b, p_fd[1]);
@@ -31,7 +32,12 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 	else if (is_exec_command(t->command[0]) != -1)
 		status = executebuiltin(t->command, b, p_fd[1], env);
 	else if (is_other_command(t->command[0]) != -1)
-		status = commandbuiltin(t->command, env);
+	{
+		if (t->next == NULL || t->next->pipe_type != 2)
+			status = commandbuiltin(t->command, env);
+		else
+			status = 2;
+	}
 	else
 	{
 		status = executecommand(t->command, b, p_fd[1], env);

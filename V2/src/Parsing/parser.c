@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 14:37:09 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 15:47:42 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ void	parser(char *str, t_mini *mini)
 	putlist(mini, splitted, operator);
 	print_commands(mini->commands);
 	print_redirection(mini->redirection);
+	free_split(splitted);
+	free(operator);
 	if (valid_line(mini->commands, mini->redirection) == 0)
 		createpipes(mini->commands, mini->redirection, mini->env);
 	free_red(&mini->redirection);
 	free_cmd(&mini->commands);
-	free_split(splitted);
-	free(operator);
 }
 
 void	putlist(t_mini	*mini, char **split, int *op)

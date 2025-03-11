@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 13:42:38 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/11 16:01:06 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,8 @@ int			echo(char **args);
 int			env(t_env **env);
 int			unset(char **args, t_env **env);
 int			export(char **args, t_env **env);
+void		ft_exit(t_env *env, t_commands *commands, t_io_red *red);
+
 // BUILTIN UTILITIES
 int			print_export(t_env **env);
 int			ft_size_env(char **env);

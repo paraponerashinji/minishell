@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 15:40:38 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/12 01:23:43 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 {
 	int	status;
 
-
 	if (t->command[0][0] == '/' && access(t->command[0], F_OK | X_OK) == 0)
 		status = executefullfile(t->command[0], t->command, b, p_fd[1]);
 	else if (ft_strncmp(t->command[0], "./", 2) == 0)
@@ -24,10 +23,7 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 		if (access(&t->command[0][1], F_OK | X_OK))
 			status = executefile(t->command, b, p_fd[1], env);
 		else
-		{
-			printf("%s: file not found\n", t->command[0]);
-			status = 127;
-		}
+			status = print_file_error(t->command[0]);
 	}
 	else if (is_exec_command(t->command[0]) != -1)
 		status = executebuiltin(t->command, b, p_fd[1], env);
@@ -39,9 +35,7 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 			status = 2;
 	}
 	else
-	{
 		status = executecommand(t->command, b, p_fd[1], env);
-	}
 	return (status);
 }
 

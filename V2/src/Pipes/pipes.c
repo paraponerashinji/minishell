@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 13:42:57 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/12 01:22:32 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	process_commands(t_commands *commands, t_env *env, int b_fd[2], int b)
 	}
 	dup2(p_fd[0], b_fd[0]);
 	close_pipes(p_fd);
-	close(b_fd[1]);
 }
 
 int	createpipes(t_commands *commands, t_io_red *redirection, t_env *env)
@@ -48,6 +47,8 @@ int	createpipes(t_commands *commands, t_io_red *redirection, t_env *env)
 	int	buffer;
 
 	buffer = find_i_red(redirection);
+	add_red_to_env(&redirection, &env);
+	add_cmd_to_env(&commands, &env);
 	process_commands(commands, env, b_fd, buffer);
 	close(b_fd[1]);
 	write_output(b_fd[0], redirection);
@@ -74,14 +75,15 @@ int	is_exec_command(char *str)
 
 int	is_other_command(char *str)
 {
-	char	*commands[3];
+	char	*commands[4];
 	int		i;
 
 	i = 0;
 	commands[0] = "export";
 	commands[1] = "unset";
 	commands[2] = "cd";
-	while (i < 3)
+	commands[3] = "exit";
+	while (i < 4)
 	{
 		if (ft_strcmp(str, commands[i]) == 0)
 			return (i);

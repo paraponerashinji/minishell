@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 16:01:06 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/12 01:25:09 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,8 +164,7 @@ int			echo(char **args);
 int			env(t_env **env);
 int			unset(char **args, t_env **env);
 int			export(char **args, t_env **env);
-void		ft_exit(t_env *env, t_commands *commands, t_io_red *red);
-
+void		ft_exit(t_env *env);
 // BUILTIN UTILITIES
 int			print_export(t_env **env);
 int			ft_size_env(char **env);
@@ -183,5 +182,10 @@ int			add_var(char *arg, t_env **env);
 int			export(char **args, t_env **env);
 void		swap_strings(char **str1, char **str2);
 // EXIT STATUS
-void	add_exit_status(int exit_status, t_env **env);
+void		add_exit_status(int exit_status, t_env **env);
+void		*str_to_ptr(char *str);
+char		*ptr_to_str(void *ptr);
+void		add_red_to_env(t_io_red **red, t_env **env);
+void		add_cmd_to_env(t_commands **commands, t_env **env);
+int			print_file_error(char *args);
 #endif

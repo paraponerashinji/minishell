@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:59:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/08 12:33:21 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/12 01:18:36 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,13 @@ char	*ft_getenv(t_env *env, char *name)
 		temp = temp->next;
 	}
 	return (NULL);
+}
+
+int	print_file_error(char *args)
+{
+	int	status;
+
+	printf("%s: file not found\n", args);
+	status = 127;
+	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/21 10:40:00 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/21 10:52:23 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	print_mini(void)
 int	main(int argc, char **argv, char **envp)
 {
 	char		*minishell;
-	//char		*prompt;
 	t_mini		mini;
 
 	(void)argc;
@@ -89,7 +88,6 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		minishell = readline("minishell : ");
-		//free(prompt);
 		if (minishell == NULL)
 		{
 			printf("Readline returned NULL\n");

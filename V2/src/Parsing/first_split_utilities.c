@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_split_utilities.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharder <aharder@student.42luxembourg.lu>  +#+  +:+       +#+        */
+/*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:12:23 by aharder           #+#    #+#             */
-/*   Updated: 2025/02/26 18:16:16 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/21 10:35:45 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	assign_start_value(t_var_bundle *var)
 	var->d_quotes = 0;
 }
 
-char	**perror_and_free(char **output)
+char	**perror_and_free(char **output, int size)
 {
 	int	i;
 
 	i = 0;
-	printf("Error: unmatched quotes");
-	while (output[i] != NULL)
+	printf("Error: unmatched quotes\n");
+	while (i < size)
 	{
 		free(output[i]);
 		i++;

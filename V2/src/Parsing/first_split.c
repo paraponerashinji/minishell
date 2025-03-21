@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:10:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 12:43:32 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/21 10:35:28 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	**first_split(char *s)
 		return (NULL);
 	process_string(s, &var, output);
 	if (var.d_quotes || var.s_quotes)
-		return (perror_and_free(output));
+		return (perror_and_free(output, split_size));
 	output[var.y] = NULL;
 	return (output);
 }

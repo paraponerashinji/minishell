@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 13:26:02 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/21 10:40:00 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	handle_signal(int sig)
 		rl_redisplay();
 	}
 }
-
+/*
 char	*crop_path(char **path)
 {
 	int		i;
@@ -44,8 +44,8 @@ char	*get_prompt(void)
 	char	*buffer;
 	char	**buffer2;
 	char	*prompt = NULL;
-	char	*prefix = "\e[1;32mminishell\e[0m:\e[1;34m~/";
-	char	*suffix = "\e[0m";
+	char	*prefix = "minishell:~/";
+	char	*suffix = "$";
 
 	if (getcwd(path, sizeof(path)) != NULL)
 	{
@@ -58,7 +58,7 @@ char	*get_prompt(void)
 		free(buffer);
 	}
 	return (prompt);
-}
+}*/
 
 void	print_mini(void)
 {
@@ -74,7 +74,7 @@ void	print_mini(void)
 int	main(int argc, char **argv, char **envp)
 {
 	char		*minishell;
-	char		*prompt;
+	//char		*prompt;
 	t_mini		mini;
 
 	(void)argc;
@@ -88,10 +88,8 @@ int	main(int argc, char **argv, char **envp)
 	print_mini();
 	while (1)
 	{
-		prompt = get_prompt();
-		printf("%s", prompt);
-		minishell = readline(">");
-		free(prompt);
+		minishell = readline("minishell : ");
+		//free(prompt);
 		if (minishell == NULL)
 		{
 			printf("Readline returned NULL\n");

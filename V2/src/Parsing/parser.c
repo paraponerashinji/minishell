@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 15:47:42 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/21 10:26:07 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	parser(char *str, t_mini *mini)
 	int			*operator;
 
 	splitted = first_split(str);
+	if (splitted == NULL)
+		return ;
 	operator = get_operators(str);
 	putlist(mini, splitted, operator);
 	print_commands(mini->commands);

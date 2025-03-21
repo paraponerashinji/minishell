@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 02:37:13 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/21 18:44:23 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,35 @@ void	check_env(t_commands *temp, t_env *env)
 		if (temp->command[i][0] == '"' || temp->command[i][0] == '\'')
 		{
 			buffer = temp->command[i];
-			if (temp->command[i][0] == '"')
+			if (temp->command[i][0] != '\'')
 				temp->command[i] = ft_strtrim(buffer, "\"");
-			else if (temp->command[i][0] == '\'')
+			else if (temp->command[i][0] != '"')
 				temp->command[i] = ft_strtrim(buffer, "'");
 			free(buffer);
 		}
 		i++;
+	}
+}
+
+void	check_env(t_commands *temp, t_env *env)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		quotes[2];
+	char	*buffer;
+
+	i = 0;
+	while (temp->command[i] != NULL)
+	{
+		j = 0;
+		while (temp->command[i][j] != '\0')
+		{
+			k = ft_strchrpos(temp->command[i], '$');
+			quotes = strchr_quotespos(temp->command[i]);
+			if (k > quotes[0] && k < quotes[1])
+				temp->command[i] = quote_replace(temp->command[i], k, env);
+		}
 	}
 }
 

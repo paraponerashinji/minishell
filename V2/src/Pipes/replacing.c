@@ -6,12 +6,12 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/21 18:44:23 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/22 15:28:41 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
+/*
 void	check_env(t_commands *temp, t_env *env)
 {
 	int		i;
@@ -39,28 +39,151 @@ void	check_env(t_commands *temp, t_env *env)
 		}
 		i++;
 	}
+}*/
+
+void	env_bundle_init(t_var_env_bundle *var)
+{
+	var->i = 0;
+	var->j = 0;
+	var->k = 0;
+	var->d_quotes = 0;
+	var->s_quotes = 0;
 }
 
 void	check_env(t_commands *temp, t_env *env)
 {
+	t_var_env_bundle	var;
+
+	env_bundle_init(&var);
+	while (temp->command[var.i] != NULL)
+	{
+		var.j = 0;
+		while (temp->command[var.i][var.j] != '\0')
+		{
+			var.k = srch_dollar(temp->command[var.i][var.j]);
+			while ((var.k == 0 || var.s_quotes) && temp->command[var.i][var.j] != '\0')
+			{
+				temp->command[var.i] = handle_env_quotes(temp->command[var.i], var.j, &var);
+				var.j++;
+				if (var.k == 0)
+					var.k = srch_dollar(temp->command[var.i][var.j]);
+			}
+			if (temp->command[var.i][var.j] != '\0')
+				temp->command[var.i] = replace(temp->command[var.i], var.j, env);
+			var.j += env_size(temp->command[var.i], var.j, env);
+		}
+		var.i++;
+	}
+}
+
+int	srch_dollar(char c)
+{
+	if (c == '$')
+		return (1);
+	else
+		return (0);
+}
+
+int	is_end_var(char c)
+{
+	if (ft_isalnum(c))
+		return (0);
+	else if (c == '_')
+		return (0);
+	else
+		return (1);
+}
+
+int	env_size(char *s, int i, t_env *env)
+{
+	char	*var;
+	char	*value;
+
+	var = ft_substr(s, i + 1, var_size(s, i + 1));
+	value = ft_getenv(env, var);
+	free(var);
+	if (!value)
+		return (0);
+	return(ft_strlen(value));
+}
+
+int	var_size(char *str, int i)
+{
+	int	size;
+
+	size = 0;
+	while (!is_end_var(str[i]) && str[i] != '\0')
+	{
+		size++;
+		i++;
+	}
+	return (size);
+}
+
+char	*ft_strrmchar(char *str, int pos)
+{
+	char	*output;
 	int		i;
 	int		j;
-	int		k;
-	int		quotes[2];
-	char	*buffer;
 
 	i = 0;
-	while (temp->command[i] != NULL)
+	j = 0;
+	output = malloc((ft_strlen(str)) * sizeof(char));
+	while (str[i] != '\0')
 	{
-		j = 0;
-		while (temp->command[i][j] != '\0')
-		{
-			k = ft_strchrpos(temp->command[i], '$');
-			quotes = strchr_quotespos(temp->command[i]);
-			if (k > quotes[0] && k < quotes[1])
-				temp->command[i] = quote_replace(temp->command[i], k, env);
-		}
+		if (i != pos)
+			output[j++] = str[i];
+		i++;
 	}
+	output[j] = '\0';
+	free(str);
+	return (output);
+}
+
+char	*handle_env_quotes(char *str, int i, t_var_env_bundle *var)
+{
+	if (!var->s_quotes && str[i] == '"')
+	{
+		var->d_quotes = !var->d_quotes;
+		str = ft_strrmchar(str, i);
+	}
+	else if (!var->d_quotes && str[i] == '\'')
+	{
+		var->s_quotes = !var->s_quotes;
+		str = ft_strrmchar(str, i);
+	}
+	return (str);
+}
+
+char	*replace(char *s, int i, t_env *env)
+{
+	char	*prefix;
+	char	*suffix;
+	char	*var;
+	char	*value;
+	int		j;
+
+	prefix = ft_substr(s, 0, i);
+	j = 0;
+	var = ft_substr(s, i + 1, var_size(s, i + 1));
+	suffix = ft_substr(s, i + 1 + var_size(s, i + 1), ft_strlen(s) - i + 1 + var_size(s, i + 1));
+	value = ft_getenv(env, var);
+	free(var);
+	if (!value)
+	{
+		free(s);
+		s = ft_strjoin(prefix, suffix);
+		free(prefix);
+		free(suffix);
+		return (s);
+	}
+	free(s);
+	s = ft_strjoin(prefix, value);
+	free(prefix);
+	prefix = ft_strjoin(s, suffix);
+	free(s);
+	free(suffix);
+	return (prefix);
 }
 
 char	*quote_replace(char *str, int i, t_env *env)
@@ -90,7 +213,7 @@ char	*quote_replace(char *str, int i, t_env *env)
 	free(buffer);
 	return (str);
 }
-
+/*
 char	*replace(char *str, int i, t_env *env)
 {
 	char	*buffer;
@@ -116,7 +239,7 @@ char	*replace(char *str, int i, t_env *env)
 	free(buff2);
 	free(buffer);
 	return (str);
-}
+}*/
 
 char	**insert_files(char **cmd, int index)
 {

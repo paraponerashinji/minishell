@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/21 10:32:19 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/22 15:22:44 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,15 @@ typedef struct s_var_bundle
 	int	s_quotes;
 	int	d_quotes;
 }	t_var_bundle;
+
+typedef struct s_var_env_bundle
+{
+	int	i;
+	int	j;
+	int	k;
+	int	s_quotes;
+	int	d_quotes;
+}	t_var_env_bundle;
 
 // MAIN
 char		*get_prompt(void);
@@ -127,6 +136,15 @@ char		*replace(char *str, int i, t_env *env);
 char		*quote_replace(char *str, int i, t_env *env);
 char		**insert_files(char **command, int index);
 int			ft_strchrpos(char *str, int searchedChar);
+// REPLACING V2
+void		env_bundle_init(t_var_env_bundle *var);
+void		check_env(t_commands *temp, t_env *env);
+int			srch_dollar(char c);
+int			is_end_var(char c);
+int			env_size(char *str, int i, t_env *env);
+int	var_size(char *str, int i);
+char		*ft_strrmchar(char *str, int pos);
+char		*handle_env_quotes(char *str, int i, t_var_env_bundle *var);
 // INPUT REDIRECTION
 int			find_i_red(t_io_red *redirection);
 void		get_heredoc(int *p_fd, char *end);

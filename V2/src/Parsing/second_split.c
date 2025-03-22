@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:18:05 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/22 15:43:32 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/22 16:11:53 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ int	find_segment_end(char *s, char c, int i)
 				printf("Error: bracket\n");
 				return (-1);
 			}
-			else
-				i++;
 		}
+		i++;
 	}
 	return (i);
 }

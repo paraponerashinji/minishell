@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/22 15:22:44 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/22 16:04:40 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <limits.h>
 # include "libft.h"
 # include "get_next_line.h"
 # include <sys/wait.h>
@@ -179,10 +180,10 @@ void		print_env(t_env *env);
 int			pwd(void);
 int			cd(char **args);
 int			echo(char **args);
-int			env(t_env **env);
+int			env(t_env **env, char **cmd);
 int			unset(char **args, t_env **env);
 int			export(char **args, t_env **env);
-void		ft_exit(t_env *env);
+void	ft_exit(t_env *env, char **arg);
 // BUILTIN UTILITIES
 int			print_export(t_env **env);
 int			ft_size_env(char **env);

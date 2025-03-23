@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/21 17:34:05 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/23 15:31:24 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	process_commands(t_commands *commands, t_env *env, int b_fd[2], int b)
 	{
 		check_env(t, env);
 		pipe(p_fd);
-		s = execute(t, b, p_fd, env);
+		s = execute(t, b, p_fd, env) % 255;
 		add_exit_status(s, &env);
 		if (t->next != NULL)
 		{

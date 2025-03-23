@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/22 16:20:45 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/23 15:22:18 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,13 @@ void	check_env(t_commands *temp, t_env *env)
 			{
 				temp->command[var.i] = handle_env_quotes(temp->command[var.i], var.j, &var);
 				var.j++;
-				if (var.k == 0)
-					var.k = srch_dollar(temp->command[var.i][var.j]);
+				var.k = srch_dollar(temp->command[var.i][var.j]);
 			}
 			if (temp->command[var.i][var.j] != '\0')
 				temp->command[var.i] = replace(temp->command[var.i], var.j, env);
+			//printf("BEFORE :%d\n", var.j);
 			var.j += env_size(temp->command[var.i], var.j, env);
+			//printf("AFTER :%d\n", var.j);
 		}
 		var.i++;
 	}
@@ -104,7 +105,7 @@ int	env_size(char *s, int i, t_env *env)
 	free(var);
 	if (!value)
 		return (0);
-	return(ft_strlen(value));
+	return(ft_strlen(value) - 2);
 }
 
 int	var_size(char *str, int i)
@@ -112,8 +113,14 @@ int	var_size(char *str, int i)
 	int	size;
 
 	size = 0;
-	while (!is_end_var(str[i]) && str[i] != '\0')
+	if (i > ft_strlen(str))
+		return (size);
+	if (str[i] == '?')
+		return (2);
+	while (str[i] != '\0')
 	{
+		if (is_end_var(str[i]))
+			break;
 		size++;
 		i++;
 	}
@@ -146,11 +153,13 @@ char	*handle_env_quotes(char *str, int i, t_var_env_bundle *var)
 	{
 		var->d_quotes = !var->d_quotes;
 		str = ft_strrmchar(str, i);
+		var->j--;
 	}
 	else if (!var->d_quotes && str[i] == '\'')
 	{
 		var->s_quotes = !var->s_quotes;
 		str = ft_strrmchar(str, i);
+		var->j--;
 	}
 	return (str);
 }
@@ -161,10 +170,8 @@ char	*replace(char *s, int i, t_env *env)
 	char	*suffix;
 	char	*var;
 	char	*value;
-	int		j;
 
 	prefix = ft_substr(s, 0, i);
-	j = 0;
 	var = ft_substr(s, i + 1, var_size(s, i + 1));
 	suffix = ft_substr(s, i + 1 + var_size(s, i + 1), ft_strlen(s) - i + 1 + var_size(s, i + 1));
 	value = ft_getenv(env, var);

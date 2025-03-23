@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:22:07 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/09 01:04:10 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/23 15:26:47 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_env	*init_env(char **envp)
 		add_env(&env, value, result);
 		i++;
 	}
+	add_exit_status(0, &env);
 	return (env);
 }
 

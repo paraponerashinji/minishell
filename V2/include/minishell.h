@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/22 16:20:45 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/23 18:10:55 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,4 +207,5 @@ char		*ptr_to_str(void *ptr);
 void		add_red_to_env(t_io_red **red, t_env **env);
 void		add_cmd_to_env(t_commands **commands, t_env **env);
 int			print_file_error(char *args);
+char		*ft_getallenv(t_env *env, char *name);
 #endif

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 15:46:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/22 16:00:34 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/23 18:40:10 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ void	ft_exit(t_env *env, char **arg)
 		else
 			exit_code = exit_code % 256 + 256;
 	}
-	red = str_to_ptr(ft_getenv(env, "&"));
-	commands = str_to_ptr(ft_getenv(env, "+"));
+	red = str_to_ptr(ft_getallenv(env, "&"));
+	commands = str_to_ptr(ft_getallenv(env, "+"));
 	free_red(red);
 	free_cmd(commands);
 	free_env(env);

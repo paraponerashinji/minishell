@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/23 15:31:24 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/23 17:50:15 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	createpipes(t_commands *commands, t_io_red *redirection, t_env *env)
 	int	buffer;
 
 	buffer = find_i_red(redirection);
-	add_red_to_env(&redirection, &env);
-	add_cmd_to_env(&commands, &env);
+	//add_red_to_env(&redirection, &env);
+	//add_cmd_to_env(&commands, &env);
 	process_commands(commands, env, b_fd, buffer);
 	close(b_fd[1]);
 	write_output(b_fd[0], redirection);

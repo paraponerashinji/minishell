@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/24 14:31:39 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/24 17:02:29 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	check_env(t_commands *temp, t_env *env)
 		while (temp->command[var.i][var.j] != '\0')
 		{
 			var.k = srch_dollar(temp->command[var.i][var.j]);
+			printf("%c\n", temp->command[var.i][var.j]);
 			while ((var.k == 0 || var.s_quotes) && temp->command[var.i][var.j] != '\0')
 			{
 				temp->command[var.i] = handle_env_quotes(temp->command[var.i], var.j, &var);
@@ -71,6 +72,8 @@ void	check_env(t_commands *temp, t_env *env)
 			if (temp->command[var.i][var.j] != '\0')
 				temp->command[var.i] = replace(temp->command[var.i], var.j, env);
 			var.j += var.k;
+			if (var.j > ft_strlen(temp->command[var.i]))
+				break;
 		}
 		var.i++;
 	}
@@ -98,13 +101,17 @@ int	env_size(char *s, int i, t_env *env)
 {
 	char	*var;
 	char	*value;
+	int		size;
 
+	if (s[i] != '\0' && is_end_var(s[i + 1]))
+		return (1);
 	var = ft_substr(s, i + 1, var_size(s, i + 1));
 	value = ft_getenv(env, var);
 	free(var);
 	if (!value)
 		return (0);
-	return(ft_strlen(value) - 2);
+	size = ft_strlen(value);
+	return(size);
 }
 
 int	var_size(char *str, int i)
@@ -115,8 +122,6 @@ int	var_size(char *str, int i)
 	if (i > ft_strlen(str))
 		return (size);
 	if (str[i] == '?')
-		return (2);
-	if (str[i] == '$')
 		return (2);
 	while (str[i] != '\0')
 	{
@@ -175,10 +180,8 @@ char	*replace(char *s, int i, t_env *env)
 	prefix = ft_substr(s, 0, i);
 	var = ft_substr(s, i + 1, var_size(s, i + 1));
 	suffix = ft_substr(s, i + 1 + var_size(s, i + 1), ft_strlen(s) - i + 1 + var_size(s, i + 1));
-	if (var[0] == '\0')
-	{
+	if (var == NULL || var[0] == '\0')
 		value = "$";
-	}
 	else
 		value = ft_getenv(env, var);
 	free(var);

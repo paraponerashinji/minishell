@@ -6,12 +6,12 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 16:06:06 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/07 02:35:32 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/25 18:02:47 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
+/*
 void	write_output(int buff_fd, t_io_red *redirection)
 {
 	t_io_red	*temp;
@@ -19,7 +19,6 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	int			i;
 
 	i = count_output_redirections(redirection);
-	temp = redirection;
 	temp = redirection;
 	if (i == 0)
 	{
@@ -31,13 +30,42 @@ void	write_output(int buff_fd, t_io_red *redirection)
 	while (temp != NULL)
 	{
 		if (temp->in_or_out == 7)
-			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC);
+			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else if (temp->in_or_out == 6)
-			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_APPEND);
+			output_fd[i++] = open(temp->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		temp = temp->next;
 	}
 	copy(buff_fd, output_fd, i);
 	free_and_close(output_fd, i);
+	close(buff_fd);
+}*/
+
+void	write_output(int buff_fd, t_io_red *redirection)
+{
+	t_io_red	*temp;
+	int			output_fd;
+
+	output_fd = 1;
+	temp = redirection;
+	while (temp != NULL)
+	{
+		if (temp->in_or_out == 7)
+		{
+			if (output_fd != 1)
+				close(output_fd);
+			output_fd = open(temp->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		}
+		if (temp->in_or_out == 6)
+		{
+			if (output_fd != 1)
+				close(output_fd);
+			output_fd = open(temp->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		}
+		temp = temp->next;
+	}
+	copy_single(buff_fd, output_fd);
+	if (output_fd != 1)
+		close(output_fd);
 	close(buff_fd);
 }
 

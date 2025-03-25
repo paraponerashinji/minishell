@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/24 17:02:29 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/25 18:03:54 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	check_env(t_commands *temp, t_env *env)
 		while (temp->command[var.i][var.j] != '\0')
 		{
 			var.k = srch_dollar(temp->command[var.i][var.j]);
-			printf("%c\n", temp->command[var.i][var.j]);
 			while ((var.k == 0 || var.s_quotes) && temp->command[var.i][var.j] != '\0')
 			{
 				temp->command[var.i] = handle_env_quotes(temp->command[var.i], var.j, &var);

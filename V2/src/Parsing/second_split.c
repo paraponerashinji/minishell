@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:18:05 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/23 18:01:31 by aharder          ###   ########.fr       */
+/*   Updated: 2025/03/25 18:04:41 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,7 @@ char	**second_split(char *s, char c)
 	i[1] = 0;
 	if (!s)
 		return (NULL);
-	printf("%d\n", splitlen(s, ' '));
 	output = malloc((splitlen(s, ' ') + 1000) * sizeof(char *));
-	printf("%d\n", splitlen(s, ' '));
 	if (!output)
 		return (NULL);
 	while (s[i[0]] != '\0')

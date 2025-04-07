@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/23 17:50:58 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:17:59 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	putlist(t_mini	*mini, char **split, int *op)
 			add_command(cmds, split[i], 3);
 		else if (op[i] != 0)
 		{
-			buffer = add_io(red, split[i], op[i]);
+			buffer = add_io(red, split[i], op[i], mini);
 			add_buff_to_last(cmds, buffer);
 		}
 		else

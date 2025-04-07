@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:27:22 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/08 13:12:18 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:23:28 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	add_command(t_commands **a, char *splitted, int type)
 	}
 }
 
-char	*add_io(t_io_red **a, char *splitted, int type)
+char	*add_io(t_io_red **a, char *splitted, int type, t_mini *mini)
 {
 	t_io_red	*buffer;
 	t_io_red	*last;
@@ -41,6 +41,7 @@ char	*add_io(t_io_red **a, char *splitted, int type)
 	buffer = malloc(sizeof(t_io_red));
 	buffer->in_or_out = type;
 	buffer->file = first_word(splitted);
+	check_env(&buffer->file, mini->env, 1);
 	buffer->next = NULL;
 	output = rm_first_word(splitted);
 	if (!*a)

@@ -6,11 +6,21 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/23 17:50:15 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:26:24 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	ft_sizedstr(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != NULL)
+		i++;
+	return (i);
+}
 
 void	process_commands(t_commands *commands, t_env *env, int b_fd[2], int b)
 {
@@ -22,7 +32,7 @@ void	process_commands(t_commands *commands, t_env *env, int b_fd[2], int b)
 	init_pipes(p_fd, b_fd);
 	while (t != NULL)
 	{
-		check_env(t, env);
+		check_env(t->command, env, ft_sizedstr(t->command));
 		pipe(p_fd);
 		s = execute(t, b, p_fd, env) % 255;
 		add_exit_status(s, &env);

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/23 18:10:55 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:27:50 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char		**merge_command(char **old, char **to_add);
 void		add_buff_to_last(t_commands **a, char *str);
 char		*first_word(char *str);
 char		*rm_first_word(char *str);
-char		*add_io(t_io_red **a, char *splitted, int op);
+char		*add_io(t_io_red **a, char *splitted, int type, t_mini *mini);
 void		free_cmd(t_commands **a);
 void		free_red(t_io_red **a);
 // FIRST SPLIT
@@ -132,14 +132,13 @@ void		close_pipes(int fd[2]);
 int			is_exec_command(char *str);
 int			is_other_command(char *str);
 // REPLACING
-void		check_env(t_commands *temp, t_env *env);
 char		*replace(char *str, int i, t_env *env);
 char		*quote_replace(char *str, int i, t_env *env);
 char		**insert_files(char **command, int index);
 int			ft_strchrpos(char *str, int searchedChar);
 // REPLACING V2
 void		env_bundle_init(t_var_env_bundle *var);
-void		check_env(t_commands *temp, t_env *env);
+void		check_env(char **temp, t_env *env, int size);
 int			srch_dollar(char c);
 int			is_end_var(char c);
 int			env_size(char *str, int i, t_env *env);

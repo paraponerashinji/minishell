@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/25 18:03:54 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:23:12 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,28 +50,28 @@ void	env_bundle_init(t_var_env_bundle *var)
 	var->s_quotes = 0;
 }
 
-void	check_env(t_commands *temp, t_env *env)
+void	check_env(char **temp, t_env *env, int size)
 {
 	t_var_env_bundle	var;
 
 	env_bundle_init(&var);
-	while (temp->command[var.i] != NULL)
+	while (var.i < size)
 	{
 		var.j = 0;
-		while (temp->command[var.i][var.j] != '\0')
+		while (temp[var.i][var.j] != '\0')
 		{
-			var.k = srch_dollar(temp->command[var.i][var.j]);
-			while ((var.k == 0 || var.s_quotes) && temp->command[var.i][var.j] != '\0')
+			var.k = srch_dollar(temp[var.i][var.j]);
+			while ((var.k == 0 || var.s_quotes) && temp[var.i][var.j] != '\0')
 			{
-				temp->command[var.i] = handle_env_quotes(temp->command[var.i], var.j, &var);
+				temp[var.i] = handle_env_quotes(temp[var.i], var.j, &var);
 				var.j++;
-				var.k = srch_dollar(temp->command[var.i][var.j]);
+				var.k = srch_dollar(temp[var.i][var.j]);
 			}
-			var.k = env_size(temp->command[var.i], var.j, env);
-			if (temp->command[var.i][var.j] != '\0')
-				temp->command[var.i] = replace(temp->command[var.i], var.j, env);
+			var.k = env_size(temp[var.i], var.j, env);
+			if (temp[var.i][var.j] != '\0')
+				temp[var.i] = replace(temp[var.i], var.j, env);
 			var.j += var.k;
-			if (var.j > ft_strlen(temp->command[var.i]))
+			if (var.j > ft_strlen(temp[var.i]))
 				break;
 		}
 		var.i++;

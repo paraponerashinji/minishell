@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/07 18:17:59 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/08 00:15:00 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,13 @@ void	parser(char *str, t_mini *mini)
 	if (splitted == NULL)
 		return ;
 	operator = get_operators(str);
-	putlist(mini, splitted, operator);
+	if (putlist(mini, splitted, operator) == 1)
+	{
+		free_split(splitted);
+		free(operator);
+		printf("Error: ambiguous redirection\n");
+		return ;
+	}
 	print_commands(mini->commands);
 	print_redirection(mini->redirection);
 	free_split(splitted);
@@ -34,7 +40,7 @@ void	parser(char *str, t_mini *mini)
 	free_cmd(&mini->commands);
 }
 
-void	putlist(t_mini	*mini, char **split, int *op)
+int	putlist(t_mini	*mini, char **split, int *op)
 {
 	char		*buffer;
 	t_commands	**cmds;
@@ -46,21 +52,22 @@ void	putlist(t_mini	*mini, char **split, int *op)
 	i = 0;
 	while (split[i] != NULL)
 	{
-		if (op[i] == 2)
-			add_command(cmds, split[i], 2);
-		else if (op[i] == 1)
-			add_command(cmds, split[i], 1);
-		else if (op[i] == 3)
-			add_command(cmds, split[i], 3);
+		if (op[i] == 2 || op[i] == 1 || op[i] == 3)
+			add_command(cmds, split[i], op[i]);
 		else if (op[i] != 0)
 		{
 			buffer = add_io(red, split[i], op[i], mini);
+			if (buffer == NULL)
+			{
+				free_cmd(cmds);
+				free_red(red);
+				return (1);
+			}
 			add_buff_to_last(cmds, buffer);
 		}
-		else
-			printf("ERREUR OPERATEUR");
 		i++;
 	}
+	return (0);
 }
 
 int	*get_operators(char *s)

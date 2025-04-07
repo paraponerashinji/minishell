@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/07 18:23:12 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/07 23:49:30 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	check_env(char **temp, t_env *env, int size)
 			while ((var.k == 0 || var.s_quotes) && temp[var.i][var.j] != '\0')
 			{
 				temp[var.i] = handle_env_quotes(temp[var.i], var.j, &var);
+				if (!var.s_quotes && !var.d_quotes && srchr_wildcard(&temp[var.i][var.j]))
+					temp[var.i] = handle_wildcard(temp[var.i], var.j);
 				var.j++;
 				var.k = srch_dollar(temp[var.i][var.j]);
 			}
@@ -255,7 +257,7 @@ char	*replace(char *str, int i, t_env *env)
 	free(buffer);
 	return (str);
 }*/
-
+/*
 char	**insert_files(char **cmd, int index)
 {
 	char	**fn;
@@ -282,7 +284,7 @@ char	**insert_files(char **cmd, int index)
 	free_split(fn);
 	free_split(cmd);
 	return (output);
-}
+}*/
 
 int	ft_strchrpos(char *str, int searchedChar)
 {

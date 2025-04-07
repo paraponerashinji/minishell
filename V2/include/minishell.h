@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/07 18:27:50 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/08 00:22:47 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ t_env		*init_env(char **envp);
 void		add_env(t_env **a, char *value, char *result);
 void		free_env(t_env *env);
 // LISTING
-void		putlist(t_mini *mini, char **split, int *op);
+int			putlist(t_mini *mini, char **split, int *op);
 void		add_command(t_commands **a, char *splitted, int op);
 t_commands	*init_command_node(char **command);
 t_commands	*get_last_command(t_commands *a);
@@ -134,7 +134,7 @@ int			is_other_command(char *str);
 // REPLACING
 char		*replace(char *str, int i, t_env *env);
 char		*quote_replace(char *str, int i, t_env *env);
-char		**insert_files(char **command, int index);
+//char		**insert_files(char **command, int index);
 int			ft_strchrpos(char *str, int searchedChar);
 // REPLACING V2
 void		env_bundle_init(t_var_env_bundle *var);
@@ -145,6 +145,12 @@ int			env_size(char *str, int i, t_env *env);
 int	var_size(char *str, int i);
 char		*ft_strrmchar(char *str, int pos);
 char		*handle_env_quotes(char *str, int i, t_var_env_bundle *var);
+// WILDCARD
+int			srchr_wildcard(char *str);
+char		*handle_wildcard(char *str, int i);
+char		*insert_files(char *pattern, char *str);
+int			pattern_matching(char *pattern, char *filename);
+int			count_wildcard(char *str, int i);
 // INPUT REDIRECTION
 int			find_i_red(t_io_red *redirection);
 void		get_heredoc(int *p_fd, char *end);

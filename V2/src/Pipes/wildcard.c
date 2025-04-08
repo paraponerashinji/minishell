@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:42:58 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/08 00:28:19 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/09 00:10:59 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ char	*ft_strjoinfree(char *s1, char *s2)
 	free(s1);
 	return (str);
 }
+
 char	*handle_wildcard(char *str, int i)
 {
 	char	*output;
@@ -94,7 +95,6 @@ char	*insert_files(char *pattern, char *str)
 	filenames = get_filenames();
 	k = 0;
 	temp = NULL;
-	
 	while (filenames[k] != NULL)
 	{
 		if (pattern_matching(pattern, filenames[k]))

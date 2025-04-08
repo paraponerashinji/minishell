@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/07 23:49:30 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/09 00:08:32 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,14 @@ void	check_env(char **temp, t_env *env, int size)
 				temp[var.i] = handle_env_quotes(temp[var.i], var.j, &var);
 				if (!var.s_quotes && !var.d_quotes && srchr_wildcard(&temp[var.i][var.j]))
 					temp[var.i] = handle_wildcard(temp[var.i], var.j);
-				var.j++;
-				var.k = srch_dollar(temp[var.i][var.j]);
+				var.k = srch_dollar(temp[var.i][++var.j]);
 			}
 			var.k = env_size(temp[var.i], var.j, env);
 			if (temp[var.i][var.j] != '\0')
 				temp[var.i] = replace(temp[var.i], var.j, env);
 			var.j += var.k;
 			if (var.j > ft_strlen(temp[var.i]))
-				break;
+				break ;
 		}
 		var.i++;
 	}
@@ -112,7 +111,7 @@ int	env_size(char *s, int i, t_env *env)
 	if (!value)
 		return (0);
 	size = ft_strlen(value);
-	return(size);
+	return (size);
 }
 
 int	var_size(char *str, int i)
@@ -127,7 +126,7 @@ int	var_size(char *str, int i)
 	while (str[i] != '\0')
 	{
 		if (is_end_var(str[i]))
-			break;
+			break ;
 		size++;
 		i++;
 	}

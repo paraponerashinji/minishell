@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:27:22 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/08 00:23:03 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/09 00:14:38 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,27 @@ void	add_command(t_commands **a, char *splitted, int type)
 	}
 }
 
+char	*free_and_null(t_io_red *buffer)
+{
+	free(buffer->file);
+	free(buffer);
+	return (NULL);
+}
+
+int	check_redirection(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == ' ')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 char	*add_io(t_io_red **a, char *splitted, int type, t_mini *mini)
 {
 	t_io_red	*buffer;
@@ -42,11 +63,10 @@ char	*add_io(t_io_red **a, char *splitted, int type, t_mini *mini)
 	buffer->in_or_out = type;
 	buffer->file = first_word(splitted);
 	if (buffer->file == NULL)
-	{
-		free(buffer);
-		return (NULL);
-	}
+		return (free_and_null(buffer));
 	check_env(&buffer->file, mini->env, 1);
+	if (check_redirection(buffer->file) == 0)
+		return (free_and_null(buffer));
 	buffer->next = NULL;
 	output = rm_first_word(splitted);
 	if (!*a)
@@ -91,11 +111,6 @@ char	*first_word(char *str)
 	k = 0;
 	while (str[i] == ' ')
 		i++;
-	if (srchr_wildcard(&str[i]))
-	{
-		if (count_wildcard(str, i) > 1)
-			return (NULL);
-	}
 	while (str[i] != ' ' && str[i] != '\0')
 	{
 		i++;

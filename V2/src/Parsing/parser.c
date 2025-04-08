@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/08 00:15:00 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/09 00:12:31 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ void	parser(char *str, t_mini *mini)
 	free_cmd(&mini->commands);
 }
 
+void	free_cmd_red(t_commands **cmd, t_io_red **red)
+{
+	free_cmd(cmd);
+	free_red(red);
+}
+
 int	putlist(t_mini	*mini, char **split, int *op)
 {
 	char		*buffer;
@@ -59,8 +65,7 @@ int	putlist(t_mini	*mini, char **split, int *op)
 			buffer = add_io(red, split[i], op[i], mini);
 			if (buffer == NULL)
 			{
-				free_cmd(cmds);
-				free_red(red);
+				free_cmd_red(cmds, red);
 				return (1);
 			}
 			add_buff_to_last(cmds, buffer);

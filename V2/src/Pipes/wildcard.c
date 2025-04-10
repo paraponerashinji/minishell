@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:42:58 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/10 14:32:55 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/10 15:13:50 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ int	srchr_wildcard(char *str)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
+	printf("str = '%s' ", str);
+	printf("str[0] = '%c' && str[1] = '%c'\n", str[0], str[1]);
 	if (str == NULL)
+		return (0);
+	if (str[0] == '\0')
 		return (0);
 	if (str[i] != '\0')
 	{
@@ -50,7 +54,8 @@ char	*handle_wildcard(char *str, int i)
 	int		k;
 
 	j = i;
-	while (str[j] != ' ' && str[j] != '\0')
+	printf("salut");
+	while (str[j] != ' ' && str[j] != '\0' && str[j] != '"' && str[j] != '\'')
 		j++;
 	pattern = malloc((j - i + 1) * sizeof(char));
 	k = i;

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/09 00:08:32 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/10 15:11:51 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	check_env(char **temp, t_env *env, int size)
 			while ((var.k == 0 || var.s_quotes) && temp[var.i][var.j] != '\0')
 			{
 				temp[var.i] = handle_env_quotes(temp[var.i], var.j, &var);
-				if (!var.s_quotes && !var.d_quotes && srchr_wildcard(&temp[var.i][var.j]))
+				if (!var.s_quotes && !var.d_quotes && var.j >= 0 && srchr_wildcard(&temp[var.i][var.j]))
 					temp[var.i] = handle_wildcard(temp[var.i], var.j);
 				var.k = srch_dollar(temp[var.i][++var.j]);
 			}
@@ -159,13 +159,15 @@ char	*handle_env_quotes(char *str, int i, t_var_env_bundle *var)
 	{
 		var->d_quotes = !var->d_quotes;
 		str = ft_strrmchar(str, i);
-		var->j--;
+		if (var->j >= 0)
+			var->j--;
 	}
 	else if (!var->d_quotes && str[i] == '\'')
 	{
 		var->s_quotes = !var->s_quotes;
 		str = ft_strrmchar(str, i);
-		var->j--;
+		if (var->j >= 0)
+			var->j--;
 	}
 	return (str);
 }

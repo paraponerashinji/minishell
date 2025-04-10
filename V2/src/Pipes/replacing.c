@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/10 15:11:51 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:08:57 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,10 @@ void	check_env(char **temp, t_env *env, int size)
 			var.k = srch_dollar(temp[var.i][var.j]);
 			while ((var.k == 0 || var.s_quotes) && temp[var.i][var.j] != '\0')
 			{
+				printf("j = %d\n", var.j);
 				temp[var.i] = handle_env_quotes(temp[var.i], var.j, &var);
 				if (!var.s_quotes && !var.d_quotes && var.j >= 0 && srchr_wildcard(&temp[var.i][var.j]))
-					temp[var.i] = handle_wildcard(temp[var.i], var.j);
+					temp[var.i] = handle_wildcard(temp[var.i], &var);
 				var.k = srch_dollar(temp[var.i][++var.j]);
 			}
 			var.k = env_size(temp[var.i], var.j, env);

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/08 00:22:47 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:07:03 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ char		*ft_strrmchar(char *str, int pos);
 char		*handle_env_quotes(char *str, int i, t_var_env_bundle *var);
 // WILDCARD
 int			srchr_wildcard(char *str);
-char		*handle_wildcard(char *str, int i);
+char		*handle_wildcard(char *str, t_var_env_bundle *var);
 char		*insert_files(char *pattern, char *str);
 int			pattern_matching(char *pattern, char *filename);
 int			count_wildcard(char *str, int i);

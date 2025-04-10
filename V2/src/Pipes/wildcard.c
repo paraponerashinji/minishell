@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:42:58 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/10 15:13:50 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:19:07 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,29 +46,46 @@ char	*ft_strjoinfree(char *s1, char *s2)
 	return (str);
 }
 
-char	*handle_wildcard(char *str, int i)
+int	find_length(int i, int k, char *str, char *output)
+{
+	int	j;
+
+	if (!output)
+		return (0);
+	if (str[k] != '\0')
+	{
+		j = ft_strchrpos(output, str[k]);
+		return (j - 1);
+	}
+	else
+		return (i);
+}
+
+char	*handle_wildcard(char *str, t_var_env_bundle *var)
 {
 	char	*output;
 	char	*pattern;
 	int		j;
 	int		k;
 
-	j = i;
-	printf("salut");
+	j = var->j;
 	while (str[j] != ' ' && str[j] != '\0' && str[j] != '"' && str[j] != '\'')
 		j++;
-	pattern = malloc((j - i + 1) * sizeof(char));
-	k = i;
+	pattern = malloc((j - var->j + 1) * sizeof(char));
+	k = var->j;
 	while (k < j)
 	{
-		pattern[k - i] = str[k];
+		pattern[k - var->j] = str[k];
 		k++;
 	}
-	pattern[k - i] = '\0';
+	pattern[k - var->j] = '\0';
 	if (ft_strchr(pattern, '/') == 0)
 		output = insert_files(pattern, str);
+	else if (ft_strcmp(str, pattern) == 0)
+		output = ft_replacesubstr(str, pattern, " ");
 	else
-		output = ft_replacesubstr(str, pattern, "");
+		output = ft_strtrim(str, pattern);
+	var->j = find_length(var->j, j, str, output);
 	free(str);
 	free(pattern);
 	return (output);
@@ -127,7 +144,12 @@ char	*insert_files(char *pattern, char *str)
 		}
 		k++;
 	}
-	str = ft_replacesubstr(str, pattern, temp);
+	if (temp)
+		str = ft_replacesubstr(str, pattern, temp);
+	else if (ft_strcmp(str, pattern) == 0)
+		str = ft_replacesubstr(str, pattern, " ");
+	else
+		str = ft_strtrim(str, pattern);
 	free(temp);
 	free_split(filenames);
 	return (str);

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/21 10:52:23 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:01:23 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,36 @@ void	handle_signal(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	if (sig == SIGQUIT)
+	{
+		//rl_on_new_line();
+		//rl_replace_line("", 0);
+		//rl_redisplay();
+	}
+}
+
+void block_signal(int signal)
+{
+// Set of signals to block
+ sigset_t sigset;
+
+// Initialize set to 0
+ sigemptyset(&sigset);
+// Add the signal to the set
+ sigaddset(&sigset, signal);
+// Add the signals in the set to the process' blocked signals
+ sigprocmask(SIG_BLOCK, &sigset, NULL);
+ if (signal == SIGQUIT)
+ {
+	rl_on_new_line();
+	//rl_replace_line("", 0);
+	//rl_redisplay();
+ }
+}
+
+void	handle_sigquit(int sig)
+{
+	block_signal(sig);
 }
 /*
 char	*crop_path(char **path)
@@ -82,7 +112,7 @@ int	main(int argc, char **argv, char **envp)
 	mini.redirection = NULL;
 	mini.env = init_env(envp);
 	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, handle_signal);
+	signal(SIGQUIT, handle_sigquit);
 	printf("\e[H\e[J");
 	print_mini();
 	while (1)

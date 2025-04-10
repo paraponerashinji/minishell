@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/22 16:12:40 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:33:11 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,14 @@ int	executefullfile(char *cmd, char **args, int i_fd, int o_fd)
 		dup2(i_fd, STDIN_FILENO);
 		dup2(o_fd, STDOUT_FILENO);
 		execve(cmd, args, environ);
+		signal(SIGQUIT, handle_signal);
 		exit(1);
 	}
 	else
+	{
+		signal(SIGQUIT, handle_signal);
 		waitpid(p, &exit_status, 0);
+	}
 	return (exit_status);
 }
 
@@ -100,12 +104,16 @@ int	executecommand(char **args, int i_fd, int o_fd, t_env *env)
 		dup2(o_fd, STDOUT_FILENO);
 		full_cmd = get_path(args[0], env);
 		execve(full_cmd, args, environ);
+		signal(SIGQUIT, handle_signal);
 		perror("fail command");
 		free(full_cmd);
 		exit(1);
 	}
 	else
+	{
+		signal(SIGQUIT, handle_signal);
 		waitpid(p, &exit_status, 0);
+	}
 	return (exit_status);
 }
 

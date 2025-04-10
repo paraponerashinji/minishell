@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/10 17:01:23 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/11 01:01:41 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	handle_signal(int sig)
 	}
 	if (sig == SIGQUIT)
 	{
-		//rl_on_new_line();
+		rl_on_new_line();
 		//rl_replace_line("", 0);
 		//rl_redisplay();
 	}
@@ -31,26 +31,24 @@ void	handle_signal(int sig)
 
 void block_signal(int signal)
 {
-// Set of signals to block
- sigset_t sigset;
+	sigset_t sigset;
 
-// Initialize set to 0
- sigemptyset(&sigset);
-// Add the signal to the set
- sigaddset(&sigset, signal);
-// Add the signals in the set to the process' blocked signals
- sigprocmask(SIG_BLOCK, &sigset, NULL);
- if (signal == SIGQUIT)
- {
-	rl_on_new_line();
-	//rl_replace_line("", 0);
-	//rl_redisplay();
- }
+	sigemptyset(&sigset);
+	sigaddset(&sigset, signal);
+	sigprocmask(SIG_BLOCK, &sigset, NULL);
+	if (signal == SIGQUIT)
+		printf("\e[36mSIGQUIT (ctrl-\\) blocked.\e[0m\n");
 }
 
-void	handle_sigquit(int sig)
+void unblock_signal(int signal)
 {
-	block_signal(sig);
+	sigset_t sigset;
+
+	sigemptyset(&sigset);
+	sigaddset(&sigset, signal);
+	sigprocmask(SIG_UNBLOCK, &sigset, NULL);
+	if (signal == SIGQUIT)
+		printf("\e[36mSIGQUIT (ctrl-\\) unblocked.\e[0m\n");
 }
 /*
 char	*crop_path(char **path)
@@ -112,12 +110,14 @@ int	main(int argc, char **argv, char **envp)
 	mini.redirection = NULL;
 	mini.env = init_env(envp);
 	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, handle_sigquit);
 	printf("\e[H\e[J");
 	print_mini();
 	while (1)
 	{
+		block_signal(SIGQUIT);
 		minishell = readline("minishell : ");
+		signal(SIGQUIT, handle_signal);
+		unblock_signal(SIGQUIT);
 		if (minishell == NULL)
 		{
 			printf("Readline returned NULL\n");

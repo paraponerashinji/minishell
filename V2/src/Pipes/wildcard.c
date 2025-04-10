@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:42:58 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/09 00:10:59 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/10 14:32:55 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,19 @@ int	srchr_wildcard(char *str)
 {
 	int	i;
 
-	i = 0;
-	while (str[i] != ' ' && str[i] != '\0')
+	i = 1;
+	if (str == NULL)
+		return (0);
+	if (str[i] != '\0')
 	{
-		if (str[i] == '*')
+		while (str[i] != '\0' && str[i] != ' ')
 		{
-			return (1);
+			if (str[i] == '*')
+			{
+				return (1);
+			}
+			i++;
 		}
-		i++;
 	}
 	return (0);
 }
@@ -55,12 +60,15 @@ char	*handle_wildcard(char *str, int i)
 		k++;
 	}
 	pattern[k - i] = '\0';
-	output = insert_files(pattern, str);
+	if (ft_strchr(pattern, '/') == 0)
+		output = insert_files(pattern, str);
+	else
+		output = ft_replacesubstr(str, pattern, "");
 	free(str);
 	free(pattern);
 	return (output);
 }
-
+/*
 int	count_wildcard(char *str, int i)
 {
 	char	*output;
@@ -79,12 +87,17 @@ int	count_wildcard(char *str, int i)
 		k++;
 	}
 	pattern[k - i] = '\0';
-	output = insert_files(pattern, str);
-	k = splitlen(output, ' ');
+	if (ft_strchr(pattern, '/') == 0)
+	{
+		output = insert_files(pattern, str);
+		k = splitlen(output, ' ');
+	}
+	else
+		k = 0;
 	free(output);
 	free(pattern);
 	return (k);
-}
+}*/
 
 char	*insert_files(char *pattern, char *str)
 {
@@ -100,9 +113,7 @@ char	*insert_files(char *pattern, char *str)
 		if (pattern_matching(pattern, filenames[k]))
 		{
 			if (!temp)
-			{
 				temp = ft_strdup(filenames[k]);
-			}
 			else
 			{
 				temp = ft_strjoinfree(temp, " ");

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 15:46:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/08 17:51:16 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/10 14:16:14 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	ft_exit(t_env *env, char **arg)
 	void		*commands;
 	long long	exit_code;
 
-	if (arg[2] != NULL)
+	if (arg[1] != NULL && arg[2] != NULL)
 	{
 		ft_putstr_fd("error: exit: too many arguments.", 2);
 		exit(1);

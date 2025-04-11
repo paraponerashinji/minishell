@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/07 18:26:24 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/11 19:23:56 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	createpipes(t_commands *commands, t_io_red *redirection, t_env *env)
 	return (1);
 }
 
-int	is_exec_command(char *str)
+int	is_exec_command(char **str)
 {
 	char	*commands[3];
 	int		i;
@@ -77,7 +77,9 @@ int	is_exec_command(char *str)
 	commands[2] = "pwd";
 	while (i < 3)
 	{
-		if (ft_strcmp(str, commands[i]) == 0)
+		if (ft_strcmp(str[0], commands[i]) == 0)
+			return (i);
+		else if (ft_strcmp(str[0], "export") == 0 && str[1] == NULL)
 			return (i);
 		i++;
 	}

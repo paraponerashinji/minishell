@@ -6,17 +6,22 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:20:52 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/22 16:13:06 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/11 19:20:22 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	commandbuiltin(char **arg, t_env *env)
+int	commandbuiltin(char **arg, int i_fd, int o_fd, t_env *env)
 {
 	int	exit_status;
+	int	temp_o_fd;
+	int	temp_i_fd;
 
-	(void)env;
+	temp_o_fd = dup(STDOUT_FILENO);
+	temp_i_fd = dup(STDIN_FILENO);
+	dup2(i_fd, STDIN_FILENO);
+	dup2(o_fd, STDOUT_FILENO);
 	exit_status = 0;
 	if (strcmp(arg[0], "cd") == 0)
 	{
@@ -28,6 +33,10 @@ int	commandbuiltin(char **arg, t_env *env)
 		exit_status = unset(arg, &env);
 	else if (strcmp(arg[0], "exit") == 0)
 		ft_exit(env, arg);
+	dup2(temp_i_fd, STDIN_FILENO);
+	dup2(temp_o_fd, STDOUT_FILENO);
+	close(temp_i_fd);
+	close(temp_o_fd);
 	return (exit_status);
 }
 

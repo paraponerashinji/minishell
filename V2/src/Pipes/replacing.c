@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/10 16:08:57 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/11 19:59:09 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,16 @@ char	*handle_env_quotes(char *str, int i, t_var_env_bundle *var)
 	return (str);
 }
 
+int	var_size2(char *str, int i)
+{
+	if (str[i] == ' ')
+		return (1);
+	else if (str[i] == '\0')
+		return (1);
+	else
+		return (0);
+}
+
 char	*replace(char *s, int i, t_env *env)
 {
 	char	*prefix;
@@ -183,8 +193,10 @@ char	*replace(char *s, int i, t_env *env)
 	prefix = ft_substr(s, 0, i);
 	var = ft_substr(s, i + 1, var_size(s, i + 1));
 	suffix = ft_substr(s, i + 1 + var_size(s, i + 1), ft_strlen(s) - i + 1 + var_size(s, i + 1));
-	if (var == NULL || var[0] == '\0')
+	if (var_size2(s, i + 1) == 1)
 		value = "$";
+	else if (var == NULL || var[0] == '\0')
+		value = " ";
 	else
 		value = ft_getenv(env, var);
 	free(var);

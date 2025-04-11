@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/10 16:07:03 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/11 19:25:41 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int			createpipes(t_commands *cmds, t_io_red *red, t_env *env);
 void		process_commands(t_commands *cmds, t_env *env, int b_fd[2], int b);
 void		init_pipes(int p_fd[2], int b_fd[2]);
 void		close_pipes(int fd[2]);
-int			is_exec_command(char *str);
+int			is_exec_command(char **str);
 int			is_other_command(char *str);
 // REPLACING
 char		*replace(char *str, int i, t_env *env);
@@ -165,7 +165,7 @@ int			executefile(char **args, int i_fd, int o_fd, t_env *env);
 int			executefullfile(char *cmd, char **args, int i_fd, int o_fd);
 int			executecommand(char **args, int i_fd, int o_fd, t_env *env);
 int			executebuiltin(char **cmd, int i_fd, int o_fd, t_env *envi);
-int			commandbuiltin(char **arg, t_env *env);
+int			commandbuiltin(char **arg, int i_fd, int o_fd, t_env *env);
 char		*get_path(char *cmd, t_env *env);
 // PIPES/EXEC UTILS
 void		free_and_close(int *fd, int size);

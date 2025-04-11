@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/11 00:26:55 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/11 19:39:04 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 {
 	int	status;
 
+	print_commands(t);
 	if (t->command[0][0] == '/' && access(t->command[0], F_OK | X_OK) == 0)
 		status = executefullfile(t->command[0], t->command, b, p_fd[1]);
 	else if (ft_strncmp(t->command[0], "./", 2) == 0)
@@ -25,12 +26,12 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 		else
 			status = print_file_error(t->command[0]);
 	}
-	else if (is_exec_command(t->command[0]) != -1)
+	else if (is_exec_command(t->command) != -1)
 		status = executebuiltin(t->command, b, p_fd[1], env);
 	else if (is_other_command(t->command[0]) != -1)
 	{
 		if (t->next == NULL || t->next->pipe_type != 2)
-			status = commandbuiltin(t->command, env);
+			status = commandbuiltin(t->command, b, p_fd[1], env);
 		else
 			status = 2;
 	}
@@ -137,6 +138,8 @@ int	executebuiltin(char **cmd, int i_fd, int o_fd, t_env *envi)
 			env(&envi, cmd);
 		else if (strncmp(cmd[0], "pwd", ft_strlen(cmd[0])) == 0)
 			pwd();
+		else if (strncmp(cmd[0], "export", ft_strlen(cmd[0])) == 0)
+			env(&envi, cmd);
 		exit(1);
 	}
 	else

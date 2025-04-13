@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 01:09:57 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/11 19:23:56 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 19:01:00 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	process_commands(t_commands *commands, t_env *env, int b_fd[2], int b)
 		b = p_fd[0];
 		t = t->next;
 	}
-	print_commands(commands);
+	//print_commands(commands);
 	dup2(p_fd[0], b_fd[0]);
 	close_pipes(p_fd);
 }

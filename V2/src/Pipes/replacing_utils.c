@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:59:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/13 18:40:15 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:51:30 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*ft_getenv(t_env *env, char *name)
 	while (temp != NULL)
 	{
 		if (strcmp(temp->value, name) == 0)
-			return (clean_env(temp->result));
+			return (temp->result);
 		temp = temp->next;
 	}
 	return (NULL);

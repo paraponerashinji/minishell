@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/13 16:56:16 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 19:01:48 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	block_signal(int signal)
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = 0;
     sigaction(signal, &sa, NULL);
-    if (signal == SIGQUIT)
-        printf("\e[36mSIGQUIT (ctrl-\\) blocked.\e[0m\n");
 }
 
 void	handle_signal(int sig)
@@ -50,8 +48,6 @@ void	unblock_signal(int signal)
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = 0;
     sigaction(signal, &sa, NULL);
-    if (signal == SIGQUIT)
-        printf("\e[36mSIGQUIT (ctrl-\\) unblocked.\e[0m\n");
 }
 /*
 char	*crop_path(char **path)
@@ -113,8 +109,8 @@ int	main(int argc, char **argv, char **envp)
 	mini.redirection = NULL;
 	mini.env = init_env(envp);
 	signal(SIGINT, handle_signal);
-	printf("\e[H\e[J");
-	print_mini();
+	//printf("\e[H\e[J");
+	//print_mini();
 	while (1)
 	{
 		block_signal(SIGQUIT);

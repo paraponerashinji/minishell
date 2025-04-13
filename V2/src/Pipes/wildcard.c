@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:42:58 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/11 00:49:45 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:59:57 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	srchr_wildcard(char *str)
 	int	i;
 
 	i = 0;
-	printf("str = '%s' ", str);
-	printf("str[0] = '%c' && str[1] = '%c'\n", str[0], str[1]);
+	//printf("str = '%s' ", str);
+	//printf("str[0] = '%c' && str[1] = '%c'\n", str[0], str[1]);
 	if (str == NULL)
 		return (0);
 	if (str[0] == '\0')

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/09 00:12:31 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:58:16 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	parser(char *str, t_mini *mini)
 		printf("Error: ambiguous redirection\n");
 		return ;
 	}
-	print_commands(mini->commands);
-	print_redirection(mini->redirection);
+	//print_commands(mini->commands);
+	//print_redirection(mini->redirection);
 	free_split(splitted);
 	free(operator);
 	add_red_to_env(&mini->redirection, &mini->env);

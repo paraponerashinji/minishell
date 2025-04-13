@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/13 16:57:31 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 19:00:18 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	execute(t_commands *t, int b, int p_fd[2], t_env *env)
 {
 	int	status;
 
-	print_commands(t);
+	//print_commands(t);
 	if (t->command[0][0] == '/' && access(t->command[0], F_OK | X_OK) == 0)
 		status = executefullfile(t->command[0], t->command, b, p_fd[1]);
 	else if (ft_strncmp(t->command[0], "./", 2) == 0)

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/11 19:59:09 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:56:42 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	var_size(char *str, int i)
 	if (i > ft_strlen(str))
 		return (size);
 	if (str[i] == '?')
-		return (2);
+		return (1);
 	while (str[i] != '\0')
 	{
 		if (is_end_var(str[i]))

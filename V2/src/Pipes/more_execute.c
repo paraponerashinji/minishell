@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:20:52 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/11 19:20:22 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:57:12 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,11 @@ char	*get_path(char *cmd, t_env *env)
 	i = -1;
 	allpath = ft_split(ft_getenv(env, "PATH"), ':');
 	s_cmd = ft_split(cmd, ' ');
+	if (allpath == NULL)
+	{
+		free_split(s_cmd);
+		return (cmd);
+	}
 	while (allpath[++i])
 	{
 		path_part = ft_strjoin(allpath[i], "/");

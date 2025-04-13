@@ -6,11 +6,23 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/11 01:01:41 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:56:16 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/minishell.h"
+
+void	block_signal(int signal)
+{
+    struct sigaction sa;
+
+    sa.sa_handler = SIG_IGN; // Ignore le signal
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(signal, &sa, NULL);
+    if (signal == SIGQUIT)
+        printf("\e[36mSIGQUIT (ctrl-\\) blocked.\e[0m\n");
+}
 
 void	handle_signal(int sig)
 {
@@ -20,6 +32,7 @@ void	handle_signal(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		block_signal(SIGQUIT);
 	}
 	if (sig == SIGQUIT)
 	{
@@ -29,26 +42,16 @@ void	handle_signal(int sig)
 	}
 }
 
-void block_signal(int signal)
+void	unblock_signal(int signal)
 {
-	sigset_t sigset;
+    struct sigaction sa;
 
-	sigemptyset(&sigset);
-	sigaddset(&sigset, signal);
-	sigprocmask(SIG_BLOCK, &sigset, NULL);
-	if (signal == SIGQUIT)
-		printf("\e[36mSIGQUIT (ctrl-\\) blocked.\e[0m\n");
-}
-
-void unblock_signal(int signal)
-{
-	sigset_t sigset;
-
-	sigemptyset(&sigset);
-	sigaddset(&sigset, signal);
-	sigprocmask(SIG_UNBLOCK, &sigset, NULL);
-	if (signal == SIGQUIT)
-		printf("\e[36mSIGQUIT (ctrl-\\) unblocked.\e[0m\n");
+    sa.sa_handler = SIG_DFL; // Rétablit le comportement par défaut
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(signal, &sa, NULL);
+    if (signal == SIGQUIT)
+        printf("\e[36mSIGQUIT (ctrl-\\) unblocked.\e[0m\n");
 }
 /*
 char	*crop_path(char **path)

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:17:41 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/13 16:56:42 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:46:05 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int	env_size(char *s, int i, t_env *env)
 	if (!value)
 		return (0);
 	size = ft_strlen(value);
+	free(value);
 	return (size);
 }
 
@@ -194,9 +195,9 @@ char	*replace(char *s, int i, t_env *env)
 	var = ft_substr(s, i + 1, var_size(s, i + 1));
 	suffix = ft_substr(s, i + 1 + var_size(s, i + 1), ft_strlen(s) - i + 1 + var_size(s, i + 1));
 	if (var_size2(s, i + 1) == 1)
-		value = "$";
+		value = ft_strdup("$");
 	else if (var == NULL || var[0] == '\0')
-		value = " ";
+		value = ft_strdup(" ");
 	else
 		value = ft_getenv(env, var);
 	free(var);
@@ -214,6 +215,7 @@ char	*replace(char *s, int i, t_env *env)
 	prefix = ft_strjoin(s, suffix);
 	free(s);
 	free(suffix);
+	free(value);
 	return (prefix);
 }
 

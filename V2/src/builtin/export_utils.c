@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 01:11:46 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 01:14:49 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:55:58 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	print_export(t_env **env)
 	j = 0;
 	while (temp[j])
 	{
+		ft_putstr_fd("declare -x ", 1);
 		printf("%s\n", temp[j]);
 		j++;
 	}

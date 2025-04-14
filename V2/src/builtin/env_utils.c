@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 01:15:22 by aharder           #+#    #+#             */
-/*   Updated: 2025/03/11 01:16:42 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:54:34 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char	**copy_environ(t_env **env)
 {
 	char	**array;
 	char	*temp;
+	char	*temp_2;
 	t_env	*ptr;
 	int		i;
 
@@ -47,11 +48,15 @@ char	**copy_environ(t_env **env)
 	i = 0;
 	while (ptr)
 	{
-		temp = ft_strjoin(ptr->value, "=");
-		if (ft_strlen(ptr->result))
-			array[i] = ft_strjoin(temp, ptr->result);
+		temp = ft_strjoin(ptr->value, "=\"");
+		if (ptr->result)
+		{
+			temp_2 =ft_strjoin(ptr->result, "\"");
+			array[i] = ft_strjoin(temp, temp_2);
+			free(temp_2);
+		}
 		else
-			array[i] = ft_strjoin(temp, "''");
+			array[i] = ft_strjoin(ptr->value, "");
 		free(temp);
 		if (!array[i])
 			free_array(array, i);
@@ -80,7 +85,7 @@ int	index_existing_var(char *arg, t_env **env)
 	ptr = *env;
 	while (ptr)
 	{
-		if (ft_strncmp(ptr->value, arg, len) == 0)
+		if (ptr->value && ft_strncmp(ptr->value, arg, len) == 0)
 			return (i);
 		i++;
 		ptr = ptr->next;

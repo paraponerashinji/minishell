@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:23:49 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/13 18:52:07 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:29:28 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,13 +183,18 @@ char		*ft_getenv(t_env *env, char *name);
 void		print_env(t_env *env);
 // BUILTIN
 int			pwd(void);
-int			cd(char **args);
+int			cd(char **args, t_env **env);
 int			echo(char **args);
 int			env(t_env **env, char **cmd);
 int			unset(char **args, t_env **env);
 int			export(char **args, t_env **env);
-void	ft_exit(t_env *env, char **arg);
+void		ft_exit(t_env *env, char **arg);
 // BUILTIN UTILITIES
+void		echo_check(char ***args);
+int			arg_var_has_valid_chars(char *arg);
+int	arg_val_has_valid_chars(char *arg);
+int	desert_string(char ***array, int *size, const char *str, int position);
+int	there_is_space(char *arg);
 int			print_export(t_env **env);
 int			ft_size_env(char **env);
 int			ft_list_size(t_env *begin_list);

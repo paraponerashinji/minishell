@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/13 19:00:18 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:47:53 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ int	executefile(char **args, int i_fd, int o_fd, t_env *env)
 		free(full_cmd);
 		exit(1);
 	}
-	else
-		waitpid(p, &exit_status, 0);
 	return (exit_status);
 }
 
@@ -81,13 +79,7 @@ int	executefullfile(char *cmd, char **args, int i_fd, int o_fd)
 		dup2(i_fd, STDIN_FILENO);
 		dup2(o_fd, STDOUT_FILENO);
 		execve(cmd, args, environ);
-		signal(SIGQUIT, handle_signal);
 		exit(1);
-	}
-	else
-	{
-		signal(SIGQUIT, handle_signal);
-		waitpid(p, &exit_status, 0);
 	}
 	return (exit_status);
 }
@@ -111,22 +103,15 @@ int	executecommand(char **args, int i_fd, int o_fd, t_env *env)
 		if (full_cmd == NULL)
 			exit(1);
 		execve(full_cmd, args, environ);
-		signal(SIGQUIT, handle_signal);
 		perror("fail command");
 		free(full_cmd);
 		exit(1);
-	}
-	else
-	{
-		signal(SIGQUIT, handle_signal);
-		waitpid(p, &exit_status, 0);
 	}
 	return (exit_status);
 }
 
 int	executebuiltin(char **cmd, int i_fd, int o_fd, t_env *envi)
 {
-	int			exit_status;
 	pid_t		p;
 
 	p = fork();
@@ -141,10 +126,8 @@ int	executebuiltin(char **cmd, int i_fd, int o_fd, t_env *envi)
 		else if (strncmp(cmd[0], "pwd", ft_strlen(cmd[0])) == 0)
 			pwd();
 		else if (strncmp(cmd[0], "export", ft_strlen(cmd[0])) == 0)
-			env(&envi, cmd);
-		exit(1);
+			export(cmd, &envi);
+		exit(0);
 	}
-	else
-		waitpid(p, &exit_status, 0);
 	return (0);
 }

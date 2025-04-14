@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:20:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/13 18:58:16 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:45:37 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	parser(char *str, t_mini *mini)
 {
 	char		**splitted;
 	int			*operator;
+	int			exit_status;
 
 	splitted = first_split(str);
 	if (splitted == NULL)
@@ -36,6 +37,11 @@ void	parser(char *str, t_mini *mini)
 	add_cmd_to_env(&mini->commands, &mini->env);
 	if (valid_line(mini->commands, mini->redirection) == 0)
 		createpipes(mini->commands, mini->redirection, mini->env);
+	while (wait(&exit_status) > 0)
+	{
+		printf("exit status = %d\n", exit_status);
+		add_exit_status(exit_status, &mini->env);
+	}
 	free_red(&mini->redirection);
 	free_cmd(&mini->commands);
 }

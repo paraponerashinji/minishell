@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:20:52 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/13 16:57:12 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:03:08 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	commandbuiltin(char **arg, int i_fd, int o_fd, t_env *env)
 	exit_status = 0;
 	if (strcmp(arg[0], "cd") == 0)
 	{
-		exit_status = cd(arg);
+		exit_status = cd(arg, &env);
 	}
 	else if (strcmp(arg[0], "export") == 0)
 		exit_status = export(arg, &env);

@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:55:16 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/14 13:47:53 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:37:36 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	executefile(char **args, int i_fd, int o_fd, t_env *env)
 		dup2(i_fd, STDIN_FILENO);
 		dup2(o_fd, STDOUT_FILENO);
 		getcwd(current_path, sizeof(current_path));
+		signal(SIGQUIT, handle_signal);
 		full_cmd = ft_strjoin(current_path, &args[0][1]);
 		execve(full_cmd, args, environ);
 		free(full_cmd);
@@ -78,6 +79,7 @@ int	executefullfile(char *cmd, char **args, int i_fd, int o_fd)
 			exit(1);
 		dup2(i_fd, STDIN_FILENO);
 		dup2(o_fd, STDOUT_FILENO);
+		signal(SIGQUIT, handle_signal);
 		execve(cmd, args, environ);
 		exit(1);
 	}
@@ -102,6 +104,7 @@ int	executecommand(char **args, int i_fd, int o_fd, t_env *env)
 		full_cmd = get_path(args[0], env);
 		if (full_cmd == NULL)
 			exit(1);
+		signal(SIGQUIT, handle_signal);
 		execve(full_cmd, args, environ);
 		perror("fail command");
 		free(full_cmd);

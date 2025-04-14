@@ -6,7 +6,7 @@
 /*   By: aharder <aharder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 02:27:04 by aharder           #+#    #+#             */
-/*   Updated: 2025/04/13 19:01:48 by aharder          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:39:20 by aharder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,13 @@ void	handle_signal(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		block_signal(SIGQUIT);
-	}
+	}/*
 	if (sig == SIGQUIT)
 	{
 		rl_on_new_line();
-		//rl_replace_line("", 0);
-		//rl_redisplay();
-	}
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}*/
 }
 
 void	unblock_signal(int signal)
@@ -116,7 +115,7 @@ int	main(int argc, char **argv, char **envp)
 		block_signal(SIGQUIT);
 		minishell = readline("minishell : ");
 		signal(SIGQUIT, handle_signal);
-		unblock_signal(SIGQUIT);
+		//unblock_signal(SIGQUIT);
 		if (minishell == NULL)
 		{
 			printf("Readline returned NULL\n");
